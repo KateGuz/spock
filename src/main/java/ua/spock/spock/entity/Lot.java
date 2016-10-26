@@ -121,5 +121,31 @@ public class Lot {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        out.append("Lot{" + "id=" + id + ", title='" + title + '\'');
+        if (description != null) {
+            out.append( ", description='" + description + '\'');
+        }
+        if (category != null) {
+            out.append( ", categoryName='" + category.getName() + '\'');
+        }
+        if (user != null) {
+            out.append( ", userName='" + user.getName() + '\'');
+        }
+        if (startDate != null) {
+            out.append(", startDate=" + startDate);
+        }
+        out.append(", endDate=" + endDate + ", currency=" + currency + ", startPrice=" + startPrice);
+        if (minStep != 0) {
+            out.append(", minStep=" + minStep);
+        }
+        if (maxBid != null) {
+            out.append(", maxBidValue=" + maxBid.getValue());
+        }
+        out.append(", quickBuyPrice=" + quickBuyPrice + ", type=" + type + '}');
 
+        return out.toString();
+    }
 }

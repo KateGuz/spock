@@ -1,9 +1,9 @@
 package ua.spock.spock.entity;
 
 public class Category {
-    int id;
-    String name;
-    Category parentCategory;
+    private int id;
+    private String name;
+    private Category parent;
 
     public int getId() {
         return id;
@@ -21,12 +21,22 @@ public class Category {
         this.name = name;
     }
 
-    public Category getParentCategory() {
-        return parentCategory;
+    public Category getParent() {
+        return parent;
     }
 
-    public void setParentCategory(Category parentCategory) {
-        this.parentCategory = parentCategory;
+    public void setParent(Category parent) {
+        this.parent = parent;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        out.append("Category{" + "id=" + id + ", name='" + name + '\'');
+        if (parent != null) {
+            out.append(", parentName='" + parent.getName() +"'");
+        }
+        out.append('}');
+        return out.toString();
+    }
 }

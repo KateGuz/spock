@@ -6,6 +6,7 @@ public class User {
     private int id;
     private String name;
     private String email;
+    private String password;
     private UserType type;
     private LocalDateTime registrationDate;
 
@@ -33,6 +34,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public UserType getType() {
         return type;
     }
@@ -49,5 +58,15 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", type=" + type +
+                ", registrationDate=" + registrationDate +
+                '}';
+    }
 }

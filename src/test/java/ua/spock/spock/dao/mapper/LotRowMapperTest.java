@@ -2,7 +2,7 @@ package ua.spock.spock.dao.mapper;
 
 import org.junit.Test;
 import static org.mockito.Mockito.*;
-import ua.spock.spock.dao.mapper.util.LotQueryType;
+import ua.spock.spock.dao.mapper.util.QueryType;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
 
@@ -17,7 +17,7 @@ public class LotRowMapperTest {
     @Test
     public void mapRow() throws Exception {
         //prepare
-        LotRowMapper lotRowMapper = new LotRowMapper(LotQueryType.GET_ONE);
+        LotRowMapper lotRowMapper = new LotRowMapper(QueryType.GET_ONE_LOT);
         ResultSet resultSet = mock(ResultSet.class);
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("title")).thenReturn("Title");

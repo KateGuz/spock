@@ -1,25 +1,23 @@
 package ua.spock.spock.entity;
 
 public enum Currency {
-    UAH("Ukrainian hryvnia"),
-    USD("US dollar"),
-    EUR("Euro");
-    String fullName;
+    USD("USD"), EUR("EUR"), UAH("UAH");
+    private String id;
 
-    Currency(String fullName) {
-        this.fullName = fullName;
+    Currency(String id) {
+        this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public static Currency fromString(String fullName) {
-        for (Currency currency :Currency.values()) {
-            if (fullName.equalsIgnoreCase(currency.getFullName())) {
+    public static Currency getCurrencyById(String id){
+        for (Currency currency : Currency.values()) {
+            if(currency.getId().equals(id)){
                 return currency;
             }
         }
-        return  null;
+        throw new IllegalArgumentException("No currency found for id = " + id);
+    }
+
+    public String getId() {
+        return id;
     }
 }

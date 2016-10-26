@@ -1,25 +1,23 @@
 package ua.spock.spock.entity;
 
 public enum LotType {
-    P("Pending"),
-    I("In progress"),
-    C("Closed");
-    String  fullName;
+    PENDING("P"), IN_PROGRESS("I"), CLOSED("C");
+    private String id;
 
-    LotType(String fullName) {
-        this.fullName = fullName;
+    LotType(String id) {
+        this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public static LotType fromString(String fullName) {
+    public static LotType getTypeById(String id){
         for (LotType lotType : LotType.values()) {
-            if (fullName.equalsIgnoreCase(lotType.getFullName())) {
+            if(lotType.getId().equals(id)){
                 return lotType;
             }
         }
-        return  null;
+        throw new IllegalArgumentException("No lotType found for id = " + id);
+    }
+
+    public String getId(){
+        return id;
     }
 }

@@ -42,8 +42,8 @@ public class Bid {
     public String toString() {
         return "Bid{" +
                 "id=" + id +
-                ", lotId=" + lot.getId() +
-                ", userId=" + user.getId() +
+                ", lotId=" + (lot == null ? "null" : lot.getId()) +
+                ", user=" + user +
                 ", value=" + value +
                 '}';
     }

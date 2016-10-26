@@ -1,24 +1,25 @@
 package ua.spock.spock.entity;
 
 public enum UserType {
-    U("User"),
-    A("Admin");
+    ADMIN("A"), USER("U");
 
-    private String fullName;
-    UserType(String fullName) {
-        this.fullName = fullName;
+    private String id;
+
+    UserType(String id) {
+        this.id = id;
     }
 
-    private String getFullName() {
-        return this.fullName;
-    }
-
-    public static UserType fromString(String fullName) {
-        for (UserType userType : UserType.values()) {
-            if (fullName.equalsIgnoreCase(userType.getFullName())) {
+    public static UserType getTypeById(String id) {
+        for (UserType userType : values()) {
+            if (userType.getId().equals(id)) {
                 return userType;
             }
         }
-        return  null;
+
+        throw new IllegalArgumentException("No userType found for id = " + id);
+    }
+
+    public String getId() {
+        return id;
     }
 }

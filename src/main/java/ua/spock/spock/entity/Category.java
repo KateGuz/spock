@@ -31,12 +31,10 @@ public class Category {
 
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder();
-        out.append("Category{" + "id=" + id + ", name='" + name + '\'');
-        if (parent != null) {
-            out.append(", parentName='" + parent.getName() +"'");
-        }
-        out.append('}');
-        return out.toString();
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parent=" + (parent == null ? "null" : parent.getId()) +
+                '}';
     }
 }

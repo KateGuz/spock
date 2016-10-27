@@ -8,9 +8,9 @@ public enum Currency {
         this.id = id;
     }
 
-    public static Currency getCurrencyById(String id){
+    public static Currency getCurrencyById(String id) {
         for (Currency currency : Currency.values()) {
-            if(currency.getId().equals(id)){
+            if (currency.getId().equals(id)) {
                 return currency;
             }
         }

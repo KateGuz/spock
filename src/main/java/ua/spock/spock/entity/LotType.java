@@ -8,16 +8,16 @@ public enum LotType {
         this.id = id;
     }
 
-    public static LotType getTypeById(String id){
+    public static LotType getTypeById(String id) {
         for (LotType lotType : LotType.values()) {
-            if(lotType.getId().equals(id)){
+            if (lotType.getId().equals(id)) {
                 return lotType;
             }
         }
         throw new IllegalArgumentException("No lotType found for id = " + id);
     }
 
-    public String getId(){
+    public String getId() {
         return id;
     }
 }

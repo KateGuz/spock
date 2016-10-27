@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="getAllLotsSQL" class="java.lang.String">
+        <constructor-arg value="SELECT lot.id, lot.title, lot.startDate, lot.endDate, lot.currency, lot.startPrice, lot.quickBuyPrice, lot.type, lot.maxBidId, bid.bid as maxBidValue FROM lot
+                                left JOIN bid ON bid.lotId=lot.id;"/>
+    </bean>
+
+    <bean id="getLotsByCategorySQL" class="java.lang.String">
+        <constructor-arg value="SELECT lot.id, lot.title, lot.startDate, lot.endDate, lot.currency, lot.startPrice, lot.quickBuyPrice, lot.type, lot.maxBidId, bid.bid as maxBidValue FROM lot
+                                JOIN category ON lot.categoryId=category.id
+                                left JOIN bid ON bid.lotId=lot.id
+                                WHERE category.id = :categoryId;"/>
+    </bean>
+</beans>

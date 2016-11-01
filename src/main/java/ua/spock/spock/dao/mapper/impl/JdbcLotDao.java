@@ -15,7 +15,7 @@ public class JdbcLotDao implements LotDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
-    String getLotByIdSQL;
+    private String getLotByIdSQL;
 
     @Override
     public Lot getLotById(int lotId) {

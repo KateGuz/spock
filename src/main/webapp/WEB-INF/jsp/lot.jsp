@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container container-narrow">
     <div class="header clearfix">
         <nav>
             <ul class="nav nav-pills pull-right">
@@ -45,15 +45,17 @@
                 <dt>description</dt>
                 <dd>${lot.description}</dd>
                 <dt>category</dt>
-                <dd>${lot.category.name}</dd>
+                <dd>${lot.category.parent.name}>${lot.category.name}</dd>
                 <dt>currency</dt>
                 <dd>${lot.currency}</dd>
-                <dt>current bid</dt>
-                <dd>...[x bids total]</dd>
+                <dt>start price</dt>
+                <dd>${lot.startPrice}</dd>
+                <dt>current price</dt>
+                <dd>${currentPrice} [${bidCount} bids total]</dd>
                 <dt>min bid step</dt>
                 <dd>${lot.minStep} ${lot.currency}</dd>
                 <dt>time left</dt>
-                <dd>${lot.endDate}</dd>
+                <dd>${timeLeft}</dd>
                 <dt>seller</dt>
                 <dd>${lot.user.name}</dd>
             </dl>
@@ -71,10 +73,12 @@
             <dl class="dl-horizontal">
 
                 <dt>buy it now price</dt>
-                <dd>...
-                    <form class="form-inline">
-                        <button type="submit" class="btn btn-primary">Buy it now</button>
-                    </form>
+                <dd><div>${lot.quickBuyPrice}  ${lot.currency}</div>
+                    <div>
+                        <form class="form-inline">
+                            <button type="submit" class="btn btn-primary">Buy it now</button>
+                        </form>
+                    </div>
                 </dd>
 
             </dl>

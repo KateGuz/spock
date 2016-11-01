@@ -5,16 +5,57 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ua.spock.spock.entity.Lot;
+import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.LotService;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @Controller
 public class LotController {
     @Autowired
     private LotService lotService;
+    @Autowired
+    private BidService bidService;
 
     @RequestMapping("/lot/{lotId}")
     public String getLotById(ModelMap model, @PathVariable int lotId) {
-        model.addAttribute("lot", lotService.getLotById(lotId));
+        Lot lot = lotService.getLotById(lotId);
+        String timeLeft = getTimeLeft(lot);
+        double currentPrice = getCurrentPrice(lot);
+        int bidCount = bidService.getBidCountForLot(lotId);
+
+        model.addAttribute("lot", lot);
+        model.addAttribute("timeLeft", timeLeft);
+        model.addAttribute("currentPrice", currentPrice);
+        model.addAttribute("bidCount", bidCount);
         return "lot";
+    }
+
+    private String getTimeLeft(Lot lot) {
+        LocalDateTime now = LocalDateTime.now();
+        Duration interval = Duration.between(now, lot.getEndDate());
+        String timeLeft;
+        if (interval.toDays() > 1) {
+            timeLeft = String.valueOf(interval.toDays()) + (interval.toDays() > 1 ? " days" : " day");
+
+        } else if (interval.toDays() > 0) {
+            Duration hrsLeft = interval.minusDays(interval.toDays());
+            timeLeft = "1 day " + (hrsLeft.toHours() > 1 ? "hrs " : "hr ");
+        }
+        else if (interval.toHours() > 0){
+            Duration minLeft = interval.minusHours(interval.toHours());
+            timeLeft = String.valueOf(interval.toHours()) + (interval.toHours() > 1 ? "hrs " : "hr ") +
+                    String.valueOf(minLeft.toMinutes()) +"min";
+        } else {
+            timeLeft = String.valueOf(interval.toMinutes()) +"min";
+        }
+
+        return timeLeft;
+    }
+
+    private double getCurrentPrice (Lot lot) {
+        return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
     }
 }

@@ -55,7 +55,7 @@
                 <dt>min bid step</dt>
                 <dd>${lot.minStep} ${lot.currency}</dd>
                 <dt>time left</dt>
-                <dd>${timeLeft}</dd>
+                <dd data-toggle="tooltip" title="${endDate}">${timeLeft}</dd>
                 <dt>seller</dt>
                 <dd>${lot.user.name}</dd>
             </dl>
@@ -85,6 +85,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

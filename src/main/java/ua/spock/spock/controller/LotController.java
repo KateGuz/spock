@@ -11,6 +11,7 @@ import ua.spock.spock.service.LotService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class LotController {
@@ -23,11 +24,13 @@ public class LotController {
     public String getLotById(ModelMap model, @PathVariable int lotId) {
         Lot lot = lotService.getLotById(lotId);
         String timeLeft = getTimeLeft(lot);
+        String endDate = getEndDate(lot);
         double currentPrice = getCurrentPrice(lot);
         int bidCount = bidService.getBidCountForLot(lotId);
 
         model.addAttribute("lot", lot);
         model.addAttribute("timeLeft", timeLeft);
+        model.addAttribute("endDate", endDate);
         model.addAttribute("currentPrice", currentPrice);
         model.addAttribute("bidCount", bidCount);
         return "lot";
@@ -42,17 +45,23 @@ public class LotController {
 
         } else if (interval.toDays() > 0) {
             Duration hrsLeft = interval.minusDays(interval.toDays());
-            timeLeft = "1 day " + (hrsLeft.toHours() > 1 ? "hrs " : "hr ");
+            timeLeft = "1 day " + hrsLeft.toHours() + (hrsLeft.toHours() > 1 ? " hrs" : " hr");
         }
         else if (interval.toHours() > 0){
             Duration minLeft = interval.minusHours(interval.toHours());
-            timeLeft = String.valueOf(interval.toHours()) + (interval.toHours() > 1 ? "hrs " : "hr ") +
-                    String.valueOf(minLeft.toMinutes()) +"min";
+            timeLeft = String.valueOf(interval.toHours()) + (interval.toHours() > 1 ? " hrs " : " hr ") +
+                    String.valueOf(minLeft.toMinutes()) +" min";
         } else {
-            timeLeft = String.valueOf(interval.toMinutes()) +"min";
+            timeLeft = String.valueOf(interval.toMinutes()) +" min";
         }
 
         return timeLeft;
+    }
+
+    private String getEndDate(Lot lot) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM HH:mm");;
+        String endDate = lot.getEndDate().format(formatter);
+        return endDate;
     }
 
     private double getCurrentPrice (Lot lot) {

@@ -9,11 +9,12 @@
     <context:component-scan base-package="ua.spock.spock.controller"/>
     <mvc:annotation-driven/>
 
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
+    <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
 </beans>

@@ -1,10 +1,10 @@
-package ua.spock.spock.dao.mapper.impl;
+package ua.spock.spock.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ua.spock.spock.dao.mapper.BidDao;
+import ua.spock.spock.dao.BidDao;
 
 @Repository
 public class JdbcBidDao implements BidDao {

@@ -12,6 +12,8 @@ import ua.spock.spock.service.LotService;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 
 @Controller
 public class LotController {
@@ -20,14 +22,26 @@ public class LotController {
     @Autowired
     private BidService bidService;
 
+    @RequestMapping("/")
+    public String getLots(ModelMap model) {
+        List<Lot> list = lotService.getAll();
+        model.addAttribute("lots", list);
+        return "lots";
+    }
+
+    @RequestMapping("/category/{categoryId}")
+    public String getLotsByCategory(ModelMap model, @PathVariable int categoryId) {
+        model.addAttribute("lots", lotService.getByCategory(categoryId));
+        return "lots";
+    }
+
     @RequestMapping("/lot/{lotId}")
     public String getLotById(ModelMap model, @PathVariable int lotId) {
-        Lot lot = lotService.getLotById(lotId);
+        Lot lot = lotService.getById(lotId);
         String timeLeft = getTimeLeft(lot);
         String endDate = getEndDate(lot);
         double currentPrice = getCurrentPrice(lot);
         int bidCount = bidService.getBidCountForLot(lotId);
-
         model.addAttribute("lot", lot);
         model.addAttribute("timeLeft", timeLeft);
         model.addAttribute("endDate", endDate);
@@ -54,7 +68,6 @@ public class LotController {
         } else {
             timeLeft = String.valueOf(interval.toMinutes()) +" min";
         }
-
         return timeLeft;
     }
 

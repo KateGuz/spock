@@ -7,7 +7,7 @@
 	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     <import resource="classpath:query-context.xml"/>
 
-    <context:component-scan base-package="ua.spock.spock.*">
+    <context:component-scan base-package="ua.spock.spock">
         <context:exclude-filter type="regex" expression="ua\.spock\.spock\.controller\..*"/>
     </context:component-scan>
 

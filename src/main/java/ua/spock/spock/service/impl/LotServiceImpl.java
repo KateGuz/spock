@@ -20,8 +20,7 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public List<Lot> getLotsByCategory(int categoryId) {
-        return lotDao.getLotsByCategory(categoryId);
+    public List<Lot> getByCategory(int categoryId) {
+        return lotDao.getByCategory(categoryId);
     }
-
 }

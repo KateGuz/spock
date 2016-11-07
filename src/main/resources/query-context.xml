@@ -4,14 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="getAllLotsSQL" class="java.lang.String">
-        <constructor-arg value="SELECT lot.id, lot.title, lot.startDate, lot.endDate, lot.currency, lot.startPrice, lot.quickBuyPrice, lot.type, lot.maxBidId, bid.bid as maxBidValue FROM lot
-                                left JOIN bid ON bid.lotId=lot.id;"/>
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+                                FROM lot AS l
+                                left JOIN bid AS b ON b.bid=l.maxBidId;"/>
     </bean>
 
     <bean id="getLotsByCategorySQL" class="java.lang.String">
-        <constructor-arg value="SELECT lot.id, lot.title, lot.startDate, lot.endDate, lot.currency, lot.startPrice, lot.quickBuyPrice, lot.type, lot.maxBidId, bid.bid as maxBidValue FROM lot
-                                JOIN category ON lot.categoryId=category.id
-                                left JOIN bid ON bid.lotId=lot.id
-                                WHERE category.id = :categoryId;"/>
+        <constructor-arg value="SELECT l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid as maxBidValue FROM lot AS l
+                                JOIN category AS c ON l.categoryId=c.id
+                                left JOIN bid AS b ON b.lotId=l.id
+                                WHERE c.id =:categoryId;"/>
     </bean>
 </beans>

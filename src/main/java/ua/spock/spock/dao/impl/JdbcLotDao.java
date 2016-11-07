@@ -20,15 +20,16 @@ public class JdbcLotDao implements LotDao {
     private String getAllLotsSQL;
     @Autowired
     private String getLotsByCategorySQL;
+    private final LotRowMapper LOT_ROW_MAPPER = new LotRowMapper(GET_ALL_LOTS);
 
     @Override
     public List<Lot> getAll() {
-        return namedParameterJdbcTemplate.query(getAllLotsSQL, new LotRowMapper(GET_ALL_LOTS));
+        return namedParameterJdbcTemplate.query(getAllLotsSQL, LOT_ROW_MAPPER);
     }
 
     @Override
-    public List<Lot> getLotsByCategory(int categoryId) {
-        return namedParameterJdbcTemplate.query(getLotsByCategorySQL, new MapSqlParameterSource("categoryId", categoryId), new LotRowMapper(GET_ALL_LOTS));
+    public List<Lot> getByCategory(int categoryId) {
+        return namedParameterJdbcTemplate.query(getLotsByCategorySQL, new MapSqlParameterSource("categoryId", categoryId), LOT_ROW_MAPPER);
     }
 }
 

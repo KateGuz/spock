@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface LotDao {
     List<Lot> getAll();
-
+    Lot getById(int lotId);
     List<Lot> getByCategory(int categoryId);
 }

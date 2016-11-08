@@ -29,4 +29,9 @@
     <bean id="getBidCountByLotIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId = :lotId;"/>
     </bean>
+    <bean id="getAllCategoriesSQL" class="java.lang.String">
+        <constructor-arg value="SELECT c.id, c.name, p.id AS parentId, p.name AS parentName FROM category AS c
+                                LEFT JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
+    </bean>
+
 </beans>

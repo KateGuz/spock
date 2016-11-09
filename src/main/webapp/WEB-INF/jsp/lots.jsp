@@ -61,22 +61,28 @@
         </div>
     </div><!-- /.container-fluid -->
 </nav>
-
+<div class="btn-group" role="group" aria-label="sorting">
+    <button type="button" class="btn btn-default " id="btnSortAsc">Sort by price ▲</button>
+    <button type="button" class="btn btn-default " id="btnSortDesc">Sort by price ▼</button>
+    <button type="button" class="btn btn-default " id="btnSortSoonest">Soonest</button>
+    <button type="button" class="btn btn-default " id="btnSortClear">Clear filters</button>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-md-1">
-            <!-- Single button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Categories <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Category</a></li>
-                    <li><a href="#">Category</a></li>
-                    <li><a href="#">Category</a></li>
-
-                </ul>
-            </div>
+            <c:forEach items="${categories}" var="parent">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        "${parent.name} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <c:forEach items="${parent.children}" var="category">
+                            <li><a href="/?categoryId=${category.id}">${category.name}</a></li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </c:forEach>
         </div>
         <div class="col-md-11">
             <c:forEach items="${lots}" var="lot" begin="0" end="8">
@@ -107,5 +113,29 @@
 <script src="/js/jquery-3.1.1.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/sort.js"></script>
 </body>
 </html>
+<%--<div class="btn-group">--%>
+<%--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"--%>
+<%--aria-haspopup="true" aria-expanded="false">--%>
+<%--Categories <span class="caret"></span>--%>
+<%--</button>--%>
+<%--<ul class="dropdown-menu">--%>
+<%--<c:forEach items="${categories}" var="parent">--%>
+<%--<div class="btn-group">--%>
+<%--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"--%>
+<%--aria-haspopup="true" aria-expanded="false">--%>
+<%--${parent.name} <span class="caret"></span>--%>
+<%--</button>--%>
+<%--<ul class="dropdown-menu">--%>
+<%--<c:forEach items="${parent}" var="category">--%>
+<%--<li><a href="#">${category.name}</a></li>--%>
+<%--</c:forEach>--%>
+
+<%--</ul>--%>
+<%--</div>--%>
+<%--</c:forEach>--%>
+
+<%--</ul>--%>
+<%--</div>--%>

@@ -6,14 +6,14 @@
     <bean id="getAllLotsSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
-                                left JOIN bid AS b ON b.bid=l.maxBidId;"/>
+                                left JOIN bid AS b ON b.bid=l.maxBidId"/>
     </bean>
 
     <bean id="getLotsByCategorySQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid as maxBidValue FROM lot AS l
                                 JOIN category AS c ON l.categoryId=c.id
                                 left JOIN bid AS b ON b.lotId=l.id
-                                WHERE c.id =:categoryId;"/>
+                                WHERE  c.parentId =:categoryId or c.id =:categoryId"/>
     </bean>
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
@@ -28,5 +28,9 @@
     </bean>
     <bean id="getBidCountByLotIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId = :lotId;"/>
+    </bean>
+    <bean id="getAllCategoriesSQL" class="java.lang.String">
+        <constructor-arg value="SELECT c.id, c.name, p.id AS parentId, p.name AS parentName FROM category AS c
+                                LEFT JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
     </bean>
 </beans>

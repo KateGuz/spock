@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.SortType;
+import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
@@ -26,8 +27,15 @@ public class LotController {
     private CategoryCacheService category;
 
     @RequestMapping("/")
-    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "categoryId", required = false) Integer categoryId) {
-        model.addAttribute("lots", lotService.getAll(new SortType(sort, categoryId)));
+    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) SortType sort) {
+        model.addAttribute("lots", lotService.getAll(new LotFilter(sort, null)));
+        model.addAttribute("categories", category.getAllCategories());
+        return "lots";
+    }
+
+    @RequestMapping("/category/{categoryId}")
+    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) SortType sort, @PathVariable Integer categoryId) {
+        model.addAttribute("lots", lotService.getAll(new LotFilter(sort, categoryId)));
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }

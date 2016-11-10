@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>User Details System</title>
+    <title>Spock</title>
 
     <!-- Bootstrap -->
     <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -78,7 +78,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <c:forEach items="${parent.children}" var="category">
-                            <li><a href="/?categoryId=${category.id}">${category.name}</a></li>
+                            <li><a href="/category/${category.id}">${category.name}</a></li>
                         </c:forEach>
                     </ul>
                 </div>

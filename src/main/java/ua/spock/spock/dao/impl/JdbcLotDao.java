@@ -5,11 +5,11 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.LotDao;
-import ua.spock.spock.dao.mapper.util.QueryGenerator;
 import ua.spock.spock.dao.mapper.LotRowMapper;
 import ua.spock.spock.dao.mapper.util.QueryType;
+import ua.spock.spock.dao.util.QueryGenerator;
 import ua.spock.spock.entity.Lot;
-import ua.spock.spock.entity.SortType;
+import ua.spock.spock.filter.LotFilter;
 
 import java.util.List;
 
@@ -30,9 +30,8 @@ public class JdbcLotDao implements LotDao {
     }
 
     @Override
-    public List<Lot> getAll(SortType sortType) {
-        queryGenerator.generate(sortType);
-        return namedParameterJdbcTemplate.query(queryGenerator.getParameters().getQuery(), queryGenerator.getParameters().getMap(), ALL_LOTS_ROW_MAPPER);
+    public List<Lot> get(LotFilter lotFilter) {
+        return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
     }
 }
 

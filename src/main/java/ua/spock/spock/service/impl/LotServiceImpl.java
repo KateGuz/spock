@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.LotDao;
 import ua.spock.spock.entity.Lot;
-import ua.spock.spock.entity.SortType;
+import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.LotService;
 
 import java.util.List;
@@ -15,8 +15,8 @@ public class LotServiceImpl implements LotService {
     private LotDao lotDao;
 
     @Override
-    public List<Lot> getAll(SortType sortType) {
-        return lotDao.getAll(sortType);
+    public List<Lot> getAll(LotFilter lotFilter) {
+        return lotDao.get(lotFilter);
     }
 
     public Lot getById(int lotId) {

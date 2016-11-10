@@ -1,18 +1,18 @@
-package ua.spock.spock.entity;
+package ua.spock.spock.dao.util;
 
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 public class SqlQueryParameters {
-    private MapSqlParameterSource map;
+    private MapSqlParameterSource parameters;
     private String query;
 
-    public MapSqlParameterSource getMap() {
-        return map;
+    public MapSqlParameterSource getParameters() {
+        return parameters;
     }
 
-    public void setMap(MapSqlParameterSource map) {
-        this.map = map;
+    public void setParameters(MapSqlParameterSource map) {
+        this.parameters = map;
     }
 
     public String getQuery() {

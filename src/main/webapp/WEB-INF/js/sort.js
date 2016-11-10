@@ -1,64 +1,32 @@
 $(document).ready(function () {
     $('#btnSortAsc').click(function () {
-
-        if (window.location.href.indexOf('categoryId') !== -1) {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.href.substring(0, window.location.href.indexOf('&')) + "&sortType=ASC";
-            }
-            else {
-                window.location.href = window.location + "&sortType=ASC";
-            }
-        } else {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.pathname + "?sortType=ASC";
-            }
-            else {
-                window.location.href = window.location + "?sortType=ASC";
-            }
+        if (window.location.href.indexOf('sortType') !== -1) {
+            window.location.href = window.location.pathname + "?sortType=priceAsc";
+        }
+        else {
+            window.location.href = window.location + "?sortType=priceAsc";
         }
     });
 
     $('#btnSortDesc').click(function () {
-        if (window.location.href.indexOf('categoryId') !== -1) {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.href.substring(0, window.location.href.indexOf('&')) + "&sortType=DESC";
-            }
-            else {
-                window.location.href = window.location + "&sortType=DESC";
-            }
-        } else {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.pathname + "?sortType=DESC";
-            }
-            else {
-                window.location.href = window.location + "?sortType=DESC";
-            }
+        if (window.location.href.indexOf('sortType') !== -1) {
+            window.location.href = window.location.pathname + "?sortType=priceDesc";
+        }
+        else {
+            window.location.href = window.location + "?sortType=priceDesc";
         }
     });
+
     $('#btnSortSoonest').click(function () {
-        if (window.location.href.indexOf('categoryId') !== -1) {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.href.substring(0, window.location.href.indexOf('&')) + "&sortType=SOONEST";
-            }
-            else {
-                window.location.href = window.location + "&sortType=SOONEST";
-            }
-        } else {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.pathname + "?sortType=SOONEST";
-            }
-            else {
-                window.location.href = window.location + "?sortType=SOONEST";
-            }
+        if (window.location.href.indexOf('sortType') !== -1) {
+            window.location.href = window.location.pathname + "?sortType=endSoonest";
+        }
+        else {
+            window.location.href = window.location + "?sortType=endSoonest";
         }
     });
 
     $('#btnSortClear').click(function () {
-
-        if (window.location.href.indexOf('categoryId') !== -1) {
-            window.location.href = window.location.href.substring(0, window.location.href.indexOf('&'));
-        } else {
-            window.location.href = window.location.pathname
-        }
+        window.location.href = window.location.pathname
     });
-})
+});

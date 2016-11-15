@@ -5,6 +5,7 @@ import ua.spock.spock.entity.SortType;
 public class LotFilter {
     private SortType sortType;
     private Integer categoryId;
+    private Integer userId;
 
 
     public SortType getSortType() {
@@ -21,5 +22,13 @@ public class LotFilter {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

@@ -13,6 +13,10 @@
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
                                 WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
     </bean>
+    <bean id="getLotsByUserIdStatementSQL" class="java.lang.String">
+        <constructor-arg value=" JOIN user AS u ON l.userId=u.id
+                                WHERE  u.id =:userId"/>
+    </bean>
 
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
@@ -33,6 +37,11 @@
     <bean id="getAllCategoriesSQL" class="java.lang.String">
         <constructor-arg value="SELECT c.id, c.name, p.id AS parentId, p.name AS parentName FROM category AS c
                                 LEFT JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
+    </bean>
+
+    <bean id="getUserByIdSQL" class="java.lang.String">
+        <constructor-arg value="SELECT * FROM user
+                                WHERE id= :id;"/>
     </bean>
 
 </beans>

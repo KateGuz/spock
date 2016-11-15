@@ -16,6 +16,8 @@ public class QueryGenerator {
     private String getLotsStatementSQL;
     @Autowired
     private String getLotsByCategoryStatementSQL;
+    @Autowired
+    private String getLotsByUserIdStatementSQL;
 
     public SqlQueryParameters generate(LotFilter lotFilter) {
         StringBuilder query = new StringBuilder();
@@ -23,6 +25,10 @@ public class QueryGenerator {
         if (lotFilter.getCategoryId() != null) {
             query.append(getLotsByCategoryStatementSQL);
             parameters.setParameters(new MapSqlParameterSource("categoryId", lotFilter.getCategoryId()));
+        }
+        if (lotFilter.getUserId() != null) {
+            query.append(getLotsByUserIdStatementSQL);
+            parameters.setParameters(new MapSqlParameterSource("userId", lotFilter.getUserId()));
         }
         if (lotFilter.getSortType() != null) {
             query.append(getOrderByStatement(lotFilter.getSortType()));

@@ -7,6 +7,7 @@ import ua.spock.spock.dao.CategoryDao;
 import ua.spock.spock.entity.Category;
 import ua.spock.spock.service.CategoryCacheService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,7 +18,7 @@ public class CategoryCacheServiceImpl implements CategoryCacheService {
 
     @Override
     public List<Category> getAllCategories() {
-        return allCategories;
+        return new ArrayList<>(allCategories);
     }
 
     @Scheduled(fixedDelay = 4 * 60 * 60 * 1000, initialDelay = 0)

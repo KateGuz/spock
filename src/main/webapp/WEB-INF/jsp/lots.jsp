@@ -54,9 +54,18 @@
                         <li><a role="button" onclick="">EUR</a></li>
                     </ul>
                 </ul>
-                <li class="active"><a href="">войти/выйти <span
-                        class="sr-only">(current)</span></a>
-                </li>
+                <ul class="nav navbar-nav navbar-right">
+                    <c:choose>
+                        <c:when test="${empty loggedUser}">
+                            <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Sign In / Sign up</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a data-toggle="modal" href="/user">${loggedUser.name}</a></li>
+                            <li><a data-toggle="modal" href="/logout">Sign out</a></li>
+                        </c:otherwise>
+                    </c:choose>
+
+                </ul>
             </ul>
         </div>
     </div><!-- /.container-fluid -->
@@ -103,6 +112,60 @@
         </div>
     </div>
 </div>
+<!-- Sign in -->
+<div id="signIn" class="modal fade registration-form" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Sign in</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="email" placeholder="Email" id="inputEmailSignIn"><br><br>
+                <input type="password" name="password" placeholder="Password" id="inputPasswordSignIn"><br><br>
+                <button class="btn-success enter-button" data-dismiss="modal" onclick="signIn()">Enter</button>
+                <br>
+                <br>
+                Have no account yet?
+                <a data-toggle="modal" href="#signUp" data-target="#signUp" data-dismiss="modal">Sign up</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Sign up -->
+<div id="signUp" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Sign up</h4>
+            </div>
+            <div class="modal-body">
+                <form id="dataForm">
+                    <input type="text" required name="name" placeholder="Name" id="inputNameSignUp"><br><br>
+                    <input type="email" required name="email" placeholder="email" id="inputEmailSignUp"><br><br>
+                    <input type="password" required name="password" placeholder="Password" id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Enter</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="/js/signIn.js"></script>
+<script src="/js/signUp.js"></script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery-3.1.1.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->

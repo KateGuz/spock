@@ -25,17 +25,23 @@ public class LotController {
     private BidService bidService;
     @Autowired
     private CategoryCacheService category;
+    private LotFilter lotFilter;
 
     @RequestMapping("/")
-    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) SortType sort) {
-        model.addAttribute("lots", lotService.getAll(new LotFilter(sort, null)));
+    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
+        lotFilter=new LotFilter();
+        lotFilter.setSortType(SortType.getTypeById(sort));
+        model.addAttribute("lots", lotService.getAll(lotFilter));
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
 
     @RequestMapping("/category/{categoryId}")
-    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) SortType sort, @PathVariable Integer categoryId) {
-        model.addAttribute("lots", lotService.getAll(new LotFilter(sort, categoryId)));
+    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @PathVariable Integer categoryId) {
+        lotFilter=new LotFilter();
+        lotFilter.setSortType(SortType.getTypeById(sort));
+        lotFilter.setCategoryId(categoryId);
+        model.addAttribute("lots", lotService.getAll(lotFilter));
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }

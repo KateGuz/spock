@@ -6,10 +6,6 @@ public class LotFilter {
     private SortType sortType;
     private Integer categoryId;
 
-    public LotFilter(SortType sortType, Integer categoryId) {
-        this.sortType = sortType;
-        this.categoryId = categoryId;
-    }
 
     public SortType getSortType() {
         return sortType;

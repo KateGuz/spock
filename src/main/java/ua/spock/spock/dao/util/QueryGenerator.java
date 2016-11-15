@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.filter.LotFilter;
 
-import static ua.spock.spock.entity.SortType.priceAsc;
-import static ua.spock.spock.entity.SortType.priceDesc;
+import static ua.spock.spock.entity.SortType.*;
 
 @Service
 public class QueryGenerator {
@@ -19,32 +18,32 @@ public class QueryGenerator {
     private String getLotsByCategoryStatementSQL;
 
     public SqlQueryParameters generate(LotFilter lotFilter) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getLotsStatementSQL);
-            if (lotFilter.getCategoryId() != null) {
-                builder.append(getLotsByCategoryStatementSQL);
-                parameters.setParameters(new MapSqlParameterSource("categoryId", lotFilter.getCategoryId()));
-            }
-        if ((lotFilter.getSortType() != null)) {
-            builder.append(orderByStatement(lotFilter.getSortType()) );
+        StringBuilder query = new StringBuilder();
+        query.append(getLotsStatementSQL);
+        if (lotFilter.getCategoryId() != null) {
+            query.append(getLotsByCategoryStatementSQL);
+            parameters.setParameters(new MapSqlParameterSource("categoryId", lotFilter.getCategoryId()));
         }
-        builder.append(";");
-        parameters.setQuery(builder.toString());
+        if (lotFilter.getSortType() != null) {
+            query.append(getOrderByStatement(lotFilter.getSortType()));
+        }
+        query.append(";");
+        parameters.setQuery(query.toString());
         return parameters;
     }
 
-    private String orderByStatement(SortType sorting) {
-        String query;
-        if (sorting.equals(priceAsc)) {
-            query = " ORDER BY l.startPrice OR maxBidValue";
+    private String getOrderByStatement(SortType sorting) {
+        StringBuilder query = new StringBuilder(" ORDER BY");
+        if (sorting == PRICE_ASC) {
+            query.append(" l.startPrice ");
         } else {
-            if (sorting.equals(priceDesc)) {
-                query = " ORDER BY l.startPrice DESC OR maxBidValue";
+            if (sorting.equals(PRICE_DESC)) {
+                query.append(" l.startPrice DESC ");
             } else {
-                query = " ORDER BY l.endDate";
+                query.append(" l.endDate");
             }
         }
-        return query;
+        return query.toString();
     }
 }
 

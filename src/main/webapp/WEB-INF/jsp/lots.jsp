@@ -116,26 +116,3 @@
 <script src="/js/sort.js"></script>
 </body>
 </html>
-<%--<div class="btn-group">--%>
-<%--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"--%>
-<%--aria-haspopup="true" aria-expanded="false">--%>
-<%--Categories <span class="caret"></span>--%>
-<%--</button>--%>
-<%--<ul class="dropdown-menu">--%>
-<%--<c:forEach items="${categories}" var="parent">--%>
-<%--<div class="btn-group">--%>
-<%--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"--%>
-<%--aria-haspopup="true" aria-expanded="false">--%>
-<%--${parent.name} <span class="caret"></span>--%>
-<%--</button>--%>
-<%--<ul class="dropdown-menu">--%>
-<%--<c:forEach items="${parent}" var="category">--%>
-<%--<li><a href="#">${category.name}</a></li>--%>
-<%--</c:forEach>--%>
-
-<%--</ul>--%>
-<%--</div>--%>
-<%--</c:forEach>--%>
-
-<%--</ul>--%>
-<%--</div>--%>

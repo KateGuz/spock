@@ -33,5 +33,14 @@
         <constructor-arg value="SELECT c.id, c.name, c.parentId, p.name AS parentName FROM category AS c
                                 JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
     </bean>
+    <bean id="getUserSQL" class="java.lang.String">
+        <constructor-arg value="SELECT * FROM user WHERE email = :email AND password =:password;"/>
+    </bean>
+    <bean id="addUserSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>
+    </bean>
+    <bean id="getUserByIdSQL" class="java.lang.String">
+        <constructor-arg value="SELECT * FROM user WHERE id = :id;"/>
+    </bean>
 
 </beans>

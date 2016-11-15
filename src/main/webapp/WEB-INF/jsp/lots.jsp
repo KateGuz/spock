@@ -164,11 +164,13 @@
 
     </div>
 </div>
-<script src="/js/signIn.js"></script>
-<script src="/js/signUp.js"></script>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/signIn.js"></script>
+<script src="/js/signUp.js"></script>
 </body>
 </html>

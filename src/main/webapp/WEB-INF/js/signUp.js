@@ -1,5 +1,5 @@
 function signUp() {
-    $("#dataForm").validate();
+    // $("#dataForm").validate();
 
     var name = $("#inputNameSignUp").val();
     var email = $("#inputEmailSignUp").val();
@@ -22,3 +22,4 @@ function signUp() {
         }
     })
 }
+

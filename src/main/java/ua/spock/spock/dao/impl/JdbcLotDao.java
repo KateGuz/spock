@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.LotDao;
 import ua.spock.spock.dao.mapper.LotRowMapper;
 import ua.spock.spock.dao.mapper.util.QueryType;
+import ua.spock.spock.dao.util.QueryGenerator;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.filter.LotFilter;
 
 import java.util.List;
 
@@ -15,13 +17,10 @@ import java.util.List;
 public class JdbcLotDao implements LotDao {
     private final LotRowMapper ALL_LOTS_ROW_MAPPER = new LotRowMapper(QueryType.GET_ALL_LOTS);
     private final LotRowMapper LOT_ROW_MAPPER = new LotRowMapper(QueryType.GET_ONE_LOT);
-
+    @Autowired
+    private QueryGenerator queryGenerator;
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    @Autowired
-    private String getAllLotsSQL;
-    @Autowired
-    private String getLotsByCategorySQL;
     @Autowired
     private String getLotByIdSQL;
 
@@ -29,14 +28,10 @@ public class JdbcLotDao implements LotDao {
     public Lot getById(int lotId) {
         return namedParameterJdbcTemplate.queryForObject(getLotByIdSQL, new MapSqlParameterSource("lotId", lotId), LOT_ROW_MAPPER);
     }
-    @Override
-    public List<Lot> getAll() {
-        return namedParameterJdbcTemplate.query(getAllLotsSQL, ALL_LOTS_ROW_MAPPER);
-    }
 
     @Override
-    public List<Lot> getByCategory(int categoryId) {
-        return namedParameterJdbcTemplate.query(getLotsByCategorySQL, new MapSqlParameterSource("categoryId", categoryId), ALL_LOTS_ROW_MAPPER);
+    public List<Lot> get(LotFilter lotFilter) {
+        return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
     }
 }
 

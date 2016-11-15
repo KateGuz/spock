@@ -3,18 +3,17 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="getAllLotsSQL" class="java.lang.String">
+    <bean id="getLotsStatementSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
-                                left JOIN bid AS b ON b.bid=l.maxBidId;"/>
+                                left JOIN bid AS b ON b.bid=l.maxBidId"/>
     </bean>
 
-    <bean id="getLotsByCategorySQL" class="java.lang.String">
-        <constructor-arg value="SELECT l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid as maxBidValue FROM lot AS l
-                                JOIN category AS c ON l.categoryId=c.id
-                                left JOIN bid AS b ON b.lotId=l.id
-                                WHERE c.id =:categoryId;"/>
+    <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
+        <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
+                                WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
     </bean>
+
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
                                 l.userId, u.name AS userName, l.startDate, l.endDate, l.currency, l.startPrice, l.minStep,
@@ -26,6 +25,7 @@
                                 left JOIN bid as b ON b.id=l.maxBidId
                                 WHERE l.id = :lotId;"/>
     </bean>
+
     <bean id="getBidCountByLotIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId = :lotId;"/>
     </bean>

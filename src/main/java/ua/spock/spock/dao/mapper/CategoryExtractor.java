@@ -18,19 +18,20 @@ public class CategoryExtractor implements ResultSetExtractor<List<Category>> {
         List<Category> allCategories = new ArrayList<>();
         Category parent = null;
         while (rs.next()) {
-                if (parent == null || parent.getId() != rs.getInt("parentId")) {
-                    parent = new Category();
-                    parent.setId(rs.getInt("parentId"));
-                    parent.setName(rs.getString("parentName"));
-                    allCategories.add(parent);
-                }
-                Category child = new Category();
-                child.setId(rs.getInt("id"));
-                child.setName(rs.getString("name"));
-                child.setParent(parent);
-                parent.getChildren().add(child);
-            }
 
+            if (parent == null || parent.getId() != rs.getInt("parentId")) {
+                parent = new Category();
+                parent.setId(rs.getInt("parentId"));
+                parent.setName(rs.getString("parentName"));
+                allCategories.add(parent);
+            }
+            Category child = new Category();
+            child.setId(rs.getInt("id"));
+            child.setName(rs.getString("name"));
+            child.setParent(parent);
+            parent.getChildren().add(child);
+        }
         return allCategories;
     }
 }
+

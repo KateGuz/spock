@@ -1,9 +1,13 @@
 package ua.spock.spock.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Category {
     private int id;
     private String name;
     private Category parent;
+    private List<Category> children = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -29,12 +33,27 @@ public class Category {
         this.parent = parent;
     }
 
+    public List<Category> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Category> children) {
+        this.children = children;
+    }
+
     @Override
     public String toString() {
+        List<String> childrenIds = new ArrayList<>();
+        if (children.size() >0) {
+            for (Category category : children) {
+                childrenIds.add("{id= " + category.getId() + ", name= " + category.getName() + "}");
+            }
+        }
         return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", parent=" + (parent == null ? "null" : parent.getId()) +
+                ", children =" +(children.size() == 0 ? "none" : childrenIds) +
                 '}';
     }
 }

@@ -1,18 +1,26 @@
 package ua.spock.spock.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.User;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
+import ua.spock.spock.service.UserService;
+import ua.spock.spock.utils.JsonParser;
 
+import javax.servlet.http.HttpSession;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,8 +32,12 @@ public class LotController {
     @Autowired
     private BidService bidService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private CategoryCacheService category;
+
     private LotFilter lotFilter;
+
 
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
@@ -88,5 +100,35 @@ public class LotController {
 
     private double getCurrentPrice(Lot lot) {
         return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public ResponseEntity addUser(@RequestBody String json, HttpSession session) {
+        User user = JsonParser.jsonToUser(json);
+        if (userService.validate(user)) {
+            userService.addUser(user);
+            session.setAttribute("loggedUser", user);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity logIn(@RequestBody String json, HttpSession session) {
+        User tempUser = JsonParser.jsonToUser(json);
+        User user = userService.getUser(tempUser);
+        if (user != null) {
+            session.setAttribute("loggedUser", user);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpSession session) {
+        session.removeAttribute("loggedUser");
+        return "redirect:/";
     }
 }

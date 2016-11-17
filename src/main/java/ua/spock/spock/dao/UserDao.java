@@ -3,5 +3,12 @@ package ua.spock.spock.dao;
 import ua.spock.spock.entity.User;
 
 public interface UserDao {
-    User getUserById(int id);
+
+    void addUser(User user);
+
+    User getUser(User user);
+
+    User getUser(int id);
+
+    void edit(int id, User user);
 }

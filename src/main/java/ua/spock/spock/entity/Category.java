@@ -1,6 +1,5 @@
 package ua.spock.spock.entity;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

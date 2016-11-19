@@ -23,10 +23,17 @@ public class JdbcLotDao implements LotDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
     private String getLotByIdSQL;
+    @Autowired
+    private String getLotsByUserIdSQL;
 
     @Override
     public Lot getById(int lotId) {
         return namedParameterJdbcTemplate.queryForObject(getLotByIdSQL, new MapSqlParameterSource("lotId", lotId), LOT_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Lot> get(int userId) {
+        return namedParameterJdbcTemplate.query(getLotsByUserIdSQL, new MapSqlParameterSource("userId", userId), ALL_LOTS_ROW_MAPPER);
     }
 
     @Override

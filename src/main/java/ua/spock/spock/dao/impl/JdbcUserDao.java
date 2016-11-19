@@ -9,14 +9,12 @@ import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.UserDao;
 import ua.spock.spock.dao.mapper.UserRowMapper;
 import ua.spock.spock.entity.User;
-
-import java.util.HashMap;
-import java.util.Map;
+import ua.spock.spock.entity.UserType;
 
 @Repository
 public class JdbcUserDao implements UserDao {
-    @Autowired
-    UserRowMapper userRowMapper;
+
+    private final UserRowMapper USER_ROW_MAPPER=new UserRowMapper();
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
@@ -34,22 +32,22 @@ public class JdbcUserDao implements UserDao {
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
         params.addValue("email", user.getEmail());
-        params.addValue("type", user.getType().getId());
+        params.addValue("type", UserType.USER.getId());
         namedParameterJdbcTemplate.update(addUserSQL, params);
     }
 
     @Override
     public User getUser(User user) {
-        Map<String, String> map = new HashMap<>();
-        map.put("email", user.getEmail());
-        map.put("password", user.getPassword());
-        return namedParameterJdbcTemplate.queryForObject(getUserSQL, new MapSqlParameterSource(map), userRowMapper);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("name", user.getName());
+        params.addValue("password", user.getPassword());
+        User userw= namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
+        return userw;
     }
 
     @Override
-    public User getUser(int id) {
-        return namedParameterJdbcTemplate.queryForObject(getUserByIdSQL, new MapSqlParameterSource("id", id), userRowMapper);
-
+    public User getUserById(int id) {
+        return namedParameterJdbcTemplate.queryForObject(getUserByIdSQL, new MapSqlParameterSource("id", id), USER_ROW_MAPPER);
     }
 
     @Override

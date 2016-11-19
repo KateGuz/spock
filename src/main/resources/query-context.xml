@@ -13,8 +13,11 @@
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
                                 WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
     </bean>
-    <bean id="getLotsByUserIdStatementSQL" class="java.lang.String">
-        <constructor-arg value=" JOIN user AS u ON l.userId=u.id
+    <bean id="getLotsByUserIdSQL" class="java.lang.String">
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+                                FROM lot AS l
+                                left JOIN bid AS b ON b.bid=l.maxBidId
+                                JOIN user AS u ON l.userId=u.id
                                 WHERE  u.id =:userId"/>
     </bean>
 
@@ -27,27 +30,28 @@
                                 JOIN category AS c ON c.id=l.categoryId
                                 JOIN category AS cp ON cp.id=c.parentId
                                 left JOIN bid as b ON b.id=l.maxBidId
-                                WHERE l.id = :lotId;"/>
+                                WHERE l.id =:lotId;"/>
     </bean>
 
     <bean id="getBidCountByLotIdSQL" class="java.lang.String">
-        <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId = :lotId;"/>
+        <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId =:lotId;"/>
     </bean>
     <bean id="getAllCategoriesSQL" class="java.lang.String">
         <constructor-arg value="SELECT c.id, c.name, c.parentId, p.name AS parentName FROM category AS c
                                 JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
     </bean>
     <bean id="getUserSQL" class="java.lang.String">
-        <constructor-arg value="SELECT * FROM user WHERE email = :email AND password =:password;"/>
+        <constructor-arg value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.name =:name AND u.password =:password;"/>
     </bean>
     <bean id="addUserSQL" class="java.lang.String">
         <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>
     </bean>
     <bean id="getUserByIdSQL" class="java.lang.String">
-        <constructor-arg value="SELECT * FROM user WHERE id = :id;"/>
+        <constructor-arg
+                value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.id = :id;"/>
     </bean>
     <bean id="editUserSQL" class="java.lang.String">
-        <constructor-arg value="UPDATE  user SET name= :name, email= :email, password =:password WHERE id= :id;"/>
+        <constructor-arg value="UPDATE  user SET name=:name, email=:email, password =:password WHERE id=:id;"/>
     </bean>
 
 </beans>

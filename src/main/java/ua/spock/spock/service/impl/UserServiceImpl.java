@@ -3,7 +3,6 @@ package ua.spock.spock.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.spock.spock.dao.UserDao;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.entity.UserType;
@@ -17,9 +16,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
     public void addUser(User user) {
-        user.setType(UserType.USER);
         userDao.addUser(user);
     }
 
@@ -36,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(int id) {
-        return userDao.getUser(id);
+        return userDao.getUserById(id);
 
     }
 

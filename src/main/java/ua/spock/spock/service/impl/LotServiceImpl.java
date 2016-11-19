@@ -15,11 +15,16 @@ public class LotServiceImpl implements LotService {
     private LotDao lotDao;
 
     @Override
-    public List<Lot> getAll(LotFilter lotFilter) {
+    public List<Lot> getLots(LotFilter lotFilter) {
         return lotDao.get(lotFilter);
     }
 
     public Lot getById(int lotId) {
         return lotDao.getById(lotId);
+    }
+
+    @Override
+    public List<Lot> getUserLots(int userId) {
+        return lotDao.get(userId);
     }
 }

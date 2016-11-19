@@ -8,4 +8,5 @@ import java.util.List;
 public interface LotDao {
     List<Lot> get(LotFilter lotFilter);
     Lot getById(int lotId);
+    List<Lot> get(int userId);
 }

@@ -10,7 +10,6 @@ import ua.spock.spock.entity.UserType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Service
 public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet resultSet, int rowNum) throws SQLException {

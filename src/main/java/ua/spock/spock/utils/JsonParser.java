@@ -12,13 +12,13 @@ public class JsonParser {
             Object object = parser.parse(json);
             User user = new User();
             JSONObject jsonObject = (JSONObject) object;
-            String email = String.valueOf(jsonObject.get("email"));
+            String name = String.valueOf(jsonObject.get("name"));
             String password = String.valueOf(jsonObject.get("password"));
-            user.setEmail(email);
+            user.setName(name);
             user.setPassword(password);
-            if (jsonObject.containsKey("name")) {
-                String name = String.valueOf(jsonObject.get("name"));
-                user.setName(name);
+            if (jsonObject.containsKey("email")) {
+                String email = String.valueOf(jsonObject.get("email"));
+                user.setEmail(email);
             }
             return user;
         } catch (ParseException e) {

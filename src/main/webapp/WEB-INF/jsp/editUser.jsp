@@ -71,58 +71,7 @@
         </div>
     </div><!-- /.container-fluid -->
 </nav>
-<div class="container container-narrow">
-    <hr>
-    <div class="row">
-        <div class="col-lg-4">
-            <img src="..." alt="...">
-        </div>
-        <div class="col-lg-8">
-            <h4>${lot.title}</h4>
-            <dl class="dl-horizontal">
-                <dt>description</dt>
-                <dd>${lot.description}</dd>
-                <dt>category</dt>
-                <dd>${lot.category.parent.name}>${lot.category.name}</dd>
-                <dt>currency</dt>
-                <dd>${lot.currency}</dd>
-                <dt>start price</dt>
-                <dd>${lot.startPrice}</dd>
-                <dt>current price</dt>
-                <dd>${currentPrice} [${bidCount} bids total]</dd>
-                <dt>min bid step</dt>
-                <dd>${lot.minStep} ${lot.currency}</dd>
-                <dt>time left</dt>
-                <dd data-toggle="tooltip" title="${endDate}">${timeLeft}</dd>
-                <dt>seller</dt>
-                <dd>${lot.user.name}</dd>
-            </dl>
-            <form class="form-inline">
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputAmount">Amount</label>
-                    <div class="input-group">
-                        <div class="input-group-addon">$</div>
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
-                        <div class="input-group-addon">.00</div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Place bid</button>
-            </form>
-            <dl class="dl-horizontal">
 
-                <dt>buy it now price</dt>
-                <dd><div>${lot.quickBuyPrice}  ${lot.currency}</div>
-                    <div>
-                        <form class="form-inline">
-                            <button type="submit" class="btn btn-primary">Buy it now</button>
-                        </form>
-                    </div>
-                </dd>
-
-            </dl>
-        </div>
-    </div>
-</div>
 <!-- Sign in -->
 <div id="signIn" class="modal fade registration-form" role="dialog">
     <div class="modal-dialog">
@@ -149,7 +98,51 @@
 
     </div>
 </div>
+<form class="navbar-form navbar-nav">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="user-load-avatar-wrapper">
+                                <div class="thumbnail user-photo">
+                                    <img src="{{photo}}">
+                                </div>
+                                <div class="user-load-avatar">
+                                    <input type="button" class="btn btn-default" value="Загрузить новое фото">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="user-info edit-user-info">
+                                <div class="edit-field-wrapper">
+                                    <p class="edit-user-label">Id:</p>
+                                    <input id="userId" type="text" class="form-control" value="${user.id}" size="30" required>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <input id="inputNameEdit" type="text" class="form-control" value="${user.name}" size="30" required>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <p class="edit-user-label">Почта:</p>
+                                    <input id="inputEmailEdit" type="text" class="form-control" value="${user.email}" size="30" required>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <p class="edit-user-label">Пароль:</p>
+                                    <input id="inputPasswordEdit" type="password" class="form-control" value="${user.password}" size="30" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="save-changes-button">
+                    <button type="submit" class="btn btn-success" onclick="edit()">Сохранить изменения</button>
+                </div>
 
+            </div>
+        </div>
+    </div>
+</form>
 <!-- Sign up -->
 <div id="signUp" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -183,5 +176,6 @@
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
+<script src="/js/edit.js"></script>
 </body>
 </html>

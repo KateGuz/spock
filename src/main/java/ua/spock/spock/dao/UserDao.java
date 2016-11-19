@@ -8,7 +8,7 @@ public interface UserDao {
 
     User getUser(User user);
 
-    User getUser(int id);
+    User getUserById(int id);
 
     void edit(int id, User user);
 }

@@ -10,4 +10,6 @@ public interface LotService {
     List<Lot> getLots(LotFilter lotFilter);
     Lot getById(int lotId);
     List<Lot> getUserLots(int userId);
+    void delete(int id);
+    void add(Lot lot);
 }

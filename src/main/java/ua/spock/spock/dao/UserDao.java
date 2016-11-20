@@ -10,5 +10,5 @@ public interface UserDao {
 
     User getUserById(int id);
 
-    void edit(int id, User user);
+    void edit(User user);
 }

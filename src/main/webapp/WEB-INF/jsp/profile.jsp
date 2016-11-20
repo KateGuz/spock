@@ -54,9 +54,18 @@
                         <li><a role="button" onclick="">EUR</a></li>
                     </ul>
                 </ul>
-                <li class="active"><a href="">войти/выйти <span
-                        class="sr-only">(current)</span></a>
-                </li>
+                <ul class="nav navbar-nav navbar-right">
+                    <c:choose>
+                        <c:when test="${empty loggedUser}">
+                            <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Sign In / Sign up</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a data-toggle="modal" href="/user/${loggedUser.id}/edit">${loggedUser.name}</a></li>
+                            <li><a data-toggle="modal" href="/logout">Sign out</a></li>
+                        </c:otherwise>
+                    </c:choose>
+
+                </ul>
             </ul>
         </div>
     </div><!-- /.container-fluid -->

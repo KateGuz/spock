@@ -9,4 +9,6 @@ public interface LotDao {
     List<Lot> get(LotFilter lotFilter);
     Lot getById(int lotId);
     List<Lot> get(int userId);
+    void add(Lot lot);
+    void delete(int id);
 }

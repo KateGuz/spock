@@ -5,7 +5,6 @@ function edit() {
     var email = $("#inputEmailEdit").val();
     var password = $("#inputPasswordEdit").val();
     var user = $("#userId").val();
-alert(user);
     var json = '{"name" :"' + name +
         '", "email" :"' + email +
         '", "password" :"' + password + '"}';
@@ -19,7 +18,7 @@ alert(user);
             location.reload();
         },
         error: function () {
-            alert("User with name or email already exist or your data is not passed validation");
+            alert("");
         }
     })
 }

@@ -5,16 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ua.spock.spock.entity.Lot;
-import org.springframework.web.bind.annotation.RequestParam;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
+import ua.spock.spock.utils.LotJsonParser;
+import ua.spock.spock.utils.UserJsonParser;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -66,6 +65,23 @@ public class LotController {
         return "lot";
     }
 
+    @RequestMapping("/lot")
+    public String add() {
+        return "addLot";
+    }
+
+    @RequestMapping(value = "/lot", method = RequestMethod.POST)
+    public ResponseEntity addNewLot(@RequestBody String json) {
+        Lot lot = LotJsonParser.jsonToLot(json);
+        lotService.add(lot);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = " /lot/{lotId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteStudent(@PathVariable("lotId") int id) {
+        lotService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
     private String getTimeLeft(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getEndDate());

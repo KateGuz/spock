@@ -11,5 +11,5 @@ public interface UserService {
     boolean validate(User user);
 
     User getUser(int id);
-    void edit(int id, User  user);
+    void edit(User  user);
 }

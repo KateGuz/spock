@@ -27,4 +27,14 @@ public class LotServiceImpl implements LotService {
     public List<Lot> getUserLots(int userId) {
         return lotDao.get(userId);
     }
+
+    @Override
+    public void delete(int id) {
+        lotDao.delete(id);
+    }
+
+    @Override
+    public void add(Lot lot) {
+        lotDao.add(lot);
+    }
 }

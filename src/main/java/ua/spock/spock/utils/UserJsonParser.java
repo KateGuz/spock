@@ -3,9 +3,10 @@ package ua.spock.spock.utils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
 
-public class JsonParser {
+public class UserJsonParser {
     public static User jsonToUser(String json) {
         JSONParser parser = new JSONParser();
         try {
@@ -26,4 +27,5 @@ public class JsonParser {
         }
 
     }
+
 }

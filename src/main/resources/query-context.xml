@@ -46,12 +46,18 @@
     <bean id="addUserSQL" class="java.lang.String">
         <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>
     </bean>
+    <bean id="addLotSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO lot (title,description,categoryId,startDate,endDate,startPrice,minStep,quickBuyPrice,userId,type,currency) VALUES (:title, :description, :categoryId, :startDate, :endDate, :startPrice, :minStep, :quickBuyPrice, :userId, :type, :currency);"/>
+    </bean>
     <bean id="getUserByIdSQL" class="java.lang.String">
         <constructor-arg
                 value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.id = :id;"/>
     </bean>
     <bean id="editUserSQL" class="java.lang.String">
         <constructor-arg value="UPDATE  user SET name=:name, email=:email, password =:password WHERE id=:id;"/>
+    </bean>
+    <bean id="deleteLotSQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM lot WHERE id =:lotId;"/>
     </bean>
 
 </beans>

@@ -14,7 +14,7 @@ import ua.spock.spock.entity.UserType;
 @Repository
 public class JdbcUserDao implements UserDao {
 
-    private final UserRowMapper USER_ROW_MAPPER=new UserRowMapper();
+    private final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
@@ -27,7 +27,7 @@ public class JdbcUserDao implements UserDao {
     private String editUserSQL;
 
     @Override
-    public void addUser(User user) {
+    public void add(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
@@ -37,21 +37,20 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUser(User user) {
+    public User get(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
-        User userw= namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
-        return userw;
+        return namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
     }
 
     @Override
-    public User getUserById(int id) {
+    public User get(int id) {
         return namedParameterJdbcTemplate.queryForObject(getUserByIdSQL, new MapSqlParameterSource("id", id), USER_ROW_MAPPER);
     }
 
     @Override
-    public void edit(int id, User user) {
+    public void edit(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", user.getId());
         params.addValue("name", user.getName());

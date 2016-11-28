@@ -4,12 +4,12 @@ import ua.spock.spock.entity.User;
 
 public interface UserService {
 
-    void addUser(User user);
+    void add(User user);
 
-    User getUser(User user);
+    User get(User user);
 
     boolean validate(User user);
 
-    User getUser(int id);
-    void edit(int id, User  user);
+    User get(int id);
+    void edit(User  user);
 }

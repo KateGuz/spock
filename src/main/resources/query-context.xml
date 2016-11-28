@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="getLotsStatementSQL" class="java.lang.String">
-        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 left JOIN bid AS b ON b.bid=l.maxBidId"/>
     </bean>
@@ -14,7 +14,7 @@
                                 WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
     </bean>
     <bean id="getLotsByUserIdSQL" class="java.lang.String">
-        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 left JOIN bid AS b ON b.bid=l.maxBidId
                                 JOIN user AS u ON l.userId=u.id
@@ -23,7 +23,7 @@
 
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
-                                l.userId, u.name AS userName, l.startDate, l.endDate, l.currency, l.startPrice, l.minStep,
+                                l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep,
                                 l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 JOIN user AS u ON u.id=l.userId
@@ -47,7 +47,7 @@
         <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>
     </bean>
     <bean id="addLotSQL" class="java.lang.String">
-        <constructor-arg value="INSERT INTO lot (title,description,categoryId,startDate,endDate,startPrice,minStep,quickBuyPrice,userId,type,currency) VALUES (:title, :description, :categoryId, :startDate, :endDate, :startPrice, :minStep, :quickBuyPrice, :userId, :type, :currency);"/>
+        <constructor-arg value="INSERT INTO lot (title,description,categoryId,startDate,endDate,startPrice,minStep,quickBuyPrice,userId,type) VALUES (:title, :description, :categoryId, :startDate, :endDate, :startPrice, :minStep, :quickBuyPrice, :userId, :type);"/>
     </bean>
     <bean id="getUserByIdSQL" class="java.lang.String">
         <constructor-arg

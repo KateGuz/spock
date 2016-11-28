@@ -27,7 +27,7 @@ public class JdbcUserDao implements UserDao {
     private String editUserSQL;
 
     @Override
-    public void addUser(User user) {
+    public void add(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
@@ -37,16 +37,15 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUser(User user) {
+    public User get(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
-        User newUser = namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
-        return newUser;
+        return namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
     }
 
     @Override
-    public User getUserById(int id) {
+    public User get(int id) {
         return namedParameterJdbcTemplate.queryForObject(getUserByIdSQL, new MapSqlParameterSource("id", id), USER_ROW_MAPPER);
     }
 

@@ -86,8 +86,6 @@
                 <dd>${lot.description}</dd>
                 <dt>category</dt>
                 <dd>${lot.category.parent.name}>${lot.category.name}</dd>
-                <dt>currency</dt>
-                <dd>${lot.currency}</dd>
                 <dt>start price</dt>
                 <dd>${lot.startPrice}</dd>
                 <dt>current price</dt>

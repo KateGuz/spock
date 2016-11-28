@@ -18,7 +18,7 @@ function edit() {
             location.reload();
         },
         error: function () {
-            alert("");
+            alert("Пользователь с таким именем или почтой уже есть.");
         }
     })
 }

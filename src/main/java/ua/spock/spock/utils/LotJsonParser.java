@@ -5,6 +5,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ua.spock.spock.entity.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class LotJsonParser {
@@ -38,8 +39,13 @@ public class LotJsonParser {
             Category category=new Category();
             category.setId(categoryId);
             lot.setCategory(category);
-            lot.setType(LotType.IN_PROGRESS);
-            lot.setCurrency(Currency.UAH);
+            LocalDateTime now = LocalDateTime.now();
+            Duration interval = Duration.between(now, lot.getStartDate());
+            if(interval.isNegative()){
+            lot.setType(LotType.IN_PROGRESS);}
+            else {
+                lot.setType(LotType.PENDING);
+            }
             return lot;
         } catch (ParseException e) {
             throw new RuntimeException("Error occurred while converting json to user", e);

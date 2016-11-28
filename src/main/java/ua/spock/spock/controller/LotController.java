@@ -13,8 +13,6 @@ import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.utils.LotJsonParser;
-import ua.spock.spock.utils.UserJsonParser;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,12 +26,9 @@ public class LotController {
     @Autowired
     private CategoryCacheService category;
 
-    private LotFilter lotFilter;
-
-
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
-        lotFilter = new LotFilter();
+        LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         model.addAttribute("lots", lotService.getLots(lotFilter));
         model.addAttribute("categories", category.getAllCategories());
@@ -42,7 +37,7 @@ public class LotController {
 
     @RequestMapping("/category/{categoryId}")
     public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @PathVariable Integer categoryId) {
-        lotFilter = new LotFilter();
+        LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
         model.addAttribute("lots", lotService.getLots(lotFilter));
@@ -82,6 +77,7 @@ public class LotController {
         lotService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
     private String getTimeLeft(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getEndDate());

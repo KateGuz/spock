@@ -1,20 +1,20 @@
 package ua.spock.spock.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.UserDao;
 import ua.spock.spock.dao.mapper.UserRowMapper;
 import ua.spock.spock.entity.User;
-
-import java.util.HashMap;
-import java.util.Map;
+import ua.spock.spock.entity.UserType;
 
 @Repository
 public class JdbcUserDao implements UserDao {
-    @Autowired
-    UserRowMapper userRowMapper;
+
+    private final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
@@ -23,29 +23,39 @@ public class JdbcUserDao implements UserDao {
     private String getUserSQL;
     @Autowired
     private String getUserByIdSQL;
+    @Autowired
+    private String editUserSQL;
 
     @Override
-    public void addUser(User user) {
+    public void add(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
         params.addValue("email", user.getEmail());
-        params.addValue("type", user.getType().getId());
+        params.addValue("type", UserType.USER.getId());
         namedParameterJdbcTemplate.update(addUserSQL, params);
     }
 
     @Override
-    public User getUser(User user) {
-        Map<String, String> map = new HashMap<>();
-        map.put("email", user.getEmail());
-        map.put("password", user.getPassword());
-        return namedParameterJdbcTemplate.queryForObject(getUserSQL, new MapSqlParameterSource(map), userRowMapper);
+    public User get(User user) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("name", user.getName());
+        params.addValue("password", user.getPassword());
+        return namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
     }
 
     @Override
-    public User getUser(int id) {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("id", id);
-        return namedParameterJdbcTemplate.queryForObject(getUserByIdSQL, new MapSqlParameterSource(map), userRowMapper);
+    public User get(int id) {
+        return namedParameterJdbcTemplate.queryForObject(getUserByIdSQL, new MapSqlParameterSource("id", id), USER_ROW_MAPPER);
+    }
+
+    @Override
+    public void edit(User user) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", user.getId());
+        params.addValue("name", user.getName());
+        params.addValue("password", user.getPassword());
+        params.addValue("email", user.getEmail());
+        namedParameterJdbcTemplate.update(editUserSQL, params);
     }
 }

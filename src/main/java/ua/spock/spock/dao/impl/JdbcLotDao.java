@@ -30,6 +30,8 @@ public class JdbcLotDao implements LotDao {
     private String deleteLotSQL;
     @Autowired
     private String addLotSQL;
+    @Autowired
+    private String editLotSQL;
 
     @Override
     public Lot getById(int lotId) {
@@ -43,6 +45,28 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public void add(Lot lot) {
+        MapSqlParameterSource params = fillParams(lot);
+        namedParameterJdbcTemplate.update(addLotSQL, params);
+
+    }
+
+    @Override
+    public void delete(int id) {
+        namedParameterJdbcTemplate.update(deleteLotSQL, new MapSqlParameterSource("lotId",id));
+    }
+
+    @Override
+    public void edit(Lot lot) {
+        MapSqlParameterSource params = fillParams(lot);
+        namedParameterJdbcTemplate.update(editLotSQL, params);
+    }
+
+    @Override
+    public List<Lot> get(LotFilter lotFilter) {
+        return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
+    }
+
+    private MapSqlParameterSource fillParams(Lot lot) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("title", lot.getTitle());
         params.addValue("description", lot.getDescription());
@@ -54,18 +78,7 @@ public class JdbcLotDao implements LotDao {
         params.addValue("quickBuyPrice", lot.getQuickBuyPrice());
         params.addValue("userId", lot.getUser().getId());
         params.addValue("type", lot.getType().getId());
-        namedParameterJdbcTemplate.update(addLotSQL, params);
-
-    }
-
-    @Override
-    public void delete(int id) {
-        namedParameterJdbcTemplate.update(deleteLotSQL, new MapSqlParameterSource("lotId",id));
-    }
-
-    @Override
-    public List<Lot> get(LotFilter lotFilter) {
-        return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
+        return params;
     }
 }
 

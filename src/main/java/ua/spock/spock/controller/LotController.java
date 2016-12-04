@@ -78,6 +78,21 @@ public class LotController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @RequestMapping("/lot/{lotId}/edit")
+    public String editLot(ModelMap model, @PathVariable int lotId) {
+        Lot lot = lotService.getById(lotId);
+        model.addAttribute("lot", lot);
+        return "editLot";
+    }
+
+    @RequestMapping(value = "/lot/{id}", method = RequestMethod.PUT)
+    public ResponseEntity editUser(@PathVariable Integer id, @RequestBody String json) {
+        Lot lot = LotJsonParser.jsonToLot(json);
+        lot.setId(id);
+        lotService.edit(lot);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     private String getTimeLeft(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getEndDate());

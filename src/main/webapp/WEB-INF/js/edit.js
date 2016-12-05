@@ -10,7 +10,7 @@ function edit() {
         '", "password" :"' + password + '"}';
 
     $.ajax({
-        url: '/user/'+user,
+        url: '/user/'+user+'/edit',
         type: 'PUT',
         data: json,
         contentType: "application/json",

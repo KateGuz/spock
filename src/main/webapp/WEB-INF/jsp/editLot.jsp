@@ -8,19 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/ninja-slider.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
 
+</head>
 <body>
 <!--Top section-->
 <section class="top-section">
@@ -35,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-    <a class="navbar-brand logo" href="/"><img src="/img/logo.png"></a>
+                <a class="navbar-brand logo" href="/"><img src="/img/logo.png"></a>
             </div>
             <div class="collapse navbar-collapse main-navbar" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-nav">
@@ -71,98 +67,93 @@
     </nav>
 </section>
 <!--End of top section-->
+
 <!--Main section-->
 <section class="main-section">
-    <form class="navbar-form navbar-nav">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="lot-image-slider-wrapper">
-                        <div id="ninja-slider">
-                            <div class="inner">
-                                <ul>
-                                    {{#each img}}
-                                    <li><a class="ns-img" href="{{src}}"></a></li>
-                                    {{/each}}
-                                </ul>
+    <div class="lot-wrapper">
+        <div class="lot-details">
+            <form class="navbar-form navbar-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="lot-image-slider-wrapper">
+                                <div id="ninja-slider">
+                                    <div class="inner">
+                                        <ul>
+                                            <c:forEach var="i" begin="0" end="3">
+                                                <li><a class="ns-img" href="/img/logo.png"></a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lot-load-new-main-image">
+                                <input type="button" class="btn btn-default" value="Загрузить новое основное фото">
+                            </div>
+                            <div class="lot-load-new-additional-images">
+                                <input type="button" class="btn btn-default" value="Загрузить новые дополнительные фото">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="edit-lot-details-wrapper">
+                                <div class="edit-field-wrapper">
+                                    <input type="text" class="form-control" value="${lot.title}" size="60" required id="title">
+                                </div>
+                                <!-- Categories dropdown -->
+                                <div class="category-pick-wrapper edit-field-wrapper">
+                                    <span>Категория:</span>
+                                    <select class="form-control">
+                                        <c:forEach items="${categories}" var="parent">
+                                        <optgroup label="${parent.name}">
+                                            <c:forEach items="${parent.children}" var="category">
+                                            <option value="${category.id}" id="categoryId">"${category.name}""${category.id}" </option>
+                                           </c:forEach>
+                                        </optgroup>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <!-- End of categories dropdown -->
+                                <div class="edit-field-wrapper">
+                                    <textarea class="form-control" rows="7" cols="60"  required id="description">${lot.description}</textarea>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Начальная ставка (UAH):</span>
+                                    <input type="number" class="form-control" value="${lot.startPrice}" size="10" required id="startPrice">
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Минимальный шаг (UAH):</span>
+                                    <input type="number" class="form-control"  value="${lot.minStep}" size="10" required id="minStep">
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Мгновенный выкуп (UAH):</span>
+                                    <input type="number" class="form-control" value="${lot.quickBuyPrice}" size="10" id="quickBuyPrice">
+                                    <span>*опционально</span>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Старт аукциона:</span>
+                                    <input type="datetime-local" class="form-control" value="${lot.startDate}" required id="startDate">
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Конец аукциона:</span>
+                                    <input type="datetime-local" class="form-control" value="${lot.endDate}" required id="endDate">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="lot-load-new-main-image">
-                        <input type="button" class="btn btn-default" value="Загрузить новое основное фото">
-                    </div>
-                    <div class="lot-load-new-additional-images">
-                        <input type="button" class="btn btn-default" value="Загрузить новые дополнительные фото">
-                    </div>
                 </div>
-                <div class="col-md-7">
-                    <div class="edit-lot-details-wrapper">
-                        <div class="edit-field-wrapper">
-                            <span>ID лота:</span>
-                            <input type="number" class="form-control" value="${lot.id}" size="60" required id="lotId">
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>ID пользователя:</span>
-                            <input type="number" class="form-control" value="${lot.user.id}" size="60" required id="userId">
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <input type="text" class="form-control" value="${lot.title}" size="60" required id="title">
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>ID категории:</span>
-                            <input type="text" class="form-control" value="${lot.category.id}" size="60" required id="categoryId">
-                        </div>
-                        <!-- Categories dropdown -->
-                        <div class="category-pick-wrapper edit-field-wrapper">
-                            <span>Категория:</span>
-                            <select class="form-control">
-                                <c:forEach items="${categories}" var="parent">
-                                    <optgroup label="${parent.name}">
-                                        <c:forEach items="${parent.children}" var="category">
-                                            <option value="${category.id}" id="categoryId_">${category.name}</option>
-                                        </c:forEach>
-                                    </optgroup>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <!-- End of categories dropdown -->
-                        <div class="edit-field-wrapper">
-                            <textarea class="form-control" rows="7" cols="60" required id="description">${lot.description}</textarea>
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>Начальная ставка (UAH):</span>
-                            <input type="number" class="form-control" value="${lot.startPrice}" size="10" required id="startPrice">
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>Минимальный шаг (UAH):</span>
-                            <input type="number" class="form-control" value="${lot.minStep}" size="10" required id="minStep">
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>Мгновенный выкуп (UAH):</span>
-                            <input type="number" class="form-control" value="${lot.quickBuyPrice}" size="10" id="quickBuyPrice">
-                            <span>*опционально</span>
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>Старт аукциона:</span>
-                            <input type="datetime-local" class="form-control" value="${lot.startDate}" required id="startDate">
-                        </div>
-                        <div class="edit-field-wrapper">
-                            <span>Конец аукциона:</span>
-                            <input type="datetime-local" class="form-control" value="${lot.endDate}"required id="endDate">
+                <div class="edit-field-wrapper">
+                    <input type="hidden" value="${lot.id}" id="lotId">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="save-changes-button">
+                            <button type="submit" class="btn btn-success save-changes-button"   value="${loggedUser.id}" id="userId" onclick="editLot()">Сохранить изменения</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
+
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="save-changes-button">
-                    <button type="submit" class="btn btn-success save-changes-button" onclick="editLot()">Сохранить изменения</button>
-                </div>
-            </div>
-        </div>
-    </form>
-    <script src="/js/ninja-slider.js"></script>
     </div>
 
 </section>
@@ -175,14 +166,70 @@
     </div>
 </section>
 <!--End of footer-->
+<!-- Sign in -->
+<div id="signIn" class="modal fade registration-form" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Вход</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" required name="name" placeholder="Имя" id="inputNameSignIn"><br><br>
+                <input type="password" name="password" placeholder="Пароль" id="inputPasswordSignIn"><br><br>
+                <button class="btn-success enter-button" data-dismiss="modal" onclick="signIn()">Войти</button>
+                <br>
+                <br>
+                Вы еще не зарегистрированны?
+                <a data-toggle="modal" href="#signUp" data-target="#signUp" data-dismiss="modal">Зарегистрироватся</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Выйти</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Sign up -->
+<div id="signUp" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Регистрация</h4>
+            </div>
+            <div class="modal-body">
+                <form id="dataForm">
+                    <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
+                    <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
+                    <input type="password" required name="password" placeholder="Пароль" id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/handlebars.min-latest.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/signIn.js"></script>
+<script src="/js/signUp.js"></script>
 <script src="/js/editLot.js"></script>
-<script src="/js/helpers.js"></script>
+<script src="/js/ninja-slider.js"></script>
 
 </body>
 </html>

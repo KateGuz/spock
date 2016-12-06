@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
 
@@ -189,6 +189,5 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/edit.js"></script>
-
 </body>
 </html>

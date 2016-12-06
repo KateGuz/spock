@@ -17,20 +17,17 @@ import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.utils.LotJsonParser;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
 public class LotController {
     @Autowired
+    private BidService bidService;
+    @Autowired
     private LotService lotService;
     @Autowired
-    private BidService bidService;
+    private Util util;
+
     @Autowired
     private CategoryCacheService category;
     @Autowired
@@ -40,24 +37,11 @@ public class LotController {
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
-        HashMap<Integer, String> timeLeft = new HashMap<>();
-        HashMap<Integer, Boolean> isStarted = new HashMap<>();
-        HashMap<Integer, Integer> bidCount = new HashMap<>();
         List<Lot> tempLots = lotService.getLots(lotFilter);
-        List<Lot> lots = new ArrayList<>();
-        Util util = new Util();
-        for (Lot lot : tempLots) {
-            if (util.isFinished(lot)) {
-                lots.add(lot);
-                timeLeft.put(lot.getId(), util.getTimeLeft(lot));
-                isStarted.put(lot.getId(), util.isStarted(lot));
-                bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
-            }
-        }
-        model.addAttribute("lots", lots);
-        model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("isStarted", isStarted);
-        model.addAttribute("bidCount", bidCount);
+       model.addAttribute("lots", util.getActualLots(tempLots));
+        model.addAttribute("timeLeft",util.getTimeLeft());
+        model.addAttribute("isStarted", util.getIsStarted());
+        model.addAttribute("bidCount", util.getBidCount());
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -67,24 +51,11 @@ public class LotController {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
-        HashMap<Integer, String> timeLeft = new HashMap<>();
-        HashMap<Integer, Boolean> isStarted = new HashMap<>();
-        HashMap<Integer, Integer> bidCount = new HashMap<>();
         List<Lot> tempLots = lotService.getLots(lotFilter);
-        List<Lot> lots = new ArrayList<>();
-        Util util = new Util();
-        for (Lot lot : tempLots) {
-            if (util.isFinished(lot)) {
-                lots.add(lot);
-                timeLeft.put(lot.getId(), util.getTimeLeft(lot));
-                isStarted.put(lot.getId(), util.isStarted(lot));
-                bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
-            }
-        }
-        model.addAttribute("lots", lots);
-        model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("isStarted", isStarted);
-        model.addAttribute("bidCount", bidCount);
+        model.addAttribute("lots", util.getActualLots(tempLots));
+        model.addAttribute("timeLeft",util.getTimeLeft());
+        model.addAttribute("isStarted", util.getIsStarted());
+        model.addAttribute("bidCount", util.getBidCount());
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -144,5 +115,7 @@ public class LotController {
         int userId = lot.getUser().getId();
         return "redirect:/user/" + userId;
     }
+
+
 }
 

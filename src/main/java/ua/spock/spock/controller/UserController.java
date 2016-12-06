@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ua.spock.spock.controller.util.Util;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
-import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.utils.UserJsonParser;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -28,7 +24,8 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private BidService bidService;
+    private Util util;
+
 
     @RequestMapping("/user/{id}/edit")
     public String showProfile(ModelMap model, @PathVariable Integer id) {
@@ -47,27 +44,12 @@ public class UserController {
 
     @RequestMapping(value = "/user/{id}")
     public String editUser(ModelMap model, @PathVariable Integer id) {
-        Util util = new Util();
         model.addAttribute("user", userService.get(id));
-        HashMap<Integer, String> timeLeft = new HashMap<>();
-        HashMap<Integer, Boolean> isStarted = new HashMap<>();
-        HashMap<Integer, Boolean> isFinished = new HashMap<>();
-        HashMap<Integer, Integer> bidCount = new HashMap<>();
         List<Lot> tempLots = lotService.getUserLots(id);
-        List<Lot> lots = new ArrayList<>();
-        for (Lot lot : tempLots) {
-            if (util.isFinished(lot)) {
-                lots.add(lot);
-                timeLeft.put(lot.getId(), util.getTimeLeft(lot));
-                isStarted.put(lot.getId(), util.isStarted(lot));
-                bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
-            }
-        }
-        model.addAttribute("lots", lots);
-        model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("isStarted", isStarted);
-        model.addAttribute("isFinished", isFinished);
-        model.addAttribute("bidCount", bidCount);
+        model.addAttribute("lots", util.getActualLots(tempLots));
+        model.addAttribute("timeLeft",util.getTimeLeft());
+        model.addAttribute("isStarted", util.getIsStarted());
+        model.addAttribute("bidCount", util.getBidCount());
         return "editUser";
     }
 }

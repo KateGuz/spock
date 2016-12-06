@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
 
@@ -187,8 +187,8 @@
                                 <c:choose>
                                     <c:when test="${loggedUser.id==user.id}">
                                         <div class="user-lot-controls">
-                                            <form class="user-lot-edit-button" action="editLot.html">
-                                                <input type="submit" class="btn btn-default" value="Редактировать"/>
+                                            <form class="user-lot-edit-button" action="/lot/${lot.id}/edit">
+                                                <a class="btn btn-default" href="/lot/${lot.id}/edit">Редактировать</a>
                                             </form>
                                             <button type="button" class="btn btn-danger"
                                                     onclick="deleteLot(${lot.id},${user.id})">Закрыть

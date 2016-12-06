@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -94,7 +94,7 @@
                                             <c:forEach items="${parent.children}" var="category">
                                                 <tr>
                                                     <td>
-                                                        <a class="category-child-link" href="/category/ ${category.id}">
+                                                        <a class="category-child-link" href="/category/${category.id}">
                                                             <div>
                                                                 <span class="glyphicon glyphicon-flash text-success"></span>
                                                                     ${category.name}
@@ -288,8 +288,6 @@
 <script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
-<script src="/js/handlebars.min-latest.js"></script>
-<script src="/js/helpers.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/sort.js"></script>

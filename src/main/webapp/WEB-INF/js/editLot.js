@@ -1,9 +1,7 @@
 
 function editLot() {
     var id = $("#lotId").val();
-    console.log(id);
     var title = $("#title").val();
-    console.log(title);
     var description = $("#description").val();
     var startPrice = $("#startPrice").val();
     var minStep = $("#minStep").val();
@@ -12,7 +10,7 @@ function editLot() {
     var endDate = $("#endDate").val();
     var quickBuyPrice = $("#quickBuyPrice").val();
     var userId = $("#userId").val();
-    console.log(startDate);
+    
 
     var json = '{"title" :"' + title +
         '", "description" :"' + description +

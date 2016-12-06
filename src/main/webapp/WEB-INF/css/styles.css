@@ -1,3 +1,271 @@
-.img {
-    margin-top: 5%;
+/*Main menu*/
+.main-navbar {
+    text-align: center;
+}
+.logo {
+    padding: 10px 15px;
+}
+.logo img {
+    height: 30px;
+    width: 30px;
+}
+.navbar-nav {
+    float: none;
+    display: inline-block;
+}
+.dropdown-menu {
+    min-width: 60px;
+}
+.navbar-default .header-logo .navbar-brand {
+    margin-left: 15px;
+}
+
+/*Categories on main page*/
+.categories-section {
+    margin-top: 10px;
+}
+.glyphicon {
+    margin-right: 10px;
+}
+.panel-body {
+    padding: 0px;
+}
+.panel-heading h4.panel-title {
+    font-size: 14px;
+}
+.panel-body table tr td {
+    padding-left: 15px;
+}
+.panel-body .table {
+    margin-bottom: 0px;
+}
+#accordion {
+    width: 100%;
+}
+a.category-parent-link:link, a.category-child-link:link {
+    color: inherit;
+    text-decoration: none;
+}
+
+/*Filters on main page*/
+.filters-section {
+    margin-top: 10px;
+    text-align: center;
+}
+.filters-section div.btn-group {
+    margin: auto;
+}
+
+/*Lots on main page*/
+.lots-preview-wrapper {
+    margin-top: 30px;
+}
+a.lot-preview-link:link {
+    color: inherit;
+    text-decoration: none;
+}
+.lot-preview-item.jumbotron {
+    padding: 10px;
+}
+.lot-preview-top {
+    margin-bottom: 5px;
+}
+.lot-preview-status {
+    margin-bottom: 5px;
+}
+.lot-preview-status span {
+    color: #396EB3;
+}
+.lot-preview-quick-buy-price {
+    float: right;
+    font-weight: bold;
+}
+.lot-preview-thumbnail {
+    margin-bottom: 10px;
+}
+.lot-preview-title {
+    color: #396EB3;
+    margin: 10px 10px 5px 10px;
+}
+.lot-preview-current-price {
+    font-weight: bold;
+}
+.lots-pagination {
+    text-align: center;
+}
+
+/*Footer*/
+.footer {
+    text-align: center;
+    height: 80px;
+    margin: 20px;
+    background-color: #DEDFE0;
+}
+.footer-content {
+    padding-top: 20px;
+}
+
+/*Lot page*/
+.lot-image-slider-wrapper {
+    text-align: center;
+}
+.lot-image-slider-wrapper #ninja-slider {
+    width: 70%;
+}
+.lot-details-wrapper {
+    margin-top: 25px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.lot-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #396EB3;
+}
+a.lot-author-link:link {
+    color: inherit;
+    text-decoration: none;
+}
+.lot-description {
+    margin-top: 10px;
+}
+.lot-price {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #35a51f;
+}
+.lot-start-price {
+    float: right;
+}
+.lot-time-left-and-participants {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #5f635e;
+}
+.place-bid {
+    margin: 40px 20px 20px 20px;
+    padding: 20px;
+    text-align: center;
+}
+.place-bid-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+}
+.place-bid-min-step {
+    margin-top: 10px;
+}
+.lot-quick-buy {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.lot-subscribtion {
+    text-align: center;
+}
+
+/*Edit lot page*/
+.lot-load-new-main-image {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.lot-load-new-additional-images {
+    text-align: center;
+}
+.edit-lot-details-wrapper {
+    margin-top: 25px;
+    margin-left: 20px;
+}
+.lot-details .navbar-form {
+    display: block;
+}
+.edit-field-wrapper {
+    margin-bottom: 10px;
+}
+.save-changes-button {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/*Add lot page*/
+.lot-load-main-image {
+    margin-bottom: 10px;
+}
+.add-lot-right-column {
+    margin-top: 25px;
+}
+.add-lot-details-wrapper {
+    margin-top: 25px;
+    margin-right: 20px;
+}
+
+/*User page*/
+.user-wrapper {
+    margin-top: 40px;
+}
+.user-photo {
+    max-width: 300px;
+}
+.user-info {
+    margin-left: 20px;
+}
+.user-name-wrapper {
+    font-weight: bold;
+    font-size: 18px;
+    color: #396EB3;
+    margin-right: 20px;
+}
+.user-name {
+    margin-right: 18px;
+}
+.user-name-divider {
+    max-width: 260px;
+    margin-left: 0;
+}
+.user-email-title, .user-pass-title {
+    font-weight: bold;
+}
+.user-email, .user-registration-date, .user-pass {
+    margin-top: 10px;
+}
+.user-lots-preview-wrapper {
+    margin-top: 0;
+}
+.user-lot-wrapper {
+    margin-bottom: 20px;
+}
+.user-lot-preview {
+    max-width: 250px;
+    margin: 0 auto 8px auto;
+}
+.user-lot-controls {
+    text-align: center;
+}
+.user-lot-edit-button {
+    display: inline-block;
+}
+.user-add-lot {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+.user-report-generation {
+    margin-bottom: 30px;
+}
+.user-edit-profile-button {
+    display: inline-block;
+}
+
+/*Edit user page*/
+.user-details .navbar-form {
+    display: block;
+}
+.edit-user-info {
+    margin-top: 20px;
+    margin-left: 0;
+}
+.edit-user-label {
+    margin-bottom: 2px;
+}
+.user-load-avatar-wrapper{
+    float: right;
 }

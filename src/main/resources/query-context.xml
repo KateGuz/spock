@@ -62,6 +62,6 @@
     <bean id="editLotSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET title=:title, description=:description, categoryId=:categoryId,
                                 startDate=:startDate, endDate=:endDate, startPrice=:startPrice, minStep=:minStep,
-                                quickBuyPrice=:quickBuyPrice, userId=:userId, type=:type WHERE id=:id;"/>
+                                quickBuyPrice=:quickBuyPrice, type=:type WHERE id=:id;"/>
     </bean>
 </beans>

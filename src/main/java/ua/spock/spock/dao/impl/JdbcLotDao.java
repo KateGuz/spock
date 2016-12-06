@@ -58,6 +58,7 @@ public class JdbcLotDao implements LotDao {
     @Override
     public void edit(Lot lot) {
         MapSqlParameterSource params = fillParams(lot);
+        params.addValue("id", lot.getId());
         namedParameterJdbcTemplate.update(editLotSQL, params);
     }
 

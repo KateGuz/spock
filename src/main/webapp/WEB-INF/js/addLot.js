@@ -27,10 +27,10 @@ function addLot() {
         data: json,
         contentType: "application/json",
         success: function () {
-            location.reload();
+            top.location.href = 'user/'+userId;
         },
         error: function () {
-            alert("Invalid username or password");
+            alert("Не удалось создать лот");
         }
     })
 }

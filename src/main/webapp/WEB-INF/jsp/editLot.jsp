@@ -35,7 +35,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand logo" href="/"><img src="/img/logo.png"></a>
+    <a class="navbar-brand logo" href="/"><img src="/img/logo.png"></a>
             </div>
             <div class="collapse navbar-collapse main-navbar" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-nav">
@@ -181,7 +181,7 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/handlebars.min-latest.js"></script>
-<script src="/js/editLot.js" charset="utf-8"></script>
+<script src="/js/editLot.js"></script>
 <script src="/js/helpers.js"></script>
 
 </body>

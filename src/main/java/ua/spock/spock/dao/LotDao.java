@@ -11,4 +11,5 @@ public interface LotDao {
     List<Lot> getByUser(int userId);
     void add(Lot lot);
     void delete(int id);
+    void edit(Lot lot);
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.entity.Category;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.filter.LotFilter;
@@ -13,9 +14,11 @@ import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.utils.LotJsonParser;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 public class LotController {
@@ -73,9 +76,28 @@ public class LotController {
     }
 
     @RequestMapping(value = " /lot/{lotId}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteStudent(@PathVariable("lotId") int id) {
+    public ResponseEntity deleteLot(@PathVariable("lotId") int id) {
         lotService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping("/lot/{lotId}/edit")
+    public String editLot(ModelMap model, @PathVariable int lotId) {
+        Lot lot = lotService.getById(lotId);
+        List<Category> allCategories = category.getAllCategories();
+        model.addAttribute("lot", lot);
+        model.addAttribute("categories", allCategories);
+
+        return "editLot";
+    }
+
+    @RequestMapping(value = "/lot/{id}", method = RequestMethod.PUT)
+    public String saveEditedLot(@PathVariable Integer id, @RequestBody String json) {
+        Lot lot = LotJsonParser.jsonToLot(json);
+        lot.setId(id);
+        lotService.edit(lot);
+        int userId = lot.getUser().getId();
+        return "redirect:/user/" + userId;
     }
 
     private String getTimeLeft(Lot lot) {

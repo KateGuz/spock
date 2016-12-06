@@ -12,4 +12,5 @@ public interface LotService {
     List<Lot> getUserLots(int userId);
     void delete(int id);
     void add(Lot lot);
+    void edit(Lot lot);
 }

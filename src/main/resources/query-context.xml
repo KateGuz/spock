@@ -59,5 +59,9 @@
     <bean id="deleteLotSQL" class="java.lang.String">
         <constructor-arg value="DELETE FROM lot WHERE id =:lotId;"/>
     </bean>
-
+    <bean id="editLotSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE lot SET title=:title, description=:description, categoryId=:categoryId,
+                                startDate=:startDate, endDate=:endDate, startPrice=:startPrice, minStep=:minStep,
+                                quickBuyPrice=:quickBuyPrice, type=:type WHERE id=:id;"/>
+    </bean>
 </beans>

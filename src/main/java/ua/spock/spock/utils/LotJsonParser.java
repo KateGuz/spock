@@ -48,7 +48,7 @@ public class LotJsonParser {
             }
             return lot;
         } catch (ParseException e) {
-            throw new RuntimeException("Error occurred while converting json to user", e);
+            throw new RuntimeException("Error occurred while converting json to lot", e);
         }
 
     }

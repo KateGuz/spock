@@ -37,4 +37,9 @@ public class LotServiceImpl implements LotService {
     public void add(Lot lot) {
         lotDao.add(lot);
     }
+
+    @Override
+    public void edit(Lot lot) {
+        lotDao.edit(lot);
+    }
 }

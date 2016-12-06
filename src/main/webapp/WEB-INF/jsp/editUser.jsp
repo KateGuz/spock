@@ -74,6 +74,7 @@
 <!--Main section-->
 <section class="main-section">
     <div class="user-wrapper">
+        <div class="user-details">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 user-details-wrapper">
@@ -202,7 +203,7 @@
             </div>
         </div>
     </div>
-
+</div>
 </section>
 <!--End of main section-->
 <!--Footer-->

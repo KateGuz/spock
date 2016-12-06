@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.controller.util.Util;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.entity.User;
@@ -16,9 +17,6 @@ import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.utils.LotJsonParser;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +41,12 @@ public class LotController {
         HashMap<Integer, Integer> bidCount = new HashMap<>();
         List<Lot> tempLots = lotService.getLots(lotFilter);
         List<Lot> lots = new ArrayList<>();
+        Util util = new Util();
         for (Lot lot : tempLots) {
-            if (isFinished(lot)) {
+            if (util.isFinished(lot)) {
                 lots.add(lot);
-                timeLeft.put(lot.getId(), getTimeLeft(lot));
-                isStarted.put(lot.getId(), isStarted(lot));
+                timeLeft.put(lot.getId(), util.getTimeLeft(lot));
+                isStarted.put(lot.getId(), util.isStarted(lot));
                 bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
             }
         }
@@ -69,11 +68,12 @@ public class LotController {
         HashMap<Integer, Integer> bidCount = new HashMap<>();
         List<Lot> tempLots = lotService.getLots(lotFilter);
         List<Lot> lots = new ArrayList<>();
+        Util util = new Util();
         for (Lot lot : tempLots) {
-            if (isFinished(lot)) {
+            if (util.isFinished(lot)) {
                 lots.add(lot);
-                timeLeft.put(lot.getId(), getTimeLeft(lot));
-                isStarted.put(lot.getId(), isStarted(lot));
+                timeLeft.put(lot.getId(), util.getTimeLeft(lot));
+                isStarted.put(lot.getId(), util.isStarted(lot));
                 bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
             }
         }
@@ -88,9 +88,10 @@ public class LotController {
     @RequestMapping("/lot/{lotId}")
     public String getLotById(ModelMap model, @PathVariable int lotId) {
         Lot lot = lotService.getById(lotId);
-        String timeLeft = getTimeLeft(lot);
-        String endDate = getEndDate(lot);
-        double currentPrice = getCurrentPrice(lot);
+        Util util = new Util();
+        String timeLeft = util.getTimeLeft(lot);
+        String endDate = util.getEndDate(lot);
+        double currentPrice = util.getCurrentPrice(lot);
         int bidCount = bidService.getBidCountForLot(lotId);
         User user = userService.get(lot.getUser().getId());
         model.addAttribute("user", user);
@@ -121,44 +122,5 @@ public class LotController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    private String getTimeLeft(Lot lot) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration interval = Duration.between(now, lot.getEndDate());
-        String timeLeft;
-        if (interval.toDays() > 1) {
-            timeLeft = String.valueOf(interval.toDays()) + (interval.toDays() > 1 ? " days" : " day");
 
-        } else if (interval.toDays() > 0) {
-            Duration hrsLeft = interval.minusDays(interval.toDays());
-            timeLeft = "1 day " + hrsLeft.toHours() + (hrsLeft.toHours() > 1 ? " hrs" : " hr");
-        } else if (interval.toHours() > 0) {
-            Duration minLeft = interval.minusHours(interval.toHours());
-            timeLeft = String.valueOf(interval.toHours()) + (interval.toHours() > 1 ? " hrs " : " hr ") +
-                    String.valueOf(minLeft.toMinutes()) + " min";
-        } else {
-            timeLeft = String.valueOf(interval.toMinutes()) + " min";
-        }
-        return timeLeft;
-    }
-
-    private boolean isStarted(Lot lot) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration interval = Duration.between(now, lot.getStartDate());
-        return interval.isNegative();
-    }
-
-    private boolean isFinished(Lot lot) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration interval = Duration.between(now, lot.getEndDate());
-        return !interval.isNegative();
-    }
-
-    private String getEndDate(Lot lot) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM HH:mm");
-        return lot.getEndDate().format(formatter);
-    }
-
-    private double getCurrentPrice(Lot lot) {
-        return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
-    }
 }

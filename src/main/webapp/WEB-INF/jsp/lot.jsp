@@ -15,10 +15,7 @@
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
 </head>
 <body>
 <!--Top section-->
@@ -74,6 +71,7 @@
 <!--Main section-->
 <section class="main-section">
     <div class="lot-wrapper">
+        <div class="lot-details">
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
@@ -82,9 +80,7 @@
                             <div class="inner">
                                 <ul>
                                     <c:forEach var="i" begin="0" end="3">
-                                        <li><a class="ns-img"
-                                               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjMtcxK2vElKxVOi9b1noqIKLvCEEsvr9wK4frJOnSHfxrt6rz9aiRz-4"></a>
-                                        </li>
+                                        <li><a class="ns-img" href="../img/logo.png"></a></li>
                                     </c:forEach>
                                 </ul>
                             </div>
@@ -133,9 +129,8 @@
                 </div>
             </div>
         </div>
-        <script src="js/ninja-slider.js"></script>
     </div>
-
+</div>
 </section>
 <!--End of main section-->
 <!--Footer-->

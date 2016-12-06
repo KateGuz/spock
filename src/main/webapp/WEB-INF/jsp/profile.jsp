@@ -33,7 +33,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand logo" href="/"><img src="../img/logo.png"></a>
+                <a class="navbar-brand logo" href="/"><img src="/img/logo.png"></a>
             </div>
             <div class="collapse navbar-collapse main-navbar" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-nav">
@@ -186,8 +186,6 @@
 <script src="/js/jquery-3.1.1.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
-<script src="/js/handlebars.min-latest.js"></script>
-<script src="/js/helpers.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/edit.js"></script>

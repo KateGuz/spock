@@ -1,0 +1,24 @@
+/*@media (min-width:992px) and (max-width:1199px){.visible-xxs{display:none;}*/
+@media (max-width:991px){
+	.user-details-wrapper {
+		margin-left: 50px;
+	}	
+}
+@media (max-width:767px){
+	.user-load-avatar-wrapper{
+		float: none;
+	}	
+}
+@media (max-width:500px){
+	.lot-start-price {
+		float: none;
+		display: block;
+		margin-top: 10px;
+	}
+}
+@media (max-width:416px){
+	.user-details-wrapper {
+		margin-left: 20px;
+	}
+}
+

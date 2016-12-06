@@ -1,6 +1,7 @@
 package ua.spock.spock.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,14 @@ public class JdbcLotDao implements LotDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
     private String getLotByIdSQL;
+    @Autowired
+    private String getLotsByUserIdSQL;
+    @Autowired
+    private String deleteLotSQL;
+    @Autowired
+    private String addLotSQL;
+    @Autowired
+    private String editLotSQL;
 
     @Override
     public Lot getById(int lotId) {
@@ -30,8 +39,47 @@ public class JdbcLotDao implements LotDao {
     }
 
     @Override
+    public List<Lot> getByUser(int userId) {
+        return namedParameterJdbcTemplate.query(getLotsByUserIdSQL, new MapSqlParameterSource("userId", userId), ALL_LOTS_ROW_MAPPER);
+    }
+
+    @Override
+    public void add(Lot lot) {
+        MapSqlParameterSource params = fillParams(lot);
+        namedParameterJdbcTemplate.update(addLotSQL, params);
+
+    }
+
+    @Override
+    public void delete(int id) {
+        namedParameterJdbcTemplate.update(deleteLotSQL, new MapSqlParameterSource("lotId",id));
+    }
+
+    @Override
+    public void edit(Lot lot) {
+        MapSqlParameterSource params = fillParams(lot);
+        params.addValue("id", lot.getId());
+        namedParameterJdbcTemplate.update(editLotSQL, params);
+    }
+
+    @Override
     public List<Lot> get(LotFilter lotFilter) {
         return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
+    }
+
+    private MapSqlParameterSource fillParams(Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("title", lot.getTitle());
+        params.addValue("description", lot.getDescription());
+        params.addValue("categoryId", lot.getCategory().getId());
+        params.addValue("startDate", lot.getStartDate());
+        params.addValue("endDate", lot.getEndDate());
+        params.addValue("startPrice", lot.getStartPrice());
+        params.addValue("minStep", lot.getMinStep());
+        params.addValue("quickBuyPrice", lot.getQuickBuyPrice());
+        params.addValue("userId", lot.getUser().getId());
+        params.addValue("type", lot.getType().getId());
+        return params;
     }
 }
 

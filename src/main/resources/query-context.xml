@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="getLotsStatementSQL" class="java.lang.String">
-        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.currency, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 left JOIN bid AS b ON b.bid=l.maxBidId"/>
     </bean>
@@ -13,34 +13,55 @@
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
                                 WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
     </bean>
+    <bean id="getLotsByUserIdSQL" class="java.lang.String">
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+                                FROM lot AS l
+                                left JOIN bid AS b ON b.bid=l.maxBidId
+                                JOIN user AS u ON l.userId=u.id
+                                WHERE  u.id =:userId"/>
+    </bean>
 
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
-                                l.userId, u.name AS userName, l.startDate, l.endDate, l.currency, l.startPrice, l.minStep,
+                                l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep,
                                 l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 JOIN user AS u ON u.id=l.userId
                                 JOIN category AS c ON c.id=l.categoryId
                                 JOIN category AS cp ON cp.id=c.parentId
                                 left JOIN bid as b ON b.id=l.maxBidId
-                                WHERE l.id = :lotId;"/>
+                                WHERE l.id =:lotId;"/>
     </bean>
 
     <bean id="getBidCountByLotIdSQL" class="java.lang.String">
-        <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId = :lotId;"/>
+        <constructor-arg value="SELECT COUNT(*) FROM bid WHERE lotId =:lotId;"/>
     </bean>
     <bean id="getAllCategoriesSQL" class="java.lang.String">
         <constructor-arg value="SELECT c.id, c.name, c.parentId, p.name AS parentName FROM category AS c
                                 JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
     </bean>
     <bean id="getUserSQL" class="java.lang.String">
-        <constructor-arg value="SELECT * FROM user WHERE email = :email AND password =:password;"/>
+        <constructor-arg value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.name =:name AND u.password =:password;"/>
     </bean>
     <bean id="addUserSQL" class="java.lang.String">
         <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>
     </bean>
-    <bean id="getUserByIdSQL" class="java.lang.String">
-        <constructor-arg value="SELECT * FROM user WHERE id = :id;"/>
+    <bean id="addLotSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO lot (title,description,categoryId,startDate,endDate,startPrice,minStep,quickBuyPrice,userId,type) VALUES (:title, :description, :categoryId, :startDate, :endDate, :startPrice, :minStep, :quickBuyPrice, :userId, :type);"/>
     </bean>
-
+    <bean id="getUserByIdSQL" class="java.lang.String">
+        <constructor-arg
+                value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.id = :id;"/>
+    </bean>
+    <bean id="editUserSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE  user SET name=:name, email=:email, password =:password WHERE id=:id;"/>
+    </bean>
+    <bean id="deleteLotSQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM lot WHERE id =:lotId;"/>
+    </bean>
+    <bean id="editLotSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE lot SET title=:title, description=:description, categoryId=:categoryId,
+                                startDate=:startDate, endDate=:endDate, startPrice=:startPrice, minStep=:minStep,
+                                quickBuyPrice=:quickBuyPrice, type=:type WHERE id=:id;"/>
+    </bean>
 </beans>

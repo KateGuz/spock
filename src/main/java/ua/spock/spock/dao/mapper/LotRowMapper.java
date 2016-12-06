@@ -21,7 +21,6 @@ public class LotRowMapper implements RowMapper<Lot> {
         lot.setTitle(resultSet.getString("title"));
         lot.setStartDate(resultSet.getTimestamp("startDate").toLocalDateTime());
         lot.setEndDate(resultSet.getTimestamp("endDate").toLocalDateTime());
-        lot.setCurrency(Currency.getCurrencyById(resultSet.getString("currency")));
         lot.setStartPrice(resultSet.getDouble("startPrice"));
         lot.setQuickBuyPrice(resultSet.getDouble("quickBuyPrice"));
         lot.setType(LotType.getTypeById(resultSet.getString("type")));

@@ -31,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand logo" href="/"><img src="../img/logo.png"></a>
+                <a class="navbar-brand logo" href="/"><img src="/img/logo.png"></a>
             </div>
             <div class="collapse navbar-collapse main-navbar" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-nav">
@@ -72,65 +72,90 @@
 <section class="main-section">
     <div class="lot-wrapper">
         <div class="lot-details">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="lot-image-slider-wrapper">
-                        <div id="ninja-slider">
-                            <div class="inner">
-                                <ul>
-                                    <c:forEach var="i" begin="0" end="3">
-                                        <li><a class="ns-img" href="../img/logo.png"></a></li>
-                                    </c:forEach>
-                                </ul>
+            <form class="navbar-form navbar-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="lot-image-slider-wrapper">
+                                <div id="ninja-slider">
+                                    <div class="inner">
+                                        <ul>
+                                            <c:forEach var="i" begin="0" end="3">
+                                                <li><a class="ns-img" href="/img/logo.png"></a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lot-load-new-main-image">
+                                <input type="button" class="btn btn-default" value="Загрузить новое основное фото">
+                            </div>
+                            <div class="lot-load-new-additional-images">
+                                <input type="button" class="btn btn-default" value="Загрузить новые дополнительные фото">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="edit-lot-details-wrapper">
+                                <div class="edit-field-wrapper">
+                                    <input type="text" class="form-control" value="${lot.title}" size="60" required id="title">
+                                </div>
+                                <!-- Categories dropdown -->
+                                <div class="category-pick-wrapper edit-field-wrapper">
+                                    <span>Категория:</span>
+                                    <select class="form-control">
+                                        <c:forEach items="${categories}" var="parent">
+                                        <optgroup label="${parent.name}">
+                                            <c:forEach items="${parent.children}" var="category">
+                                            <option value="${category.id}" id="categoryId">"${category.name}""${category.id}" </option>
+                                           </c:forEach>
+                                        </optgroup>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <!-- End of categories dropdown -->
+                                <div class="edit-field-wrapper">
+                                    <textarea class="form-control" rows="7" cols="60"  required id="description">${lot.description}</textarea>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Начальная ставка (UAH):</span>
+                                    <input type="number" class="form-control" value="${lot.startPrice}" size="10" required id="startPrice">
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Минимальный шаг (UAH):</span>
+                                    <input type="number" class="form-control"  value="${lot.minStep}" size="10" required id="minStep">
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Мгновенный выкуп (UAH):</span>
+                                    <input type="number" class="form-control" value="${lot.quickBuyPrice}" size="10" id="quickBuyPrice">
+                                    <span>*опционально</span>
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Старт аукциона:</span>
+                                    <input type="datetime-local" class="form-control" value="${lot.startDate}" required id="startDate">
+                                </div>
+                                <div class="edit-field-wrapper">
+                                    <span>Конец аукциона:</span>
+                                    <input type="datetime-local" class="form-control" value="${lot.endDate}" required id="endDate">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="lot-quick-buy">
-                        <button type="button" class="btn btn-default">Выкупить сейчас за ${lot.quickBuyPrice} UAH
-                        </button>
-                    </div>
-                    <div class="lot-subscribtion">
-                        <button type="button" class="btn btn-default">Подписаться на обновления</button>
+                </div>
+                <div class="edit-field-wrapper">
+                    <input type="hidden" value="${lot.id}" id="lotId">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="save-changes-button">
+                            <button type="submit" class="btn btn-success save-changes-button"   value="${loggedUser.id}" id="userId" onclick="editLot()">Сохранить изменения</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-7">
-                    <div class="lot-details-wrapper">
-                        <div class="lot-title">
-                            <span>${lot.title}</span>
-                        </div>
-                        <div>
-                            Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
-                        </div>
-                        <div class="lot-description">
-                            <span>${lot.description}</span>
-                        </div>
+            </form>
 
-                        <div class="lot-price">
-                            <span>Максимальная ставка: ${lot.maxBid.value} UAH </span>
-                            <span class="lot-start-price">Стартовая цена: ${lot.startPrice} UAH</span>
-                        </div>
-                        <div class="lot-time-left-and-participants">
-                            <span>До конца аукциона осталось ${timeLeft} (всего было размещено ${bidCount} ставок).</span>
-                        </div>
-
-                    </div>
-                    <div class="place-bid thumbnail">
-                        <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
-                        <form class="navbar-form navbar-nav">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="${currentPrice}">
-                            </div>
-                            <button type="submit" class="btn btn-default">Сделать ставку</button>
-                            <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-</div>
+
 </section>
 <!--End of main section-->
 <!--Footer-->
@@ -141,7 +166,6 @@
     </div>
 </section>
 <!--End of footer-->
-
 <!-- Sign in -->
 <div id="signIn" class="modal fade registration-form" role="dialog">
     <div class="modal-dialog">
@@ -183,10 +207,8 @@
                 <form id="dataForm">
                     <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
                     <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
-                    <input type="password" required name="password" placeholder="Пароль"
-                           id="inputPasswordSignUp"><br><br>
-                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся
-                    </button>
+                    <input type="password" required name="password" placeholder="Пароль" id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся</button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -197,6 +219,8 @@
     </div>
 </div>
 
+
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
@@ -204,6 +228,8 @@
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
+<script src="/js/editLot.js"></script>
 <script src="/js/ninja-slider.js"></script>
+
 </body>
 </html>

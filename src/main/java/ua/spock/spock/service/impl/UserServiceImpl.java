@@ -2,10 +2,8 @@ package ua.spock.spock.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.spock.spock.dao.UserDao;
 import ua.spock.spock.entity.User;
-import ua.spock.spock.entity.UserType;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.service.utils.EmailValidator;
 
@@ -16,15 +14,13 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public void addUser(User user) {
-        user.setType(UserType.USER);
-        userDao.addUser(user);
+    public void add(User user) {
+        userDao.add(user);
     }
 
     @Override
-    public User getUser(User user) {
-        return userDao.getUser(user);
+    public User get(User user) {
+        return userDao.get(user);
     }
 
     @Override
@@ -34,7 +30,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(int id) {
-        return userDao.getUser(id);
+    public User get(int id) {
+        return userDao.get(id);
+
+    }
+
+    @Override
+    public void edit(User user) {
+        userDao.edit(user);
     }
 }

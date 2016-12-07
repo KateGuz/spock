@@ -6,17 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ua.spock.spock.entity.Category;
 import ua.spock.spock.controller.util.Util;
-import ua.spock.spock.entity.Lot;
-import ua.spock.spock.entity.SortType;
-import ua.spock.spock.entity.User;
+import ua.spock.spock.entity.*;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.utils.LotJsonParser;
+
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -116,6 +115,17 @@ public class LotController {
         return "redirect:/user/" + userId;
     }
 
-
+    @RequestMapping(value = "/lot/{lotId}/quickBuy", method = RequestMethod.POST)
+    public ResponseEntity quickBuy(@PathVariable Integer lotId, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+        Lot lot = lotService.getById(lotId);
+        Bid bid = new Bid();
+        bid.setValue(lot.getQuickBuyPrice());
+        bid.setLot(lot);
+        bid.setUser(user);
+        bidService.placeBid(bid);
+        lotService.closeLot(lot);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
 

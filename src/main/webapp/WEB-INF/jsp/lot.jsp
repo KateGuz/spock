@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div class="lot-quick-buy">
-                        <button type="button" class="btn btn-default">Выкупить сейчас за ${lot.quickBuyPrice} UAH
+                        <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}" onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} UAH
                         </button>
                     </div>
                     <div class="lot-subscribtion">
@@ -205,5 +205,6 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/ninja-slider.js"></script>
+<script src="/js/quickBuy.js"></script>
 </body>
 </html>

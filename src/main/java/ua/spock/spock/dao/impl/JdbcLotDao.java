@@ -10,6 +10,7 @@ import ua.spock.spock.dao.mapper.LotRowMapper;
 import ua.spock.spock.dao.mapper.util.QueryType;
 import ua.spock.spock.dao.util.QueryGenerator;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.LotType;
 import ua.spock.spock.filter.LotFilter;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class JdbcLotDao implements LotDao {
     private String addLotSQL;
     @Autowired
     private String editLotSQL;
+    @Autowired
+    private String updateMaxBidIdSQL;
+    @Autowired
+    private String closeLotSQL;
 
     @Override
     public Lot getById(int lotId) {
@@ -65,6 +70,22 @@ public class JdbcLotDao implements LotDao {
     @Override
     public List<Lot> get(LotFilter lotFilter) {
         return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
+    }
+
+    @Override
+    public void updateMaxBidId(Lot lot, int bidId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", lot.getId());
+        params.addValue("bidId", bidId);
+        namedParameterJdbcTemplate.update(updateMaxBidIdSQL, params);
+    }
+
+    @Override
+    public void closeLot(Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", lot.getId());
+        params.addValue("type", LotType.CLOSED.getId());
+        namedParameterJdbcTemplate.update(closeLotSQL, params);
     }
 
     private MapSqlParameterSource fillParams(Lot lot) {

@@ -5,7 +5,8 @@ function quickBuy() {
         url: '/lot/'+lotId+'/quickBuy',
         type: 'POST',
         success: function () {
-            location.reload();
+            alert("Лот куплен!");
+            window.location.href = "http://localhost:8080/";
         },
         error: function () {
             alert("что-то пошло нетак :(");

@@ -1,6 +1,5 @@
 function quickBuy() {
     var lotId = $("#quickBuy").val();
-    var json = "nothing";
     $.ajax({
         url: '/lot/'+lotId+'/quickBuy',
         type: 'POST',

@@ -50,6 +50,7 @@ public class UserController {
         model.addAttribute("timeLeft",util.getTimeLeft());
         model.addAttribute("isStarted", util.getIsStarted());
         model.addAttribute("bidCount", util.getBidCount());
+        model.addAttribute("currentPrice",util.getCurrentPrice());
         return "editUser";
     }
 }

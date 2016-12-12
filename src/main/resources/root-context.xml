@@ -20,9 +20,11 @@
         <property name="username" value="${user}"/>
         <property name="password" value="${password}"/>
     </bean>
-
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
     <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="dataSource"/>
+        <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
     <task:annotation-driven executor="executor" scheduler="scheduler"/>

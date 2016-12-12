@@ -64,4 +64,8 @@
                                 startDate=:startDate, endDate=:endDate, startPrice=:startPrice, minStep=:minStep,
                                 quickBuyPrice=:quickBuyPrice, type=:type WHERE id=:id;"/>
     </bean>
+
+    <bean id="updateMaxBidIdSQL" class="java.lang.String">
+               <constructor-arg value="UPDATE lot SET maxBidId=:bidId WHERE id=:id;"/>
+    </bean>
 </beans>

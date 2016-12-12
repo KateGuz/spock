@@ -18,6 +18,11 @@ public class Util {
     private HashMap<Integer, String> timeLeft = new HashMap<>();
     private HashMap<Integer, Boolean> isStarted = new HashMap<>();
     private HashMap<Integer, Integer> bidCount = new HashMap<>();
+    private HashMap<Integer, Double> currentPrice = new HashMap<>();
+
+    public HashMap<Integer, Double> getCurrentPrice() {
+        return currentPrice;
+    }
 
     public HashMap<Integer, String> getTimeLeft() {
         return timeLeft;
@@ -68,6 +73,7 @@ public class Util {
                 timeLeft.put(lot.getId(), getTimeLeft(lot));
                 isStarted.put(lot.getId(), isStarted(lot));
                 bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
+                currentPrice.put(lot.getId(),getCurrentPrice(lot));
             }
         }
         return lots;

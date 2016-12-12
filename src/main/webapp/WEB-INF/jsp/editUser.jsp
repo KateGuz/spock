@@ -151,7 +151,7 @@
                                                     <span>Максимальная ставка:  ${lot.startPrice} UAH</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span>Максимальная ставка: ${lot.maxBid.value} UAH</span>
+                                                    <span>Максимальная ставка: ${currentPrice.get(lot.id)} UAH</span>
                                                 </c:otherwise>
                                             </c:choose>
 

@@ -3,6 +3,7 @@ package ua.spock.spock.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.BidDao;
+import ua.spock.spock.entity.Bid;
 import ua.spock.spock.service.BidService;
 
 @Service
@@ -13,5 +14,10 @@ public class BidServiceImpl implements BidService {
     @Override
     public int getBidCountForLot(int lotId) {
         return bidDao.getBidCountForLot(lotId);
+    }
+
+    @Override
+    public int add(Bid bid) {
+        return bidDao.add(bid);
     }
 }

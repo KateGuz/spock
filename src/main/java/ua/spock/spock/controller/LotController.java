@@ -17,6 +17,7 @@ import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.utils.LotJsonParser;
+
 import java.util.List;
 
 @Controller
@@ -38,10 +39,11 @@ public class LotController {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         List<Lot> tempLots = lotService.getLots(lotFilter);
-       model.addAttribute("lots", util.getActualLots(tempLots));
-        model.addAttribute("timeLeft",util.getTimeLeft());
+        model.addAttribute("lots", util.getActualLots(tempLots));
+        model.addAttribute("timeLeft", util.getTimeLeft());
         model.addAttribute("isStarted", util.getIsStarted());
         model.addAttribute("bidCount", util.getBidCount());
+        model.addAttribute("currentPrice", util.getCurrentPrice());
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -53,9 +55,10 @@ public class LotController {
         lotFilter.setCategoryId(categoryId);
         List<Lot> tempLots = lotService.getLots(lotFilter);
         model.addAttribute("lots", util.getActualLots(tempLots));
-        model.addAttribute("timeLeft",util.getTimeLeft());
+        model.addAttribute("timeLeft", util.getTimeLeft());
         model.addAttribute("isStarted", util.getIsStarted());
         model.addAttribute("bidCount", util.getBidCount());
+        model.addAttribute("currentPrice", util.getCurrentPrice());
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }

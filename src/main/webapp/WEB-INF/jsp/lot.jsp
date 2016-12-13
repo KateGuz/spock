@@ -86,13 +86,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="lot-quick-buy">
-                        <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}" onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} UAH
-                        </button>
-                    </div>
-                    <div class="lot-subscribtion">
-                        <button type="button" class="btn btn-default">Подписаться на обновления</button>
-                    </div>
+                        <c:if test="${!empty loggedUser}">
+                            <div class="lot-quick-buy">
+                                <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}" onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} UAH
+                                </button>
+                            </div>
+                            <div class="lot-subscribtion">
+                                <button type="button" class="btn btn-default">Подписаться на обновления</button>
+                            </div>
+                        </c:if>
                 </div>
                 <div class="col-md-7">
                     <div class="lot-details-wrapper">
@@ -110,20 +112,31 @@
                             <span>Максимальная ставка: ${lot.maxBid.value} UAH </span>
                             <span class="lot-start-price">Стартовая цена: ${lot.startPrice} UAH</span>
                         </div>
+                        <div class="lot-price">
+                            <span>Купить сейчас за: ${lot.quickBuyPrice} UAH</span>
+                        </div>
+
                         <div class="lot-time-left-and-participants">
                             <span>До конца аукциона осталось ${timeLeft} (всего было размещено ${bidCount} ставок).</span>
                         </div>
 
                     </div>
                     <div class="place-bid thumbnail">
-                        <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
-                        <form class="navbar-form navbar-nav">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="${currentPrice}">
-                            </div>
-                            <button type="submit" class="btn btn-default">Сделать ставку</button>
-                            <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
-                        </form>
+                        <c:choose>
+                            <c:when test="${empty loggedUser}">
+                                <p><a data-toggle="modal" href="#signIn" data-target="#signIn">Войдите/зарегистрируйтесь</a>, если хотите сделать ставку или купить лот сейчас.</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
+                                <form class="navbar-form navbar-nav">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="${currentPrice}">
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Сделать ставку</button>
+                                    <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
 
                     </div>
                 </div>

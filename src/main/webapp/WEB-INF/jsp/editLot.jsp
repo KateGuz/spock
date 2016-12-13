@@ -102,11 +102,18 @@
                                 <!-- Categories dropdown -->
                                 <div class="category-pick-wrapper edit-field-wrapper">
                                     <span>Категория:</span>
-                                    <select class="form-control">
+                                    <select class="form-control" id="categories">
                                         <c:forEach items="${categories}" var="parent">
                                         <optgroup label="${parent.name}">
                                             <c:forEach items="${parent.children}" var="category">
-                                            <option value="${category.id}" id="categoryId">"${category.name}""${category.id}" </option>
+                                                <c:choose>
+                                                    <c:when test="${category.id == lot.category.id}">
+                                                        <option selected value="${category.id}" id="categoryId">${category.name}</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${category.id}" id="categoryId">${category.name}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
                                            </c:forEach>
                                         </optgroup>
                                         </c:forEach>

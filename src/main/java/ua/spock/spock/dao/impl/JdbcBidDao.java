@@ -29,7 +29,7 @@ public class JdbcBidDao implements BidDao {
         params.addValue("lotId", bid.getLot().getId());
         params.addValue("userId", bid.getUser().getId());
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update(placeBidSQL, params,keyHolder);
+        namedParameterJdbcTemplate.update(placeBidSQL, params, keyHolder);
         return keyHolder.getKey().intValue();
     }
 }

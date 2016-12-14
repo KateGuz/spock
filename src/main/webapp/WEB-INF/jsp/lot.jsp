@@ -101,7 +101,10 @@
                         <div class="lot-title">
                             <span>${lot.title}</span>
                         </div>
-                        <div>
+                        <div class="lot-category">
+                            Категория: ${lot.category.name}
+                        </div>
+                        <div class="lot-seller">
                             Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
                         </div>
                         <div class="lot-description">
@@ -112,10 +115,11 @@
                             <span>Максимальная ставка: ${lot.maxBid.value} UAH </span>
                             <span class="lot-start-price">Стартовая цена: ${lot.startPrice} UAH</span>
                         </div>
-                        <div class="lot-price">
-                            <span>Купить сейчас за: ${lot.quickBuyPrice} UAH</span>
-                        </div>
-
+                        <c:if test="${empty loggedUser}">
+                            <div class="lot-price">
+                                <span>Купить сейчас за: ${lot.quickBuyPrice} UAH</span>
+                            </div>
+                        </c:if>
                         <div class="lot-time-left-and-participants">
                             <span>До конца аукциона осталось ${timeLeft} (всего было размещено ${bidCount} ставок).</span>
                         </div>

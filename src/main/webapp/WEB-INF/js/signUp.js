@@ -1,6 +1,4 @@
 function signUp() {
-    // $("#dataForm").validate();
-
     var name = $("#inputNameSignUp").val();
     var email = $("#inputEmailSignUp").val();
     var password = $("#inputPasswordSignUp").val();
@@ -18,7 +16,7 @@ function signUp() {
             location.reload();
         },
         error: function () {
-            alert("User with name or email already exist or your data is not passed validation");
+            alert("User with name or email already exist or your data is not passed validation.");
         }
     })
 }

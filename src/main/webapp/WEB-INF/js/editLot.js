@@ -31,7 +31,7 @@ function editLot() {
             location.reload();
         },
         error: function () {
-            alert("Invalid data");
+            alert("Вы внесли некорректные данные.");
         }
     })
 }

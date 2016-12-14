@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                             <div class="save-changes-button">
-                                <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}" id="userId" onclick="edit()">Сохранить изменения</button>
+                                <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}" id="userId" onclick="editUser()">Сохранить изменения</button>
                             </div>
 
                         </div>
@@ -188,6 +188,6 @@
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
-<script src="/js/edit.js"></script>
+<script src="/js/editUser.js"></script>
 </body>
 </html>

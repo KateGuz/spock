@@ -276,7 +276,7 @@
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
-<script src="/js/edit.js"></script>
+<script src="/js/editUser.js"></script>
 <script src="/js/delete.js"></script>
 </body>
 </html>

@@ -11,7 +11,6 @@ function editLot() {
     var quickBuyPrice = $("#quickBuyPrice").val();
     var userId = $("#userId").val();
     
-
     var json = '{"title" :"' + title +
         '", "description" :"' + description +
         '", "startPrice" :"' + startPrice +

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class Util {
+public class LotDetailsWrapper {
     @Autowired
     private BidService bidService;
     private HashMap<Integer, String> timeLeft = new HashMap<>();
@@ -65,15 +65,15 @@ public class Util {
         return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
     }
 
-    public List<Lot> getActualLots(List<Lot> tempLots) {
+    public List<Lot> prepareData(List<Lot> tempLots) {
         List<Lot> lots = new ArrayList<>();
         for (Lot lot : tempLots) {
-            if (isFinished(lot)) {
+            if (isNotFinished(lot)) {
                 lots.add(lot);
                 timeLeft.put(lot.getId(), getTimeLeft(lot));
                 isStarted.put(lot.getId(), isStarted(lot));
                 bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
-                currentPrice.put(lot.getId(),getCurrentPrice(lot));
+                currentPrice.put(lot.getId(), getCurrentPrice(lot));
             }
         }
         return lots;
@@ -85,7 +85,7 @@ public class Util {
         return interval.isNegative();
     }
 
-    private boolean isFinished(Lot lot) {
+    private boolean isNotFinished(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getEndDate());
         return !interval.isNegative();

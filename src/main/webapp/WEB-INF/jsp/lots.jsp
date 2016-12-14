@@ -163,7 +163,7 @@
                                                             <span>Максимальная ставка:  ${lot.startPrice} UAH</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span>Максимальная ставка: ${lot.maxBid.value} UAH</span>
+                                                            <span>Максимальная ставка: ${currentPrice.get(lot.id)} UAH</span>
                                                         </c:otherwise>
                                                     </c:choose>
 
@@ -284,7 +284,7 @@
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>

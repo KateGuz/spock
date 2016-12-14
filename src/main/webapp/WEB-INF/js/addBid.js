@@ -9,14 +9,16 @@ function addBid() {
 
     $.ajax({
         url: '/bid',
-        type: 'POST',
-        data: json,
+        type: 'post',
         contentType: "application/json",
-        success: function () {
-            top.location.href = 'lot/'+lotId;
+        dataType: 'json',
+        timeout: 100000,
+        data: json,
+        success: function (data) {
+            alert("Удалось");
         },
         error: function () {
             alert("Не удалось сделать ставку");
         }
-    })
+    });
 }

@@ -32,6 +32,8 @@ public class JdbcLotDao implements LotDao {
     private String addLotSQL;
     @Autowired
     private String editLotSQL;
+    @Autowired
+    private String updateMaxBidIdSQL;
 
     @Override
     public Lot getById(int lotId) {
@@ -66,6 +68,14 @@ public class JdbcLotDao implements LotDao {
     public List<Lot> get(LotFilter lotFilter) {
         return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
     }
+
+    @Override
+     public void updateMaxBidId(int lotId, int bidId) {
+              MapSqlParameterSource params = new MapSqlParameterSource();
+                params.addValue("id", lotId);
+               params.addValue("bidId", bidId);
+               namedParameterJdbcTemplate.update(updateMaxBidIdSQL, params);
+           }
 
     private MapSqlParameterSource fillParams(Lot lot) {
         MapSqlParameterSource params = new MapSqlParameterSource();

@@ -6,7 +6,7 @@
     <bean id="getLotsStatementSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
-                                left JOIN bid AS b ON b.bid=l.maxBidId"/>
+                                left JOIN bid AS b ON b.id=l.maxBidId"/>
     </bean>
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
@@ -63,5 +63,9 @@
         <constructor-arg value="UPDATE lot SET title=:title, description=:description, categoryId=:categoryId,
                                 startDate=:startDate, endDate=:endDate, startPrice=:startPrice, minStep=:minStep,
                                 quickBuyPrice=:quickBuyPrice, type=:type WHERE id=:id;"/>
+    </bean>
+
+    <bean id="updateMaxBidIdSQL" class="java.lang.String">
+               <constructor-arg value="UPDATE lot SET maxBidId=:bidId WHERE id=:id;"/>
     </bean>
 </beans>

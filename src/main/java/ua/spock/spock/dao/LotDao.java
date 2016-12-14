@@ -12,4 +12,5 @@ public interface LotDao {
     void add(Lot lot);
     void delete(int id);
     void edit(Lot lot);
+    void updateMaxBidId(int lotId, int bidId);
 }

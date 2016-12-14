@@ -42,4 +42,9 @@ public class LotServiceImpl implements LotService {
     public void edit(Lot lot) {
         lotDao.edit(lot);
     }
+
+    @Override
+    public void updateMaxBidId(int lotId, int bidId) {
+        lotDao.updateMaxBidId(lotId,bidId);
+    }
 }

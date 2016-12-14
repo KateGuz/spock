@@ -119,9 +119,13 @@
                         <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
                         <form class="navbar-form navbar-nav">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="${currentPrice}">
+                                <input type="text" class="form-control" placeholder="${currentPrice}" id="bid">
                             </div>
-                            <button type="submit" class="btn btn-default">Сделать ставку</button>
+                            <div class="edit-field-wrapper">
+                                <input type="hidden" value="${lot.id}" id="lotId">
+                            </div>
+                            <button type="submit" class="btn btn-default" value="${loggedUser.id}" id="userId"
+                                    onclick="addBid()">Сделать ставку</button>
                             <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
                         </form>
 
@@ -198,12 +202,13 @@
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
+<script src="/js/addBid.js"></script>
 <script src="/js/ninja-slider.js"></script>
 </body>
 </html>

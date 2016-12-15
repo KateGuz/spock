@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/ninja-slider.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
@@ -87,11 +87,11 @@
                                 <!-- Categories dropdown -->
                                 <div class="category-pick-wrapper edit-field-wrapper">
                                     <span>Категория:</span>
-                                    <select class="form-control">
+                                    <select class="form-control" id="categories">
                                         <c:forEach items="${categories}" var="parent">
                                             <optgroup label="${parent.name}">
                                             <c:forEach items="${parent.children}" var="category">
-                                                <option value="${category.id}" id="categoryId">"${category.name}"</option>
+                                                <option value="${category.id}" id="categoryId">${category.name}</option>
                                                 </c:forEach>
                                             </optgroup>
                                         </c:forEach>

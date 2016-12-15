@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.controller.util.LotDetails;
 import ua.spock.spock.entity.*;
 import ua.spock.spock.controller.util.LotDetailsWrapper;
 import ua.spock.spock.filter.LotFilter;
@@ -37,11 +38,12 @@ public class LotController {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         List<Lot> tempLots = lotService.getLots(lotFilter);
-        model.addAttribute("lots", lotDetailsWrapper.prepareData(tempLots));
-        model.addAttribute("timeLeft", lotDetailsWrapper.getTimeLeft());
-        model.addAttribute("isStarted", lotDetailsWrapper.getIsStarted());
-        model.addAttribute("bidCount", lotDetailsWrapper.getBidCount());
-        model.addAttribute("currentPrice", lotDetailsWrapper.getCurrentPrice());
+        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
+        model.addAttribute("lots", lotDetails.getActualLots());
+        model.addAttribute("timeLeft", lotDetails.getTimeLeft());
+        model.addAttribute("isStarted", lotDetails.getIsStarted());
+        model.addAttribute("bidCount", lotDetails.getBidCount());
+        model.addAttribute("currentPrice", lotDetails.getCurrentPrice());
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -52,11 +54,12 @@ public class LotController {
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
         List<Lot> tempLots = lotService.getLots(lotFilter);
-        model.addAttribute("lots", lotDetailsWrapper.prepareData(tempLots));
-        model.addAttribute("timeLeft", lotDetailsWrapper.getTimeLeft());
-        model.addAttribute("isStarted", lotDetailsWrapper.getIsStarted());
-        model.addAttribute("bidCount", lotDetailsWrapper.getBidCount());
-        model.addAttribute("currentPrice", lotDetailsWrapper.getCurrentPrice());
+        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
+        model.addAttribute("lots", lotDetails.getActualLots());
+        model.addAttribute("timeLeft", lotDetails.getTimeLeft());
+        model.addAttribute("isStarted", lotDetails.getIsStarted());
+        model.addAttribute("bidCount", lotDetails.getBidCount());
+        model.addAttribute("currentPrice", lotDetails.getCurrentPrice());
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -151,6 +154,19 @@ public class LotController {
         } else {
             return "lots";
         }
+    }
+
+    @RequestMapping(value = "/lot/{lotId}/quickBuy", method = RequestMethod.POST)
+    public ResponseEntity quickBuy(@PathVariable Integer lotId, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+        Lot lot = lotService.getById(lotId);
+        Bid bid = new Bid();
+        bid.setValue(lot.getQuickBuyPrice());
+        bid.setLot(lot);
+        bid.setUser(user);
+        bidService.add(bid);
+        lotService.closeLot(lot);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
 

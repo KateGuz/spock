@@ -5,11 +5,14 @@ import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.BidDao;
 import ua.spock.spock.entity.Bid;
 import ua.spock.spock.service.BidService;
+import ua.spock.spock.service.LotService;
 
 @Service
 public class BidServiceImpl implements BidService {
     @Autowired
     private BidDao bidDao;
+    @Autowired
+    private LotService lotService;
 
     @Override
     public int getBidCountForLot(int lotId) {
@@ -17,7 +20,8 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public int add(Bid bid) {
-        return bidDao.add(bid);
+    public void add(Bid bid) {
+        int bidId = bidDao.add(bid);
+        lotService.updateMaxBidId(bid.getLot(), bidId);
     }
 }

@@ -1,4 +1,4 @@
-function edit() {
+function editUser() {
     // $("#dataForm").validate();
 
     var name = $("#inputNameEdit").val();

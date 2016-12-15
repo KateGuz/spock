@@ -44,7 +44,12 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public void updateMaxBidId(int lotId, int bidId) {
-        lotDao.updateMaxBidId(lotId,bidId);
+    public void updateMaxBidId(Lot lot, int bidId) {
+        lotDao.updateMaxBidId(lot, bidId);
+    }
+
+    @Override
+    public void closeLot(Lot lot) {
+        lotDao.closeLot(lot);
     }
 }

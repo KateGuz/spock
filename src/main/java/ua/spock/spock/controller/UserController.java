@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ua.spock.spock.controller.util.LotDetails;
 import ua.spock.spock.controller.util.LotDetailsWrapper;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
@@ -65,11 +66,12 @@ public class UserController {
     public String editUser(ModelMap model, @PathVariable Integer id) {
         model.addAttribute("user", userService.get(id));
         List<Lot> tempLots = lotService.getUserLots(id);
-        model.addAttribute("lots", lotDetailsWrapper.prepareData(tempLots));
-        model.addAttribute("timeLeft", lotDetailsWrapper.getTimeLeft());
-        model.addAttribute("isStarted", lotDetailsWrapper.getIsStarted());
-        model.addAttribute("bidCount", lotDetailsWrapper.getBidCount());
-        model.addAttribute("currentPrice", lotDetailsWrapper.getCurrentPrice());
+        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
+        model.addAttribute("lots", lotDetails.getActualLots());
+        model.addAttribute("timeLeft", lotDetails.getTimeLeft());
+        model.addAttribute("isStarted", lotDetails.getIsStarted());
+        model.addAttribute("bidCount", lotDetails.getBidCount());
+        model.addAttribute("currentPrice", lotDetails.getCurrentPrice());
         return "editUser";
     }
 }

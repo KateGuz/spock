@@ -31,11 +31,10 @@ public class BidController {
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == bid.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
                 Lot lot = lotService.getById(bid.getLot().getId());
-                if (bid.getValue() < lot.getMaxBid().getValue() + lot.getMinStep()) {
+                if ((lot.getMaxBid() != null && bid.getValue() < lot.getMaxBid().getValue() + lot.getMinStep()) || (lot.getMaxBid() == null && bid.getValue() < lot.getStartPrice())) {
                     return new ResponseEntity(HttpStatus.BAD_REQUEST);
                 } else {
-                    int bidId = bidService.add(bid);
-                    lotService.updateMaxBidId(bid.getLot().getId(), bidId);
+                    bidService.add(bid);
                     return new ResponseEntity(HttpStatus.OK);
                 }
             } else {

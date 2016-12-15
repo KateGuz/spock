@@ -13,5 +13,6 @@ public interface LotService {
     void delete(int id);
     void add(Lot lot);
     void edit(Lot lot);
-    void updateMaxBidId(int lotId, int bidId);
+    void updateMaxBidId(Lot lot, int bidId);
+    void closeLot(Lot lot);
 }

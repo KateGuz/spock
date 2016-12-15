@@ -3,38 +3,18 @@ package ua.spock.spock.controller.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.LotType;
 import ua.spock.spock.service.BidService;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class LotDetailsWrapper {
     @Autowired
     private BidService bidService;
-    private HashMap<Integer, String> timeLeft = new HashMap<>();
-    private HashMap<Integer, Boolean> isStarted = new HashMap<>();
-    private HashMap<Integer, Integer> bidCount = new HashMap<>();
-    private HashMap<Integer, Double> currentPrice = new HashMap<>();
-
-    public HashMap<Integer, Double> getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public HashMap<Integer, String> getTimeLeft() {
-        return timeLeft;
-    }
-
-    public HashMap<Integer, Boolean> getIsStarted() {
-        return isStarted;
-    }
-
-    public HashMap<Integer, Integer> getBidCount() {
-        return bidCount;
-    }
 
     public String getTimeLeft(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
@@ -65,18 +45,18 @@ public class LotDetailsWrapper {
         return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
     }
 
-    public List<Lot> prepareData(List<Lot> tempLots) {
-        List<Lot> lots = new ArrayList<>();
+    public LotDetails prepareData(List<Lot> tempLots) {
+        LotDetails details = new LotDetails();
         for (Lot lot : tempLots) {
-            if (isNotFinished(lot)) {
-                lots.add(lot);
-                timeLeft.put(lot.getId(), getTimeLeft(lot));
-                isStarted.put(lot.getId(), isStarted(lot));
-                bidCount.put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
-                currentPrice.put(lot.getId(), getCurrentPrice(lot));
+            if (isNotFinished(lot) && isNotClosed(lot)) {
+                details.getActualLots().add(lot);
+                details.getTimeLeft().put(lot.getId(), getTimeLeft(lot));
+                details.getIsStarted().put(lot.getId(), isStarted(lot));
+                details.getBidCount().put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
+                details.getCurrentPrice().put(lot.getId(), getCurrentPrice(lot));
             }
         }
-        return lots;
+        return details;
     }
 
     private boolean isStarted(Lot lot) {
@@ -89,5 +69,9 @@ public class LotDetailsWrapper {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getEndDate());
         return !interval.isNegative();
+    }
+
+    private boolean isNotClosed(Lot lot) {
+        return lot.getType() != LotType.CLOSED;
     }
 }

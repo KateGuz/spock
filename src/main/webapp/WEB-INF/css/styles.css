@@ -126,7 +126,7 @@ a.lot-author-link:link {
     color: inherit;
     text-decoration: none;
 }
-.lot-description {
+.lot-description, .lot-seller, .lot-category {
     margin-top: 10px;
 }
 .lot-price {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ua.spock.spock.controller.util.LotDetails;
+import ua.spock.spock.controller.util.ModelMapAttributesWrapper;
 import ua.spock.spock.entity.*;
 import ua.spock.spock.controller.util.LotDetailsWrapper;
 import ua.spock.spock.filter.LotFilter;
@@ -32,6 +33,8 @@ public class LotController {
     private CategoryCacheService category;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ModelMapAttributesWrapper modelMapAttributesWrapper;
 
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
@@ -39,11 +42,7 @@ public class LotController {
         lotFilter.setSortType(SortType.getTypeById(sort));
         List<Lot> tempLots = lotService.getLots(lotFilter);
         LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        model.addAttribute("lots", lotDetails.getActualLots());
-        model.addAttribute("timeLeft", lotDetails.getTimeLeft());
-        model.addAttribute("isStarted", lotDetails.getIsStarted());
-        model.addAttribute("bidCount", lotDetails.getBidCount());
-        model.addAttribute("currentPrice", lotDetails.getCurrentPrice());
+        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -55,11 +54,7 @@ public class LotController {
         lotFilter.setCategoryId(categoryId);
         List<Lot> tempLots = lotService.getLots(lotFilter);
         LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        model.addAttribute("lots", lotDetails.getActualLots());
-        model.addAttribute("timeLeft", lotDetails.getTimeLeft());
-        model.addAttribute("isStarted", lotDetails.getIsStarted());
-        model.addAttribute("bidCount", lotDetails.getBidCount());
-        model.addAttribute("currentPrice", lotDetails.getCurrentPrice());
+        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -70,12 +65,16 @@ public class LotController {
         LotDetailsWrapper lotDetailsWrapper = new LotDetailsWrapper();
         String timeLeft = lotDetailsWrapper.getTimeLeft(lot);
         String endDate = lotDetailsWrapper.getEndDate(lot);
+        boolean isStarted = lotDetailsWrapper.isStarted(lot);
+        boolean isNotFinished = lotDetailsWrapper.isNotFinished(lot);
         double currentPrice = lotDetailsWrapper.getCurrentPrice(lot);
         int bidCount = bidService.getBidCountForLot(lotId);
         User user = userService.get(lot.getUser().getId());
         model.addAttribute("user", user);
         model.addAttribute("lot", lot);
         model.addAttribute("timeLeft", timeLeft);
+        model.addAttribute("isStarted",isStarted);
+        model.addAttribute("isNotFinished", isNotFinished);
         model.addAttribute("endDate", endDate);
         model.addAttribute("currentPrice", currentPrice);
         model.addAttribute("bidCount", bidCount);

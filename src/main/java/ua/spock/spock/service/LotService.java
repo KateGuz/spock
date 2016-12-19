@@ -9,7 +9,8 @@ import java.util.List;
 public interface LotService {
     List<Lot> getLots(LotFilter lotFilter);
     Lot getById(int lotId);
-    List<Lot> getUserLots(int userId);
+    List<Lot> getUserLots(int userId, int page, int lotsPerPage);
+    int getLotCountByUser(int userId);
     void delete(int id);
     void add(Lot lot);
     void edit(Lot lot);

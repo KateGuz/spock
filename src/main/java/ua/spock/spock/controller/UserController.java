@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ua.spock.spock.controller.util.LotDetails;
 import ua.spock.spock.controller.util.LotDetailsWrapper;
 import ua.spock.spock.controller.util.ModelMapAttributesWrapper;
@@ -38,14 +35,13 @@ public class UserController {
     public String showProfile(ModelMap model, @PathVariable Integer id, HttpSession session) {
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
-                model.addAttribute("lots", lotService.getUserLots(id));
                 model.addAttribute("user", userService.get(id));
                 return "profile";
             } else {
-                return "lots";
+                return "redirect:/";
             }
         } else {
-            return "lots";
+            return "redirect:/";
         }
     }
 
@@ -66,11 +62,21 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}")
-    public String editUser(ModelMap model, @PathVariable Integer id) {
+    public String editUser(ModelMap model, @PathVariable Integer id, @RequestParam(value = "page", required = false) Integer page) {
         model.addAttribute("user", userService.get(id));
-        List<Lot> tempLots = lotService.getUserLots(id);
+        System.out.println("<<<<<page = " + page+ ">>>>>>>");
+        if (page == null) {
+            page = 1;
+        }
+        System.out.println("<<<<<page = " + page+ ">>>>>>>");
+        int lotsPerPage = 6;
+        List<Lot> tempLots = lotService.getUserLots(id, page, lotsPerPage);
+        int pageCount = (int) Math.ceil(lotService.getLotCountByUser(id) * 1.0 / lotsPerPage);
+        System.out.println("<<<<<pageCount = " + pageCount+ ">>>>>>>");
         LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots);
         modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        model.addAttribute("page", page);
+        model.addAttribute("pageCount", pageCount);
         return "editUser";
     }
 }

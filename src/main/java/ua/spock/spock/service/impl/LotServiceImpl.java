@@ -24,8 +24,13 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public List<Lot> getUserLots(int userId) {
-        return lotDao.getByUser(userId);
+    public List<Lot> getUserLots(int userId, int page, int lotsPerPage) {
+        return lotDao.getByUser(userId, page, lotsPerPage);
+    }
+
+    @Override
+    public int getLotCountByUser(int userId) {
+        return lotDao.getLotCountByUser(userId);
     }
 
     @Override

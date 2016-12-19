@@ -37,6 +37,8 @@ public class JdbcLotDao implements LotDao {
     private String updateMaxBidIdSQL;
     @Autowired
     private String closeLotSQL;
+    @Autowired
+    private String getCountByUserSQL;
 
 
     @Override
@@ -45,8 +47,17 @@ public class JdbcLotDao implements LotDao {
     }
 
     @Override
-    public List<Lot> getByUser(int userId) {
-        return namedParameterJdbcTemplate.query(getLotsByUserIdSQL, new MapSqlParameterSource("userId", userId), ALL_LOTS_ROW_MAPPER);
+    public List<Lot> getByUser(int userId, int page, int lotsPerPage) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userId", userId);
+        params.addValue("offset", (page - 1) * lotsPerPage);
+        params.addValue("lotsPerPage", lotsPerPage);
+        return namedParameterJdbcTemplate.query(getLotsByUserIdSQL, params, ALL_LOTS_ROW_MAPPER);
+    }
+
+    @Override
+    public int getLotCountByUser(int userId) {
+        return namedParameterJdbcTemplate.queryForObject(getCountByUserSQL, new MapSqlParameterSource("userId", userId), Integer.class);
     }
 
     @Override

@@ -11,17 +11,17 @@
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
-                                WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
+                                WHERE  c.parentId =:categoryId OR c.id =:categoryId AND l.type = 'I'"/>
+    </bean>
+    <bean id="getLotCountStatementSQL" class="java.lang.String">
+        <constructor-arg value="SELECT COUNT(*) FROM lot AS l"/>
     </bean>
     <bean id="getLotsByUserIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 left JOIN bid AS b ON b.bid=l.maxBidId
                                 JOIN user AS u ON l.userId=u.id
-                                WHERE  u.id =:userId LIMIT :offset, :lotsPerPage"/>
-    </bean>
-    <bean id="getCountByUserSQL"  class="java.lang.String">
-        <constructor-arg value="SELECT Count(*) FROM lot WHERE  userId =:userId;"/>
+                                WHERE  u.id =:userId;"/>
     </bean>
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,

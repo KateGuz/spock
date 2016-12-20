@@ -62,21 +62,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}")
-    public String editUser(ModelMap model, @PathVariable Integer id, @RequestParam(value = "page", required = false) Integer page) {
+    public String editUser(ModelMap model, @PathVariable Integer id) {
+        List<Lot> lots = lotService.getUserLots(id);
+        LotDetails lotDetails = lotDetailsWrapper.prepareData(lots);
+        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
         model.addAttribute("user", userService.get(id));
-        System.out.println("<<<<<page = " + page+ ">>>>>>>");
-        if (page == null) {
-            page = 1;
-        }
-        System.out.println("<<<<<page = " + page+ ">>>>>>>");
-        int lotsPerPage = 6;
-        List<Lot> tempLots = lotService.getUserLots(id, page, lotsPerPage);
-        int pageCount = (int) Math.ceil(lotService.getLotCountByUser(id) * 1.0 / lotsPerPage);
-        System.out.println("<<<<<pageCount = " + pageCount+ ">>>>>>>");
-        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots);
-        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
-        model.addAttribute("page", page);
-        model.addAttribute("pageCount", pageCount);
         return "editUser";
     }
 }

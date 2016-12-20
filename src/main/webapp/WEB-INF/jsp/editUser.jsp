@@ -199,26 +199,6 @@
                         </c:forEach>
                     </div>
                 </div>
-                <!--Pagination-->
-                <nav aria-label="Page navigation" class="lots-pagination">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li<c:if test="${page == 1}"> class="active"</c:if>><a href="/user/${user.id}/?page=1">1</a></li>
-                        <li<c:if test="${page == 2}"> class="active"</c:if><c:if test="${pageCount < 2}"> class="disabled"</c:if>><a href="/user/${user.id}/?page=2">2</a></li>
-                        <li<c:if test="${page == 3}"> class="active"</c:if><c:if test="${pageCount < 3}"> class="disabled"</c:if>><a href="/user/${user.id}/?page=3">3</a></li>
-                        <li<c:if test="${page == 4}"> class="active"</c:if><c:if test="${pageCount < 4}"> class="disabled"</c:if>><a href="/user/${user.id}/?page=4">4</a></li>
-                        <li>
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <!--End of pagination-->
             </div>
         </div>
     </div>

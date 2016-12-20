@@ -45,19 +45,9 @@ public class LotDetailsWrapper {
         return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
     }
 
-    public LotDetails prepareData(List<Lot> tempLots) {
+    public LotDetails prepareData(List<Lot> lots) {
         LotDetails details = new LotDetails();
-        for (Lot lot : tempLots) {
-            if (isNotFinished(lot) && isNotClosed(lot) && isStarted(lot)) {
-                prepareOneLot(details, lot);
-            }
-        }
-        return details;
-    }
-
-    public LotDetails prepareDataForUser(List<Lot> tempLots) {
-        LotDetails details = new LotDetails();
-        for (Lot lot : tempLots) {
+        for (Lot lot : lots) {
             prepareOneLot(details, lot);
         }
         return details;

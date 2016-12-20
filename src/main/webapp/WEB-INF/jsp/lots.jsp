@@ -200,10 +200,10 @@
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
+                                <li<c:if test="${page == 1}"> class="active"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1">1</a></li>
+                                <li<c:if test="${page == 2}"> class="active"</c:if><c:if test="${pageCount < 2}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=2">2</a></li>
+                                <li<c:if test="${page == 3}"> class="active"</c:if><c:if test="${pageCount < 3}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=3">3</a></li>
+                                <li<c:if test="${page == 4}"> class="active"</c:if><c:if test="${pageCount < 4}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=4">4</a></li>
                                 <li>
                                     <a href="#" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>

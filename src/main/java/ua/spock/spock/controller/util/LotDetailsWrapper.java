@@ -48,24 +48,28 @@ public class LotDetailsWrapper {
     public LotDetails prepareData(List<Lot> tempLots) {
         LotDetails details = new LotDetails();
         for (Lot lot : tempLots) {
-            if (isNotFinished(lot) && isNotClosed(lot)) {
-                details.getActualLots().add(lot);
-                details.getTimeLeft().put(lot.getId(), getTimeLeft(lot));
-                details.getIsStarted().put(lot.getId(), isStarted(lot));
-                details.getBidCount().put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
-                details.getCurrentPrice().put(lot.getId(), getCurrentPrice(lot));
+            if (isNotFinished(lot) && isNotClosed(lot) && isStarted(lot)) {
+                prepareOneLot(details, lot);
             }
         }
         return details;
     }
 
-    private boolean isStarted(Lot lot) {
+    public LotDetails prepareDataForUser(List<Lot> tempLots) {
+        LotDetails details = new LotDetails();
+        for (Lot lot : tempLots) {
+            prepareOneLot(details, lot);
+        }
+        return details;
+    }
+
+    public boolean isStarted(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getStartDate());
         return interval.isNegative();
     }
 
-    private boolean isNotFinished(Lot lot) {
+    public boolean isNotFinished(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
         Duration interval = Duration.between(now, lot.getEndDate());
         return !interval.isNegative();
@@ -73,5 +77,14 @@ public class LotDetailsWrapper {
 
     private boolean isNotClosed(Lot lot) {
         return lot.getType() != LotType.CLOSED;
+    }
+
+    private void prepareOneLot(LotDetails details, Lot lot) {
+        details.getActualLots().add(lot);
+        details.getTimeLeft().put(lot.getId(), getTimeLeft(lot));
+        details.getIsStarted().put(lot.getId(), isStarted(lot));
+        details.getIsNotFinished().put(lot.getId(), isNotFinished(lot));
+        details.getBidCount().put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
+        details.getCurrentPrice().put(lot.getId(), getCurrentPrice(lot));
     }
 }

@@ -166,8 +166,8 @@
                                             </c:choose>
                                         </div>
                                         <c:choose>
-                                            <c:when test="${isFinished.get(lot.id)}">
-                                                <span>Торги окончинны</span>
+                                            <c:when test="${!isNotFinished.get(lot.id) || lot.type.id == 'C'}">
+                                                <span>Торги окончены</span>
                                             </c:when>
                                             <c:otherwise>
                                                 <c:choose>

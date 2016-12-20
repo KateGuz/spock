@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.spock.spock.controller.util.LotDetails;
 import ua.spock.spock.controller.util.LotDetailsWrapper;
+import ua.spock.spock.controller.util.ModelMapAttributesWrapper;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.entity.UserType;
@@ -29,6 +30,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private LotDetailsWrapper lotDetailsWrapper;
+    @Autowired
+    private ModelMapAttributesWrapper modelMapAttributesWrapper;
 
 
     @RequestMapping("/user/{id}/edit")
@@ -66,12 +69,8 @@ public class UserController {
     public String editUser(ModelMap model, @PathVariable Integer id) {
         model.addAttribute("user", userService.get(id));
         List<Lot> tempLots = lotService.getUserLots(id);
-        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        model.addAttribute("lots", lotDetails.getActualLots());
-        model.addAttribute("timeLeft", lotDetails.getTimeLeft());
-        model.addAttribute("isStarted", lotDetails.getIsStarted());
-        model.addAttribute("bidCount", lotDetails.getBidCount());
-        model.addAttribute("currentPrice", lotDetails.getCurrentPrice());
+        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots);
+        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
         return "editUser";
     }
 }

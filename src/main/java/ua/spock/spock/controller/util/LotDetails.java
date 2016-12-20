@@ -9,6 +9,7 @@ import java.util.List;
 public class LotDetails {
     private HashMap<Integer, String> timeLeft = new HashMap<>();
     private HashMap<Integer, Boolean> isStarted = new HashMap<>();
+    private HashMap<Integer, Boolean> isNotFinished = new HashMap<>();
     private HashMap<Integer, Integer> bidCount = new HashMap<>();
     private HashMap<Integer, Double> currentPrice = new HashMap<>();
     private List<Lot> actualLots = new ArrayList<>();
@@ -31,5 +32,9 @@ public class LotDetails {
 
     public HashMap<Integer, Integer> getBidCount() {
         return bidCount;
+    }
+
+    public HashMap<Integer, Boolean> getIsNotFinished() {
+        return isNotFinished;
     }
 }

@@ -46,9 +46,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">UAH<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">USD</a></li>
-                            <li><a href="">EUR</a></li>
-                            <li><a href="">UAH</a></li>
+                            <li><a href="/currency/USD,/">USD</a></li>
+                            <li><a href="/currency/EUR,/">EUR</a></li>
+                            <li><a href="/currency/UAH,/">UAH</a></li>
                         </ul>
                     </li>
 
@@ -145,7 +145,7 @@
                                                         <span class="lot-preview-quick-buy-price"
                                                               title="Стоимость мгновенного выкупа">
 							                                <span class="glyphicon glyphicon-gift"></span>
-							                                    ${lot.quickBuyPrice} UAH
+							                                    ${lot.quickBuyPrice} ${currency}
 					                                	</span>
                                                         </c:when>
                                                     </c:choose>
@@ -160,10 +160,10 @@
                                                 <div class="lot-preview-current-price">
                                                     <c:choose>
                                                         <c:when test="${lot.maxBid==null}">
-                                                            <span>Максимальная ставка:  ${lot.startPrice} UAH</span>
+                                                            <span>Максимальная ставка:  ${lot.startPrice} ${currency}</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span>Максимальная ставка: ${currentPrice.get(lot.id)} UAH</span>
+                                                            <span>Максимальная ставка: ${lot.maxBid.value} ${currency}</span>
                                                         </c:otherwise>
                                                     </c:choose>
 

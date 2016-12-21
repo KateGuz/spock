@@ -28,7 +28,6 @@ public class LotController {
     private LotService lotService;
     @Autowired
     private LotDetailsWrapper lotDetailsWrapper;
-
     @Autowired
     private CategoryCacheService category;
     @Autowired
@@ -36,14 +35,17 @@ public class LotController {
     @Autowired
     private ModelMapAttributesWrapper modelMapAttributesWrapper;
 
+    public static String currency = "UAH";
+
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         List<Lot> tempLots = lotService.getLots(lotFilter);
         LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
         model.addAttribute("categories", category.getAllCategories());
+        model.addAttribute("currency", currency);
         return "lots";
     }
 
@@ -54,7 +56,7 @@ public class LotController {
         lotFilter.setCategoryId(categoryId);
         List<Lot> tempLots = lotService.getLots(lotFilter);
         LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
         model.addAttribute("categories", category.getAllCategories());
         return "lots";
     }
@@ -73,11 +75,12 @@ public class LotController {
         model.addAttribute("user", user);
         model.addAttribute("lot", lot);
         model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("isStarted",isStarted);
+        model.addAttribute("isStarted", isStarted);
         model.addAttribute("isNotFinished", isNotFinished);
         model.addAttribute("endDate", endDate);
         model.addAttribute("currentPrice", currentPrice);
         model.addAttribute("bidCount", bidCount);
+        model.addAttribute("currency", currency);
         return "lot";
     }
 
@@ -166,6 +169,12 @@ public class LotController {
         bidService.add(bid);
         lotService.closeLot(lot);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping("/currency/{currencyName}")
+    public String getLotById(@PathVariable String currencyName) {
+        currency = currencyName;
+        return "redirect:/";
     }
 }
 

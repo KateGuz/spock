@@ -47,9 +47,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">UAH<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">USD</a></li>
-                            <li><a href="">EUR</a></li>
-                            <li><a href="">UAH</a></li>
+                            <li><a href="/currency/USD">USD</a></li>
+                            <li><a href="/currency/EUR">EUR</a></li>
+                            <li><a href="/currency/UAH">UAH</a></li>
                         </ul>
                     </li>
 

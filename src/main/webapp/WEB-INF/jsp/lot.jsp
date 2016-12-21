@@ -45,9 +45,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">UAH<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">USD</a></li>
-                            <li><a href="">EUR</a></li>
-                            <li><a href="">UAH</a></li>
+                            <li><a href="/currency/USD">USD</a></li>
+                            <li><a href="/currency/EUR">EUR</a></li>
+                            <li><a href="/currency/UAH">UAH</a></li>
                         </ul>
                     </li>
 
@@ -88,7 +88,7 @@
                     </div>
                         <c:if test="${isNotFinished && !empty loggedUser && lot.type.id == 'I'}">
                             <div class="lot-quick-buy">
-                                <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}" onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} UAH
+                                <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}" onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} ${currency}
                                 </button>
                             </div>
                             <div class="lot-subscribtion">
@@ -112,12 +112,12 @@
                         </div>
 
                         <div class="lot-price">
-                            <span>Максимальная ставка: ${lot.maxBid.value} UAH </span>
-                            <span class="lot-start-price">Стартовая цена: ${lot.startPrice} UAH</span>
+                            <span>Максимальная ставка: ${lot.maxBid.value} ${currency} </span>
+                            <span class="lot-start-price">Стартовая цена: ${lot.startPrice} ${currency}</span>
                         </div>
                         <c:if test="${empty loggedUser || lot.type.id != 'I'}">
                             <div class="lot-price">
-                                <span>Купить сейчас за: ${lot.quickBuyPrice} UAH</span>
+                                <span>Купить сейчас за: ${lot.quickBuyPrice} ${currency}</span>
                             </div>
                         </c:if>
                         <div class="lot-time-left-and-participants">

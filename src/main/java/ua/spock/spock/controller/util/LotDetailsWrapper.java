@@ -2,6 +2,7 @@ package ua.spock.spock.controller.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.spock.spock.controller.LotController;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
 import ua.spock.spock.service.BidService;
@@ -15,6 +16,8 @@ import java.util.List;
 public class LotDetailsWrapper {
     @Autowired
     private BidService bidService;
+    @Autowired
+    private App app;
 
     public String getTimeLeft(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
@@ -86,5 +89,31 @@ public class LotDetailsWrapper {
         details.getIsNotFinished().put(lot.getId(), isNotFinished(lot));
         details.getBidCount().put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
         details.getCurrentPrice().put(lot.getId(), getCurrentPrice(lot));
+        lotCurrency(lot);
+    }
+
+    public Lot lotCurrency(Lot lot) {
+        double currencyValue;
+        if (LotController.currency.equals("UAH")) {
+            return lot;
+        } else {
+            if (LotController.currency.equals("USD")) {
+                currencyValue = app.exec().get(1);
+
+            } else {
+                currencyValue = app.exec().get(2);
+            }
+            double minStep = lot.getMinStep() / currencyValue;
+            lot.setMinStep(minStep);
+            if (lot.getMaxBid() != null) {
+                double maxBidValue = lot.getMaxBid().getValue() / currencyValue;
+                lot.getMaxBid().setValue(maxBidValue);
+            }
+            double startPrice = lot.getStartPrice() / currencyValue;
+            lot.setStartPrice(startPrice);
+            double quickBuyPrice = lot.getQuickBuyPrice() / currencyValue;
+            lot.setQuickBuyPrice(quickBuyPrice);
+            return lot;
+        }
     }
 }

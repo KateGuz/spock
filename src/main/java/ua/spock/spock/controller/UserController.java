@@ -71,6 +71,7 @@ public class UserController {
         List<Lot> tempLots = lotService.getUserLots(id);
         LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots);
         modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        model.addAttribute("currency", LotController.currency);
         return "editUser";
     }
 }

@@ -193,22 +193,37 @@
                             </div>
                         </section>
                         <!--Pagination-->
+                        <c:set var="start" value="${page - 2}"/>
+                        <c:if test="${start < 1}"><c:set var="start" value="1"/></c:if>
                         <nav aria-label="Page navigation" class="lots-pagination">
                             <ul class="pagination">
                                 <li>
-                                    <a href="#" aria-label="Previous">
+                                    <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1" aria-label="First">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <li<c:if test="${page == 1}"> class="active"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1">1</a></li>
-                                <li<c:if test="${page == 2}"> class="active"</c:if><c:if test="${pageCount < 2}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=2">2</a></li>
-                                <li<c:if test="${page == 3}"> class="active"</c:if><c:if test="${pageCount < 3}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=3">3</a></li>
-                                <li<c:if test="${page == 4}"> class="active"</c:if><c:if test="${pageCount < 4}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=4">4</a></li>
+                                <c:forEach var="i" begin="${start}" end="${start +  4}">
+                                    <li<c:if test="${page == i}"> class="active"</c:if><c:if test="${pageCount < i}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${i}">${i}</a></li>
+                                </c:forEach>
                                 <li>
-                                    <a href="#" aria-label="Next">
+                                    <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${pageCount}" aria-label="Last">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
+                                <%--<li>--%>
+                                    <%--<a href="#" aria-label="Previous">--%>
+                                        <%--<span aria-hidden="true">&laquo;</span>--%>
+                                    <%--</a>--%>
+                                <%--</li>--%>
+                                <%--<li<c:if test="${page == 1}"> class="active"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1">1</a></li>--%>
+                                <%--<li<c:if test="${page == 2}"> class="active"</c:if><c:if test="${pageCount < 2}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=2">2</a></li>--%>
+                                <%--<li<c:if test="${page == 3}"> class="active"</c:if><c:if test="${pageCount < 3}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=3">3</a></li>--%>
+                                <%--<li<c:if test="${page == 4}"> class="active"</c:if><c:if test="${pageCount < 4}"> class="disabled"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=4">4</a></li>--%>
+                                <%--<li>--%>
+                                    <%--<a href="#" aria-label="Next">--%>
+                                        <%--<span aria-hidden="true">&raquo;</span>--%>
+                                    <%--</a>--%>
+                                <%--</li>--%>
                             </ul>
                         </nav>
                         <!--End of pagination-->

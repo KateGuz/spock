@@ -60,7 +60,7 @@ public class LotController {
         if (page == null) {
             page = 1;
         }
-        int lotsPerPage = 3;
+        int lotsPerPage = 9;
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);

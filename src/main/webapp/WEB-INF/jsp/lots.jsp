@@ -194,9 +194,9 @@
                         </section>
                         <!--Pagination-->
                         <c:if test="${pageCount != 1}">
-                            <c:set var="start" value="${page - 2}"/>
-                            <c:if test="${start < 1}"><c:set var="start" value="1"/></c:if>
+                            <c:set var="start" value="${page - 2 < 1 ? 1 : page - 2}"/>
                             <c:set var="end" value="${start + 4 > pageCount ? pageCount : start + 4}"/>
+                            <c:if test="${page < end + 2}"><c:set var="start" value="${end - 4 < 1 ? 1 : end - 4}"/></c:if>
                             <nav aria-label="Page navigation" class="lots-pagination">
                                 <ul class="pagination">
                                     <li>

@@ -15,13 +15,14 @@ public class LotServiceImpl implements LotService {
     private LotDao lotDao;
 
     @Override
-    public List<Lot> getLots(LotFilter lotFilter, int page, int lotsPerPage) {
-        return lotDao.get(lotFilter, page, lotsPerPage);
+    public List<Lot> getLots(LotFilter lotFilter) {
+        return lotDao.get(lotFilter);
     }
 
     @Override
-    public int getLotCount(LotFilter lotFilter) {
-        return lotDao.getLotCount(lotFilter);
+    public int getPageCount(LotFilter lotFilter) {
+
+        return lotDao.getPageCount(lotFilter);
     }
 
     public Lot getById(int lotId) {

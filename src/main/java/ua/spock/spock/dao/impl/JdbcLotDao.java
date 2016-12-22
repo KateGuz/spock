@@ -38,6 +38,7 @@ public class JdbcLotDao implements LotDao {
     private String updateMaxBidIdSQL;
     @Autowired
     private String closeLotSQL;
+    private final int LOTS_PER_PAGE = 9;
 
     @Override
     public Lot getById(int lotId) {
@@ -69,19 +70,21 @@ public class JdbcLotDao implements LotDao {
     }
 
     @Override
-    public List<Lot> get(LotFilter lotFilter,  int page, int lotsPerPage) {
-        SqlQueryParameters sqlQueryParameters = queryGenerator.generate(lotFilter, page, lotsPerPage);
+    public List<Lot> get(LotFilter lotFilter) {
+        SqlQueryParameters sqlQueryParameters = queryGenerator.generate(lotFilter, lotFilter.getPage(), LOTS_PER_PAGE);
         String query = sqlQueryParameters.getQuery();
         MapSqlParameterSource params = sqlQueryParameters.getParameters();
         return namedParameterJdbcTemplate.query(query, params, ALL_LOTS_ROW_MAPPER);
     }
 
     @Override
-    public int getLotCount(LotFilter lotFilter) {
+    public int getPageCount(LotFilter lotFilter) {
         SqlQueryParameters sqlQueryParameters = queryGenerator.generateCount(lotFilter);
         String query = sqlQueryParameters.getQuery();
         MapSqlParameterSource params = sqlQueryParameters.getParameters();
-        return namedParameterJdbcTemplate.queryForObject(query, params, Integer.class);
+        int lotCount = namedParameterJdbcTemplate.queryForObject(query, params, Integer.class);
+        return (int) Math.ceil(lotCount * 1.0 / LOTS_PER_PAGE);
+
     }
 
 

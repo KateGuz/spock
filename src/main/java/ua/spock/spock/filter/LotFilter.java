@@ -5,6 +5,7 @@ import ua.spock.spock.entity.SortType;
 public class LotFilter {
     private SortType sortType;
     private Integer categoryId;
+    private int page;
 
     public SortType getSortType() {
         return sortType;
@@ -22,4 +23,11 @@ public class LotFilter {
         this.categoryId = categoryId;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
 }

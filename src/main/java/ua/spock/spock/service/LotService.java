@@ -7,8 +7,8 @@ import ua.spock.spock.filter.LotFilter;
 import java.util.List;
 
 public interface LotService {
-    List<Lot> getLots(LotFilter lotFilter, int page, int lotsPerPage);
-    int getLotCount(LotFilter lotFilter);
+    List<Lot> getLots(LotFilter lotFilter);
+    int getPageCount(LotFilter lotFilter);
     Lot getById(int lotId);
     List<Lot> getUserLots(int userId);
     void delete(int id);

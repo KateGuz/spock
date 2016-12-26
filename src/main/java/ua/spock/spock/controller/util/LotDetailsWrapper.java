@@ -2,11 +2,12 @@ package ua.spock.spock.controller.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.spock.spock.controller.LotController;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
 import ua.spock.spock.service.BidService;
+import ua.spock.spock.service.CurrencyCasheService;
 
+import javax.servlet.http.HttpSession;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +18,7 @@ public class LotDetailsWrapper {
     @Autowired
     private BidService bidService;
     @Autowired
-    private App app;
+    private CurrencyCasheService currencyCashe;
 
     public String getTimeLeft(Lot lot) {
         LocalDateTime now = LocalDateTime.now();
@@ -48,20 +49,20 @@ public class LotDetailsWrapper {
         return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
     }
 
-    public LotDetails prepareData(List<Lot> tempLots) {
+    public LotDetails prepareData(List<Lot> tempLots, HttpSession session) {
         LotDetails details = new LotDetails();
         for (Lot lot : tempLots) {
             if (isNotFinished(lot) && isNotClosed(lot) && isStarted(lot)) {
-                prepareOneLot(details, lot);
+                prepareOneLot(details, lot, session);
             }
         }
         return details;
     }
 
-    public LotDetails prepareDataForUser(List<Lot> tempLots) {
+    public LotDetails prepareDataForUser(List<Lot> tempLots, HttpSession session) {
         LotDetails details = new LotDetails();
         for (Lot lot : tempLots) {
-            prepareOneLot(details, lot);
+            prepareOneLot(details, lot, session);
         }
         return details;
     }
@@ -82,37 +83,38 @@ public class LotDetailsWrapper {
         return lot.getType() != LotType.CLOSED;
     }
 
-    private void prepareOneLot(LotDetails details, Lot lot) {
+    private void prepareOneLot(LotDetails details, Lot lot, HttpSession session) {
         details.getActualLots().add(lot);
         details.getTimeLeft().put(lot.getId(), getTimeLeft(lot));
         details.getIsStarted().put(lot.getId(), isStarted(lot));
         details.getIsNotFinished().put(lot.getId(), isNotFinished(lot));
         details.getBidCount().put(lot.getId(), bidService.getBidCountForLot(lot.getId()));
         details.getCurrentPrice().put(lot.getId(), getCurrentPrice(lot));
-        lotCurrency(lot);
+        lotCurrency(lot, session);
     }
 
-    public Lot lotCurrency(Lot lot) {
+    public Lot lotCurrency(Lot lot, HttpSession session) {
         double currencyValue;
-        if (LotController.currency.equals("UAH")) {
+        if (session.getAttribute("currency").equals("UAH")) {
             return lot;
         } else {
-            if (LotController.currency.equals("USD")) {
-                currencyValue = app.exec().get(1);
+            if (session.getAttribute("currency").equals("USD")) {
+                currencyValue = currencyCashe.getCurrencyValue().get("USD");
 
             } else {
-                currencyValue = app.exec().get(2);
+                currencyValue = currencyCashe.getCurrencyValue().get("EUR");
             }
             double minStep = lot.getMinStep() / currencyValue;
-            lot.setMinStep(minStep);
+            lot.setMinStep(Double.parseDouble(String.format("%.2f", minStep)));
             if (lot.getMaxBid() != null) {
                 double maxBidValue = lot.getMaxBid().getValue() / currencyValue;
-                lot.getMaxBid().setValue(maxBidValue);
+                lot.getMaxBid().setValue(Double.parseDouble(String.format("%.2f", maxBidValue)));
             }
             double startPrice = lot.getStartPrice() / currencyValue;
-            lot.setStartPrice(startPrice);
+            lot.setStartPrice(Double.parseDouble(String.format("%.2f", startPrice)));
             double quickBuyPrice = lot.getQuickBuyPrice() / currencyValue;
-            lot.setQuickBuyPrice(quickBuyPrice);
+
+            lot.setQuickBuyPrice(Double.parseDouble(String.format("%.2f", quickBuyPrice)));
             return lot;
         }
     }

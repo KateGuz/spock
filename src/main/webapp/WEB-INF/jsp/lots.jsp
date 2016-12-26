@@ -42,16 +42,23 @@
                     <button type="submit" class="btn btn-default">Найти</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
+                      <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">UAH<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/currency/USD,/">USD</a></li>
-                            <li><a href="/currency/EUR,/">EUR</a></li>
-                            <li><a href="/currency/UAH,/">UAH</a></li>
+                           aria-expanded="false">${currency}<span class="caret"></span></a>
+                        <ul class="dropdown-menu" >
+                            <li>
+                                <button id="USD" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('USD')">USD
+                                </button>
+                            </li>
+                            <li><button id="EUR" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('EUR')">EUR
+                            </button></li>
+                            <li><button id="UAH" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('UAH')">UAH
+                            </button></li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -291,5 +298,6 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/sort.js"></script>
+<script src="/js/currencyConversion.js"></script>
 </body>
 </html>

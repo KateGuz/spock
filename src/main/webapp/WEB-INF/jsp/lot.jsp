@@ -43,14 +43,21 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">UAH<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/currency/USD">USD</a></li>
-                            <li><a href="/currency/EUR">EUR</a></li>
-                            <li><a href="/currency/UAH">UAH</a></li>
+                           aria-expanded="false">${currency}<span class="caret"></span></a>
+                        <ul class="dropdown-menu" >
+                            <li>
+                                <button id="USD" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('USD')">USD
+                                </button>
+                            </li>
+                            <li><button id="EUR" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('EUR')">EUR
+                            </button></li>
+                            <li><button id="UAH" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('UAH')">UAH
+                            </button></li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -72,55 +79,56 @@
 <section class="main-section">
     <div class="lot-wrapper">
         <div class="lot-details">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="lot-image-slider-wrapper">
-                        <div id="ninja-slider">
-                            <div class="inner">
-                                <ul>
-                                    <c:forEach var="i" begin="0" end="3">
-                                        <li><a class="ns-img" href="../img/logo.png"></a></li>
-                                    </c:forEach>
-                                </ul>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="lot-image-slider-wrapper">
+                            <div id="ninja-slider">
+                                <div class="inner">
+                                    <ul>
+                                        <c:forEach var="i" begin="0" end="3">
+                                            <li><a class="ns-img" href="../img/logo.png"></a></li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
                         <c:if test="${isNotFinished && !empty loggedUser && lot.type.id == 'I'}">
                             <div class="lot-quick-buy">
-                                <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}" onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} ${currency}
+                                <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}"
+                                        onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} ${currency}
                                 </button>
                             </div>
                             <div class="lot-subscribtion">
                                 <button type="button" class="btn btn-default">Подписаться на обновления</button>
                             </div>
                         </c:if>
-                </div>
-                <div class="col-md-7">
-                    <div class="lot-details-wrapper">
-                        <div class="lot-title">
-                            <span>${lot.title}</span>
-                        </div>
-                        <div class="lot-category">
-                            Категория: ${lot.category.name}
-                        </div>
-                        <div class="lot-seller">
-                            Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
-                        </div>
-                        <div class="lot-description">
-                            <span>${lot.description}</span>
-                        </div>
-
-                        <div class="lot-price">
-                            <span>Максимальная ставка: ${lot.maxBid.value} ${currency} </span>
-                            <span class="lot-start-price">Стартовая цена: ${lot.startPrice} ${currency}</span>
-                        </div>
-                        <c:if test="${empty loggedUser || lot.type.id != 'I'}">
-                            <div class="lot-price">
-                                <span>Купить сейчас за: ${lot.quickBuyPrice} ${currency}</span>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="lot-details-wrapper">
+                            <div class="lot-title">
+                                <span>${lot.title}</span>
                             </div>
-                        </c:if>
-                        <div class="lot-time-left-and-participants">
+                            <div class="lot-category">
+                                Категория: ${lot.category.name}
+                            </div>
+                            <div class="lot-seller">
+                                Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
+                            </div>
+                            <div class="lot-description">
+                                <span>${lot.description}</span>
+                            </div>
+
+                            <div class="lot-price">
+                                <span>Максимальная ставка: ${lotCurrencyValue.maxBid.value} ${currency} </span>
+                                <span class="lot-start-price">Стартовая цена: ${lotCurrencyValue.startPrice} ${currency}</span>
+                            </div>
+                            <c:if test="${empty loggedUser || lot.type.id != 'I'}">
+                                <div class="lot-price">
+                                    <span>Купить сейчас за: ${lotCurrencyValue.quickBuyPrice} ${currency}</span>
+                                </div>
+                            </c:if>
+                            <div class="lot-time-left-and-participants">
                             <span>
                                 <c:choose>
                                     <c:when test="${!isNotFinished || lot.type.id == 'C'}">
@@ -132,44 +140,48 @@
                                                 <span>Осталось: ${timeLeft}</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span>Начало:  ${lot.startDate}</span>
+                                                <span>Начало: ${lot.startDate}</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise>
                                 </c:choose>
                                 (всего было размещено ${bidCount} ставок).
                             </span>
-                        </div>
+                            </div>
 
-                    </div>
-                    <c:if test="${isNotFinished && lot.type.id == 'I'}">
-                        <div class="place-bid thumbnail">
-                            <c:choose>
-                                <c:when test="${empty loggedUser}">
-                                    <p><a data-toggle="modal" href="#signIn" data-target="#signIn">Войдите/зарегистрируйтесь</a>, если хотите сделать ставку или купить лот сейчас.</p>
-                                </c:when>
-                                <c:otherwise>
-                                    <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
-                                    <form class="navbar-form navbar-nav">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="${currentPrice}"  id="bid">
-                                        </div>
-                                        <div class="edit-field-wrapper">
-                                            <input type="hidden" value="${lot.id}" id="lotId">
-                                        </div>
-                                        <button type="submit" class="btn btn-default" value="${loggedUser.id}" id="userId"
-                                                onclick="addBid()">Сделать ставку</button>
-                                        <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
-                                    </form>
-                                </c:otherwise>
-                            </c:choose>
                         </div>
-                    </c:if>
+                        <c:if test="${isNotFinished && lot.type.id == 'I'}">
+                            <div class="place-bid thumbnail">
+                                <c:choose>
+                                    <c:when test="${empty loggedUser}">
+                                        <p><a data-toggle="modal" href="#signIn" data-target="#signIn">Войдите/зарегистрируйтесь</a>,
+                                            если хотите сделать ставку или купить лот сейчас.</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
+                                        <form class="navbar-form navbar-nav">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="${currentPrice}"
+                                                       id="bid">
+                                            </div>
+                                            <div class="edit-field-wrapper">
+                                                <input type="hidden" value="${lot.id}" id="lotId">
+                                            </div>
+                                            <button type="submit" class="btn btn-default" value="${loggedUser.id}"
+                                                    id="userId"
+                                                    onclick="addBid()">Сделать ставку
+                                            </button>
+                                            <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </c:if>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </section>
 <!--End of main section-->
 <!--Footer-->
@@ -246,5 +258,6 @@
 <script src="/js/addBid.js"></script>
 <script src="/js/ninja-slider.js"></script>
 <script src="/js/quickBuy.js"></script>
+<script src="/js/currencyConversion.js"></script>
 </body>
 </html>

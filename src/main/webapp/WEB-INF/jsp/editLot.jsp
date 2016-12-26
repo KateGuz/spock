@@ -43,11 +43,19 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">UAH<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/currency/USD">USD</a></li>
-                            <li><a href="/currency/EUR">EUR</a></li>
-                            <li><a href="/currency/UAH">UAH</a></li>
+                           aria-expanded="false">${currency}<span class="caret"></span></a>
+                        <ul class="dropdown-menu" >
+                            <li>
+                                <button id="USD" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('USD')">USD
+                                </button>
+                            </li>
+                            <li><button id="EUR" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('EUR')">EUR
+                            </button></li>
+                            <li><button id="UAH" type="button" class="btn btn-link"
+                                        onclick="currencyConversion('UAH')">UAH
+                            </button></li>
                         </ul>
                     </li>
 
@@ -237,6 +245,6 @@
 <script src="/js/signUp.js"></script>
 <script src="/js/editLot.js"></script>
 <script src="/js/ninja-slider.js"></script>
-
+<script src="/js/currencyConversion.js"></script>
 </body>
 </html>

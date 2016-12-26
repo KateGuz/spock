@@ -40,6 +40,7 @@ public class UserController {
             if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
                 model.addAttribute("lots", lotService.getUserLots(id));
                 model.addAttribute("user", userService.get(id));
+                model.addAttribute("currency", session.getAttribute("currency"));
                 return "profile";
             } else {
                 return "lots";
@@ -66,12 +67,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}")
-    public String editUser(ModelMap model, @PathVariable Integer id) {
+    public String editUser(ModelMap model, @PathVariable Integer id,HttpSession session) {
         model.addAttribute("user", userService.get(id));
         List<Lot> tempLots = lotService.getUserLots(id);
-        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots);
+        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots,session);
         modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
-        model.addAttribute("currency", LotController.currency);
+        model.addAttribute("currency", session.getAttribute("currency"));
         return "editUser";
     }
 }

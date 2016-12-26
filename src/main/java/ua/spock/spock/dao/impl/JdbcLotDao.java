@@ -58,7 +58,7 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public void delete(int id) {
-        namedParameterJdbcTemplate.update(deleteLotSQL, new MapSqlParameterSource("lotId",id));
+        namedParameterJdbcTemplate.update(deleteLotSQL, new MapSqlParameterSource("lotId", id));
     }
 
     @Override

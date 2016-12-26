@@ -44,21 +44,21 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">${currency}<span class="caret"></span></a>
-                        <ul class="dropdown-menu" >
+                        <ul class="dropdown-menu">
                             <li>
-                                <button id="USD" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('USD')">USD
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
                                 </button>
                             </li>
-                            <li><button id="EUR" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('EUR')">EUR
-                            </button></li>
-                            <li><button id="UAH" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('UAH')">UAH
-                            </button></li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -99,58 +99,68 @@
                                 <input type="button" class="btn btn-default" value="Загрузить новое основное фото">
                             </div>
                             <div class="lot-load-new-additional-images">
-                                <input type="button" class="btn btn-default" value="Загрузить новые дополнительные фото">
+                                <input type="button" class="btn btn-default"
+                                       value="Загрузить новые дополнительные фото">
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="edit-lot-details-wrapper">
                                 <div class="edit-field-wrapper">
-                                    <input type="text" class="form-control" value="${lot.title}" size="60" required id="title">
+                                    <input type="text" class="form-control" value="${lot.title}" size="60" required
+                                           id="title">
                                 </div>
                                 <!-- Categories dropdown -->
                                 <div class="category-pick-wrapper edit-field-wrapper">
                                     <span>Категория:</span>
                                     <select class="form-control" id="categories">
                                         <c:forEach items="${categories}" var="parent">
-                                        <optgroup label="${parent.name}">
-                                            <c:forEach items="${parent.children}" var="category">
-                                                <c:choose>
-                                                    <c:when test="${category.id == lot.category.id}">
-                                                        <option selected value="${category.id}" id="categoryId">${category.name}</option>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <option value="${category.id}" id="categoryId">${category.name}</option>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                           </c:forEach>
-                                        </optgroup>
+                                            <optgroup label="${parent.name}">
+                                                <c:forEach items="${parent.children}" var="category">
+                                                    <c:choose>
+                                                        <c:when test="${category.id == lot.category.id}">
+                                                            <option selected value="${category.id}"
+                                                                    id="categoryId">${category.name}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${category.id}"
+                                                                    id="categoryId">${category.name}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+                                            </optgroup>
                                         </c:forEach>
                                     </select>
                                 </div>
                                 <!-- End of categories dropdown -->
                                 <div class="edit-field-wrapper">
-                                    <textarea class="form-control" rows="7" cols="60"  required id="description">${lot.description}</textarea>
+                                    <textarea class="form-control" rows="7" cols="60" required
+                                              id="description">${lot.description}</textarea>
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Начальная ставка (UAH):</span>
-                                    <input type="number" class="form-control" value="${lot.startPrice}" size="10" required id="startPrice">
+                                    <input type="number" class="form-control" value="${lot.startPrice}" size="10"
+                                           required id="startPrice">
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Минимальный шаг (UAH):</span>
-                                    <input type="number" class="form-control"  value="${lot.minStep}" size="10" required id="minStep">
+                                    <input type="number" class="form-control" value="${lot.minStep}" size="10" required
+                                           id="minStep">
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Мгновенный выкуп (UAH):</span>
-                                    <input type="number" class="form-control" value="${lot.quickBuyPrice}" size="10" id="quickBuyPrice">
+                                    <input type="number" class="form-control" value="${lot.quickBuyPrice}" size="10"
+                                           id="quickBuyPrice">
                                     <span>*опционально</span>
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Старт аукциона:</span>
-                                    <input type="datetime-local" class="form-control" value="${lot.startDate}" required id="startDate">
+                                    <input type="datetime-local" class="form-control" value="${lot.startDate}" required
+                                           id="startDate">
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Конец аукциона:</span>
-                                    <input type="datetime-local" class="form-control" value="${lot.endDate}" required id="endDate">
+                                    <input type="datetime-local" class="form-control" value="${lot.endDate}" required
+                                           id="endDate">
                                 </div>
                             </div>
                         </div>
@@ -162,7 +172,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="save-changes-button">
-                            <button type="submit" class="btn btn-success save-changes-button"   value="${loggedUser.id}" id="userId" onclick="editLot()">Сохранить изменения</button>
+                            <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}"
+                                    id="userId" onclick="editLot()">Сохранить изменения
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -222,8 +234,10 @@
                 <form id="dataForm">
                     <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
                     <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
-                    <input type="password" required name="password" placeholder="Пароль" id="inputPasswordSignUp"><br><br>
-                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся</button>
+                    <input type="password" required name="password" placeholder="Пароль"
+                           id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся
+                    </button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -233,7 +247,6 @@
 
     </div>
 </div>
-
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -42,21 +42,22 @@
                     <button type="submit" class="btn btn-default">Найти</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                      <li class="dropdown">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">${currency}<span class="caret"></span></a>
-                        <ul class="dropdown-menu" >
+                        <ul class="dropdown-menu">
                             <li>
-                                <button id="USD" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('USD')">USD
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
                                 </button>
                             </li>
-                            <li><button id="EUR" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('EUR')">EUR
-                            </button></li>
-                            <li><button id="UAH" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('UAH')">UAH
-                            </button></li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
                     <c:choose>

@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ua.spock.spock.controller.util.LotDetails;
 import ua.spock.spock.controller.util.LotDetailsWrapper;
 import ua.spock.spock.controller.util.ModelMapAttributesWrapper;
@@ -33,11 +30,16 @@ public class UserController {
     @Autowired
     private ModelMapAttributesWrapper modelMapAttributesWrapper;
 
-
     @RequestMapping("/user/{id}/edit")
-    public String showProfile(ModelMap model, @PathVariable Integer id, HttpSession session) {
+    public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
+                if (currency != null) {
+                    session.setAttribute("currency", currency);
+                }
+                if (session.getAttribute("currency") == null) {
+                    session.setAttribute("currency", "UAH");
+                }
                 model.addAttribute("lots", lotService.getUserLots(id));
                 model.addAttribute("user", userService.get(id));
                 model.addAttribute("currency", session.getAttribute("currency"));
@@ -67,11 +69,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}")
-    public String editUser(ModelMap model, @PathVariable Integer id,HttpSession session) {
+    public String editUser(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+        if (currency != null) {
+            session.setAttribute("currency", currency);
+        }
+        if (session.getAttribute("currency") == null) {
+            session.setAttribute("currency", "UAH");
+        }
         model.addAttribute("user", userService.get(id));
         List<Lot> tempLots = lotService.getUserLots(id);
-        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots,session);
-        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots, session);
+        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
         model.addAttribute("currency", session.getAttribute("currency"));
         return "editUser";
     }

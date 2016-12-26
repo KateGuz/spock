@@ -55,11 +55,11 @@ public class CurrencyCasheServiceImpl implements CurrencyCasheService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        JSONArray employeeList = (JSONArray) object;
-        JSONArray arrayObject = (JSONArray) employeeList.get(employeeList.size() - 1);
+        JSONArray currencyForPeriodList = (JSONArray) object;
+        JSONArray currencyForThisDay = (JSONArray) currencyForPeriodList.get(currencyForPeriodList.size() - 1);
         currencyMap.put("UAH", 1.0);
-        currencyMap.put("USD", Double.valueOf(String.valueOf(arrayObject.get(1))));
-        currencyMap.put("EUR", Double.valueOf(String.valueOf(arrayObject.get(2))));
+        currencyMap.put("USD", Double.valueOf(String.valueOf(currencyForThisDay.get(1))));
+        currencyMap.put("EUR", Double.valueOf(String.valueOf(currencyForThisDay.get(2))));
         return currencyMap;
     }
 }

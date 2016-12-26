@@ -44,18 +44,19 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">${currency}<span class="caret"></span></a>
-                        <ul class="dropdown-menu" >
+                        <ul class="dropdown-menu">
                             <li>
-                                <button id="USD" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('USD')">USD
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
                                 </button>
                             </li>
-                            <li><button id="EUR" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('EUR')">EUR
-                            </button></li>
-                            <li><button id="UAH" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('UAH')">UAH
-                            </button></li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
                     <c:choose>
@@ -93,10 +94,12 @@
                                 </div>
                             </div>
                         </div>
-                        <c:if test="${isNotFinished && !empty loggedUser && lot.type.id == 'I'}">
+                        <c:if test="${isNotFinished && !empty loggedUser && lotCurrencyValue.type.id == 'I'}">
                             <div class="lot-quick-buy">
-                                <button type="button" class="btn btn-default" id="quickBuy" value="${lot.id}"
-                                        onclick="quickBuy()">Выкупить сейчас за ${lot.quickBuyPrice} ${currency}
+                                <button type="button" class="btn btn-default" id="quickBuy"
+                                        value="${lotCurrencyValue.id}"
+                                        onclick="quickBuy()">Выкупить сейчас
+                                    за ${lotCurrencyValue.quickBuyPrice} ${currency}
                                 </button>
                             </div>
                             <div class="lot-subscribtion">
@@ -107,23 +110,23 @@
                     <div class="col-md-7">
                         <div class="lot-details-wrapper">
                             <div class="lot-title">
-                                <span>${lot.title}</span>
+                                <span>${lotCurrencyValue.title}</span>
                             </div>
                             <div class="lot-category">
-                                Категория: ${lot.category.name}
+                                Категория: ${lotCurrencyValue.category.name}
                             </div>
                             <div class="lot-seller">
                                 Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
                             </div>
                             <div class="lot-description">
-                                <span>${lot.description}</span>
+                                <span>${lotCurrencyValue.description}</span>
                             </div>
 
                             <div class="lot-price">
                                 <span>Максимальная ставка: ${lotCurrencyValue.maxBid.value} ${currency} </span>
                                 <span class="lot-start-price">Стартовая цена: ${lotCurrencyValue.startPrice} ${currency}</span>
                             </div>
-                            <c:if test="${empty loggedUser || lot.type.id != 'I'}">
+                            <c:if test="${empty loggedUser || lotCurrencyValue.type.id != 'I'}">
                                 <div class="lot-price">
                                     <span>Купить сейчас за: ${lotCurrencyValue.quickBuyPrice} ${currency}</span>
                                 </div>
@@ -131,7 +134,7 @@
                             <div class="lot-time-left-and-participants">
                             <span>
                                 <c:choose>
-                                    <c:when test="${!isNotFinished || lot.type.id == 'C'}">
+                                    <c:when test="${!isNotFinished || lotCurrencyValue.type.id == 'C'}">
                                         <span>Торги окончены</span>
                                     </c:when>
                                     <c:otherwise>
@@ -140,7 +143,7 @@
                                                 <span>Осталось: ${timeLeft}</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span>Начало: ${lot.startDate}</span>
+                                                <span>Начало: ${lotCurrencyValue.startDate}</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise>
@@ -150,7 +153,7 @@
                             </div>
 
                         </div>
-                        <c:if test="${isNotFinished && lot.type.id == 'I'}">
+                        <c:if test="${isNotFinished && lotCurrencyValue.type.id == 'I'}">
                             <div class="place-bid thumbnail">
                                 <c:choose>
                                     <c:when test="${empty loggedUser}">
@@ -165,13 +168,14 @@
                                                        id="bid">
                                             </div>
                                             <div class="edit-field-wrapper">
-                                                <input type="hidden" value="${lot.id}" id="lotId">
+                                                <input type="hidden" value="${lotUAHValue.id}" id="lotId">
                                             </div>
                                             <button type="submit" class="btn btn-default" value="${loggedUser.id}"
                                                     id="userId"
                                                     onclick="addBid()">Сделать ставку
                                             </button>
-                                            <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
+                                            <p class="place-bid-min-step">*минимальный шаг: ${lotUAHValue.minStep}
+                                                UAH</p>
                                         </form>
                                     </c:otherwise>
                                 </c:choose>

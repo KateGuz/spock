@@ -44,21 +44,21 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">${currency}<span class="caret"></span></a>
-                        <ul class="dropdown-menu" >
+                        <ul class="dropdown-menu">
                             <li>
-                                <button id="USD" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('USD')">USD
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
                                 </button>
                             </li>
-                            <li><button id="EUR" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('EUR')">EUR
-                            </button></li>
-                            <li><button id="UAH" type="button" class="btn btn-link"
-                                        onclick="currencyConversion('UAH')">UAH
-                            </button></li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -92,29 +92,35 @@
                                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjMtcxK2vElKxVOi9b1noqIKLvCEEsvr9wK4frJOnSHfxrt6rz9aiRz-4"><br>
                                             </div>
                                             <div class="user-load-avatar">
-                                                <input type="button" class="btn btn-default" value="Загрузить новое фото">
+                                                <input type="button" class="btn btn-default"
+                                                       value="Загрузить новое фото">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="user-info edit-user-info">
                                             <div class="edit-field-wrapper">
-                                                <input type="text" class="form-control" value="${user.name}" size="30" required id="inputNameEdit">
+                                                <input type="text" class="form-control" value="${user.name}" size="30"
+                                                       required id="inputNameEdit">
                                             </div>
                                             <div class="edit-field-wrapper">
                                                 <p class="edit-user-label">Почта:</p>
-                                                <input type="text" class="form-control" value="${user.email}" size="30" required id="inputEmailEdit">
+                                                <input type="text" class="form-control" value="${user.email}" size="30"
+                                                       required id="inputEmailEdit">
                                             </div>
                                             <div class="edit-field-wrapper">
                                                 <p class="edit-user-label">Пароль:</p>
-                                                <input type="password" class="form-control" value="${user.password}" size="30" required id="inputPasswordEdit">
+                                                <input type="password" class="form-control" value="${user.password}"
+                                                       size="30" required id="inputPasswordEdit">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="save-changes-button">
-                                <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}" id="userId" onclick="editUser()">Сохранить изменения</button>
+                                <button type="submit" class="btn btn-success save-changes-button"
+                                        value="${loggedUser.id}" id="userId" onclick="editUser()">Сохранить изменения
+                                </button>
                             </div>
 
                         </div>
@@ -176,8 +182,10 @@
                 <form id="dataForm">
                     <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
                     <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
-                    <input type="password" required name="password" placeholder="Пароль" id="inputPasswordSignUp"><br><br>
-                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся</button>
+                    <input type="password" required name="password" placeholder="Пароль"
+                           id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся
+                    </button>
                 </form>
             </div>
             <div class="modal-footer">

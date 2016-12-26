@@ -100,7 +100,6 @@ public class LotDetailsWrapper {
         } else {
             if (session.getAttribute("currency").equals("USD")) {
                 currencyValue = currencyCashe.getCurrencyValue().get("USD");
-
             } else {
                 currencyValue = currencyCashe.getCurrencyValue().get("EUR");
             }
@@ -113,7 +112,6 @@ public class LotDetailsWrapper {
             double startPrice = lot.getStartPrice() / currencyValue;
             lot.setStartPrice(Double.parseDouble(String.format("%.2f", startPrice)));
             double quickBuyPrice = lot.getQuickBuyPrice() / currencyValue;
-
             lot.setQuickBuyPrice(Double.parseDouble(String.format("%.2f", quickBuyPrice)));
             return lot;
         }

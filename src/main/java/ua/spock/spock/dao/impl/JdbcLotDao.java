@@ -71,7 +71,7 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public List<Lot> get(LotFilter lotFilter) {
-        SqlQueryParameters sqlQueryParameters = queryGenerator.generate(lotFilter, lotFilter.getPage(), LOTS_PER_PAGE);
+        SqlQueryParameters sqlQueryParameters = queryGenerator.generate(lotFilter, LOTS_PER_PAGE);
         String query = sqlQueryParameters.getQuery();
         MapSqlParameterSource params = sqlQueryParameters.getParameters();
         return namedParameterJdbcTemplate.query(query, params, ALL_LOTS_ROW_MAPPER);

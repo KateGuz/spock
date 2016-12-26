@@ -19,9 +19,9 @@ public class QueryGenerator {
     @Autowired
     private String getLotCountStatementSQL;
 
-    public SqlQueryParameters generate(LotFilter lotFilter, int page, int lotsPerPage) {
+    public SqlQueryParameters generate(LotFilter lotFilter, int lotsPerPage) {
         MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-        paramsMap.addValue("offset", (page - 1) * lotsPerPage);
+        paramsMap.addValue("offset", (lotFilter.getPage() - 1) * lotsPerPage);
         paramsMap.addValue("lotsPerPage", lotsPerPage);
         StringBuilder query = new StringBuilder();
         query.append(getLotsStatementSQL);
@@ -29,7 +29,7 @@ public class QueryGenerator {
             query.append(getLotsByCategoryStatementSQL);
             paramsMap.addValue("categoryId", lotFilter.getCategoryId());
         } else {
-            query.append(" WHERE l.type = 'I'");
+            query.append(" WHERE l.type = 'I' OR l.type = 'P'");
         }
         if (lotFilter.getSortType() != null) {
             query.append(getOrderByStatement(lotFilter.getSortType()));

@@ -123,7 +123,15 @@
                             </div>
 
                             <div class="lot-price">
-                                <span>Максимальная ставка: ${lotCurrencyValue.maxBid.value} ${currency} </span>
+                                <c:choose>
+                                    <c:when test="${empty lotCurrencyValue.maxBid.value}">
+                                        <span>Максимальная ставка: ${lotCurrencyValue.startPrice} ${currency} </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>Максимальная ставка: ${lotCurrencyValue.maxBid.value} ${currency} </span>
+                                    </c:otherwise>
+                                </c:choose>
+
                                 <span class="lot-start-price">Стартовая цена: ${lotCurrencyValue.startPrice} ${currency}</span>
                             </div>
                             <c:if test="${empty loggedUser || lotCurrencyValue.type.id != 'I'}">

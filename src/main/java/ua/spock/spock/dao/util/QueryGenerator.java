@@ -29,7 +29,7 @@ public class QueryGenerator {
             query.append(getLotsByCategoryStatementSQL);
             paramsMap.addValue("categoryId", lotFilter.getCategoryId());
         } else {
-            query.append(" WHERE l.type = 'I' OR l.type = 'P'");
+            query.append(" WHERE l.type != 'C'");
         }
         if (lotFilter.getSortType() != null) {
             query.append(getOrderByStatement(lotFilter.getSortType()));
@@ -48,7 +48,7 @@ public class QueryGenerator {
             query.append(getLotsByCategoryStatementSQL);
             paramsMap.addValue("categoryId", lotFilter.getCategoryId());
         } else {
-            query.append(" WHERE l.type = 'I'");
+            query.append(" WHERE l.type != 'C'");
         }
         query.append(";");
         parameters.setParameters(paramsMap);

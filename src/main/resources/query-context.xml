@@ -11,7 +11,7 @@
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
-                                WHERE  (c.parentId =:categoryId OR c.id =:categoryId) AND (l.type = 'I' OR l.type = 'P')"/>
+                                WHERE  (c.parentId =:categoryId OR c.id =:categoryId) AND (l.type !='C')"/>
     </bean>
     <bean id="getLotCountStatementSQL" class="java.lang.String">
         <constructor-arg value="SELECT COUNT(*) FROM lot AS l"/>

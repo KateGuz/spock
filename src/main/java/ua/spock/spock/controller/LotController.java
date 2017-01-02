@@ -37,25 +37,35 @@ public class LotController {
     private ModelMapAttributesWrapper modelMapAttributesWrapper;
 
     @RequestMapping("/")
-    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort) {
+    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
-        List<Lot> tempLots = lotService.getLots(lotFilter);
-        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        lotFilter.setPage(page);
+        List<Lot> lots = lotService.getLots(lotFilter);
+        int pageCount = lotService.getPageCount(lotFilter);
+        LotDetails lotDetails = lotDetailsWrapper.prepareData(lots);
+        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
         model.addAttribute("categories", category.getAllCategories());
+        model.addAttribute("page", page);
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("sortType", sort);
         return "lots";
     }
 
     @RequestMapping("/category/{categoryId}")
-    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @PathVariable Integer categoryId) {
+    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort,  @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer categoryId) {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
-        List<Lot> tempLots = lotService.getLots(lotFilter);
-        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots);
-        modelMapAttributesWrapper.fillLotAtributes(model,lotDetails);
+        lotFilter.setPage(page);
+        List<Lot> lots = lotService.getLots(lotFilter);
+        int pageCount = lotService.getPageCount(lotFilter);
+        LotDetails lotDetails = lotDetailsWrapper.prepareData(lots);
+        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
         model.addAttribute("categories", category.getAllCategories());
+        model.addAttribute("page", page);
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("sortType", sort);
         return "lots";
     }
 

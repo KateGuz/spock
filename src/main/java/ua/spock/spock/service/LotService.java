@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface LotService {
     List<Lot> getLots(LotFilter lotFilter);
+    int getPageCount(LotFilter lotFilter);
     Lot getById(int lotId);
     List<Lot> getUserLots(int userId);
     void delete(int id);

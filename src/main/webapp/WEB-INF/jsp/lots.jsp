@@ -193,24 +193,28 @@
                             </div>
                         </section>
                         <!--Pagination-->
-                        <nav aria-label="Page navigation" class="lots-pagination">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li>
-                                    <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <c:if test="${pageCount > 1}">
+                            <c:set var="start" value="${page - 2 < 1 ? 1 : page - 2}"/>
+                            <c:set var="end" value="${start + 4 > pageCount ? pageCount : start + 4}"/>
+                            <c:if test="${page < end + 2}"><c:set var="start" value="${end - 4 < 1 ? 1 : end - 4}"/></c:if>
+                            <nav aria-label="Page navigation" class="lots-pagination">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1" aria-label="First">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <c:forEach var="currentPage" begin="${start}" end="${end}">
+                                        <li<c:if test="${page == currentPage}"> class="active"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${currentPage}">${currentPage}</a></li>
+                                    </c:forEach>
+                                    <li>
+                                        <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${pageCount}" aria-label="Last">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </c:if>
                         <!--End of pagination-->
                         <!--End of lots section-->
                     </div>

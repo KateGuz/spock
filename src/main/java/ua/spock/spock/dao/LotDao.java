@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface LotDao {
     List<Lot> get(LotFilter lotFilter);
+    int getPageCount(LotFilter lotFilter);
     Lot getById(int lotId);
     List<Lot> getByUser(int userId);
     void add(Lot lot);

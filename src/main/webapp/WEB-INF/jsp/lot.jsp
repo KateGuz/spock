@@ -94,12 +94,12 @@
                                 </div>
                             </div>
                         </div>
-                        <c:if test="${isNotFinished && !empty loggedUser && lotCurrencyValue.type.id == 'I'}">
+                        <c:if test="${!empty loggedUser && lotCurrencyValue.lot.type.id == 'I'}">
                             <div class="lot-quick-buy">
                                 <button type="button" class="btn btn-default" id="quickBuy"
-                                        value="${lotCurrencyValue.id}"
+                                        value="${lotCurrencyValue.lot.id}"
                                         onclick="quickBuy()">Выкупить сейчас
-                                    за ${lotCurrencyValue.quickBuyPrice} ${currency}
+                                    за ${lotCurrencyValue.lot.quickBuyPrice} ${currency}
                                 </button>
                             </div>
                             <div class="lot-subscribtion">
@@ -110,58 +110,58 @@
                     <div class="col-md-7">
                         <div class="lot-details-wrapper">
                             <div class="lot-title">
-                                <span>${lotCurrencyValue.title}</span>
+                                <span>${lotCurrencyValue.lot.title}</span>
                             </div>
                             <div class="lot-category">
-                                Категория: ${lotCurrencyValue.category.name}
+                                Категория: ${lotCurrencyValue.lot.category.name}
                             </div>
                             <div class="lot-seller">
                                 Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
                             </div>
                             <div class="lot-description">
-                                <span>${lotCurrencyValue.description}</span>
+                                <span>${lotCurrencyValue.lot.description}</span>
                             </div>
 
                             <div class="lot-price">
                                 <c:choose>
-                                    <c:when test="${empty lotCurrencyValue.maxBid.value}">
-                                        <span>Максимальная ставка: ${lotCurrencyValue.startPrice} ${currency} </span>
+                                    <c:when test="${empty lotCurrencyValue.lot.maxBid.value}">
+                                        <span>Максимальная ставка: ${lotCurrencyValue.lot.startPrice} ${currency} </span>
                                     </c:when>
                                     <c:otherwise>
-                                        <span>Максимальная ставка: ${lotCurrencyValue.maxBid.value} ${currency} </span>
+                                        <span>Максимальная ставка: ${lotCurrencyValue.lot.maxBid.value} ${currency} </span>
                                     </c:otherwise>
                                 </c:choose>
 
-                                <span class="lot-start-price">Стартовая цена: ${lotCurrencyValue.startPrice} ${currency}</span>
+                                <span class="lot-start-price">Стартовая цена: ${lotCurrencyValue.lot.startPrice} ${currency}</span>
                             </div>
-                            <c:if test="${empty loggedUser || lotCurrencyValue.type.id != 'I'}">
+                            <c:if test="${empty loggedUser || lotCurrencyValue.lot.type.id != 'I'}">
                                 <div class="lot-price">
-                                    <span>Купить сейчас за: ${lotCurrencyValue.quickBuyPrice} ${currency}</span>
+                                    <span>Купить сейчас за: ${lotCurrencyValue.lot.quickBuyPrice} ${currency}</span>
                                 </div>
                             </c:if>
                             <div class="lot-time-left-and-participants">
                             <span>
                                 <c:choose>
-                                    <c:when test="${!isNotFinished || lotCurrencyValue.type.id == 'C'}">
+                                    <c:when test="${lotCurrencyValue.lot.type.id == 'C'}">
                                         <span>Торги окончены</span>
                                     </c:when>
                                     <c:otherwise>
                                         <c:choose>
-                                            <c:when test="${isStarted}">
-                                                <span>Осталось: ${timeLeft}</span>
+                                            <c:when test="${lotCurrencyValue.lot.type.id == 'I'}">
+                                                <span>Осталось: ${lotCurrencyValue.timeLeft}</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span>Начало: ${lotCurrencyValue.startDate}</span>
+                                                <span>Начало: ${lotCurrencyValue.lot.startDate}</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise>
                                 </c:choose>
-                                (всего было размещено ${bidCount} ставок).
+                                (всего было размещено ${lotCurrencyValue.bidCount} ставок).
                             </span>
                             </div>
 
                         </div>
-                        <c:if test="${isNotFinished && lotCurrencyValue.type.id == 'I'}">
+                        <c:if test="${lotCurrencyValue.lot.type.id == 'I'}">
                             <div class="place-bid thumbnail">
                                 <c:choose>
                                     <c:when test="${empty loggedUser}">
@@ -199,7 +199,7 @@
 <!--Footer-->
 <section class="footer">
     <div class="footer-content">
-        <span>Spock</span></br>
+        <span>Spock</span>
         <span>Все права защищены</span>
     </div>
 </section>

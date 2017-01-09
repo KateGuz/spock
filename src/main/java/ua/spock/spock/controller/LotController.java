@@ -6,15 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ua.spock.spock.controller.util.LotDetails;
-import ua.spock.spock.controller.util.ModelMapAttributesWrapper;
 import ua.spock.spock.entity.*;
-import ua.spock.spock.controller.util.LotDetailsWrapper;
+import ua.spock.spock.entity.dto.LotDto;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
+import ua.spock.spock.service.LotDtoWrapper;
 import ua.spock.spock.utils.LotJsonParser;
 
 import javax.servlet.http.HttpSession;
@@ -27,14 +26,11 @@ public class LotController {
     @Autowired
     private LotService lotService;
     @Autowired
-    private LotDetailsWrapper lotDetailsWrapper;
-    @Autowired
     private CategoryCacheService category;
     @Autowired
     private UserService userService;
     @Autowired
-    private ModelMapAttributesWrapper modelMapAttributesWrapper;
-
+    private LotDtoWrapper lotDtoWrapper;
 
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
@@ -44,69 +40,64 @@ public class LotController {
         if (session.getAttribute("currency") == null) {
             session.setAttribute("currency", "UAH");
         }
+        currency = (String) session.getAttribute("currency");
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
-        List<Lot> tempLots = lotService.getLots(lotFilter);
-        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots, session);
-        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
+        List<LotDto> list = lotDtoWrapper.getLotDto(lotService.getLots(lotFilter), currency);
+        model.addAttribute("lotsDto", list);
         model.addAttribute("categories", category.getAllCategories());
-        model.addAttribute("currency", session.getAttribute("currency"));
+        model.addAttribute("currency", currency);
         return "lots";
     }
 
     @RequestMapping("/category/{categoryId}")
-    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, @PathVariable Integer categoryId, HttpSession session) {
+    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String
+            sort, @RequestParam(value = "currency", required = false) String currency, @PathVariable Integer
+                                           categoryId, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
         }
         if (session.getAttribute("currency") == null) {
             session.setAttribute("currency", "UAH");
         }
+        currency = (String) session.getAttribute("currency");
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
-        List<Lot> tempLots = lotService.getLots(lotFilter);
-        LotDetails lotDetails = lotDetailsWrapper.prepareData(tempLots, session);
-        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
+        List<LotDto> list = lotDtoWrapper.getLotDto(lotService.getLots(lotFilter), currency);
+        model.addAttribute("lotsDto", list);
         model.addAttribute("categories", category.getAllCategories());
-        model.addAttribute("currency", session.getAttribute("currency"));
+        model.addAttribute("currency", currency);
         return "lots";
     }
 
     @RequestMapping("/lot/{lotId}")
-    public String getLotById(ModelMap model, @PathVariable int lotId, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+    public String getLotById(ModelMap model, @PathVariable int lotId,
+                             @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
         }
         if (session.getAttribute("currency") == null) {
             session.setAttribute("currency", "UAH");
         }
+        currency = (String) session.getAttribute("currency");
         Lot lot = lotService.getById(lotId);
-        String timeLeft = lotDetailsWrapper.getTimeLeft(lot);
-        String endDate = lotDetailsWrapper.getEndDate(lot);
-        boolean isStarted = lotDetailsWrapper.isStarted(lot);
-        boolean isNotFinished = lotDetailsWrapper.isNotFinished(lot);
-        double currentPrice = lotDetailsWrapper.getCurrentPrice(lot);
-        int bidCount = bidService.getBidCountForLot(lotId);
+        double currentPrice = lotDtoWrapper.getCurrentPrice(lot);
         User user = userService.get(lot.getUser().getId());
         model.addAttribute("user", user);
-        model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("isStarted", isStarted);
-        model.addAttribute("isNotFinished", isNotFinished);
-        model.addAttribute("endDate", endDate);
         model.addAttribute("currentPrice", currentPrice);
-        model.addAttribute("bidCount", bidCount);
-        model.addAttribute("currency", session.getAttribute("currency"));
+        model.addAttribute("currency", currency);
         Lot tempLot = new Lot();
         tempLot.setMinStep(lot.getMinStep());
         tempLot.setId(lot.getId());
         model.addAttribute("lotUAHValue", tempLot);
-        model.addAttribute("lotCurrencyValue", lotDetailsWrapper.lotCurrency(lot, session));
+        model.addAttribute("lotCurrencyValue", lotDtoWrapper.wrap(lot, currency));
         return "lot";
     }
 
     @RequestMapping("/lot")
-    public String add(ModelMap model, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+    public String add(ModelMap model, @RequestParam(value = "currency", required = false) String
+            currency, HttpSession session) {
         if (session.getAttribute("loggedUser") != null) {
             if (currency != null) {
                 session.setAttribute("currency", currency);
@@ -150,7 +141,8 @@ public class LotController {
     }
 
     @RequestMapping("/lot/{lotId}/edit")
-    public String editLot(ModelMap model, @PathVariable int lotId, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+    public String editLot(ModelMap model, @PathVariable int lotId,
+                          @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
         Lot lot = lotService.getById(lotId);
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == lot.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {

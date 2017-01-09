@@ -6,16 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ua.spock.spock.controller.util.LotDetails;
-import ua.spock.spock.controller.util.LotDetailsWrapper;
-import ua.spock.spock.controller.util.ModelMapAttributesWrapper;
-import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.entity.UserType;
+import ua.spock.spock.entity.dto.LotDto;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
+import ua.spock.spock.service.LotDtoWrapper;
 import ua.spock.spock.utils.UserJsonParser;
-
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -26,9 +23,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private LotDetailsWrapper lotDetailsWrapper;
-    @Autowired
-    private ModelMapAttributesWrapper modelMapAttributesWrapper;
+    private LotDtoWrapper lotDtoWrapper;
 
     @RequestMapping("/user/{id}/edit")
     public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
@@ -40,7 +35,6 @@ public class UserController {
                 if (session.getAttribute("currency") == null) {
                     session.setAttribute("currency", "UAH");
                 }
-                model.addAttribute("lots", lotService.getUserLots(id));
                 model.addAttribute("user", userService.get(id));
                 model.addAttribute("currency", session.getAttribute("currency"));
                 return "profile";
@@ -76,11 +70,11 @@ public class UserController {
         if (session.getAttribute("currency") == null) {
             session.setAttribute("currency", "UAH");
         }
+        currency = (String) session.getAttribute("currency");
         model.addAttribute("user", userService.get(id));
-        List<Lot> tempLots = lotService.getUserLots(id);
-        LotDetails lotDetails = lotDetailsWrapper.prepareDataForUser(tempLots, session);
-        modelMapAttributesWrapper.fillLotAtributes(model, lotDetails);
-        model.addAttribute("currency", session.getAttribute("currency"));
+        List<LotDto> list = lotDtoWrapper.getAllUserLotDto(lotService.getUserLots(id), currency);
+        model.addAttribute("lotsDto", list);
+        model.addAttribute("currency", currency);
         return "editUser";
     }
 }

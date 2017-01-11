@@ -11,7 +11,7 @@ import ua.spock.spock.entity.UserType;
 import ua.spock.spock.entity.dto.LotDto;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
-import ua.spock.spock.service.LotDtoWrapper;
+import ua.spock.spock.service.LotDtoConstructor;
 import ua.spock.spock.utils.UserJsonParser;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -23,7 +23,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private LotDtoWrapper lotDtoWrapper;
+    private LotDtoConstructor lotDtoConstructor;
 
     @RequestMapping("/user/{id}/edit")
     public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
@@ -72,8 +72,8 @@ public class UserController {
         }
         currency = (String) session.getAttribute("currency");
         model.addAttribute("user", userService.get(id));
-        List<LotDto> list = lotDtoWrapper.getAllUserLotDto(lotService.getUserLots(id), currency);
-        model.addAttribute("lotsDto", list);
+        List<LotDto> list = lotDtoConstructor.getAllUserLotDto(lotService.getUserLots(id), currency);
+        model.addAttribute("lots", list);
         model.addAttribute("currency", currency);
         return "editUser";
     }

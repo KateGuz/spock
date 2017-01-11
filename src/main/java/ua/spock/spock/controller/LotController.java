@@ -13,7 +13,7 @@ import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
-import ua.spock.spock.service.LotDtoWrapper;
+import ua.spock.spock.service.LotDtoConstructor;
 import ua.spock.spock.utils.LotJsonParser;
 
 import javax.servlet.http.HttpSession;
@@ -30,7 +30,7 @@ public class LotController {
     @Autowired
     private UserService userService;
     @Autowired
-    private LotDtoWrapper lotDtoWrapper;
+    private LotDtoConstructor lotDtoConstructor;
 
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
@@ -43,8 +43,8 @@ public class LotController {
         currency = (String) session.getAttribute("currency");
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
-        List<LotDto> list = lotDtoWrapper.getLotDto(lotService.getLots(lotFilter), currency);
-        model.addAttribute("lotsDto", list);
+        List<LotDto> list = lotDtoConstructor.getLotDto(lotService.getLots(lotFilter), currency);
+        model.addAttribute("lots", list);
         model.addAttribute("categories", category.getAllCategories());
         model.addAttribute("currency", currency);
         return "lots";
@@ -64,8 +64,8 @@ public class LotController {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
-        List<LotDto> list = lotDtoWrapper.getLotDto(lotService.getLots(lotFilter), currency);
-        model.addAttribute("lotsDto", list);
+        List<LotDto> list = lotDtoConstructor.getLotDto(lotService.getLots(lotFilter), currency);
+        model.addAttribute("lots", list);
         model.addAttribute("categories", category.getAllCategories());
         model.addAttribute("currency", currency);
         return "lots";
@@ -82,7 +82,7 @@ public class LotController {
         }
         currency = (String) session.getAttribute("currency");
         Lot lot = lotService.getById(lotId);
-        double currentPrice = lotDtoWrapper.getCurrentPrice(lot);
+        double currentPrice = lotDtoConstructor.getCurrentPrice(lot);
         User user = userService.get(lot.getUser().getId());
         model.addAttribute("user", user);
         model.addAttribute("currentPrice", currentPrice);
@@ -91,7 +91,7 @@ public class LotController {
         tempLot.setMinStep(lot.getMinStep());
         tempLot.setId(lot.getId());
         model.addAttribute("lotUAHValue", tempLot);
-        model.addAttribute("lotCurrencyValue", lotDtoWrapper.wrap(lot, currency));
+        model.addAttribute("lotCurrencyValue", lotDtoConstructor.construct(lot, currency));
         return "lot";
     }
 

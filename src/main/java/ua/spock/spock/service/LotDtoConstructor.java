@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
 import ua.spock.spock.entity.dto.LotDto;
-import ua.spock.spock.service.BidService;
-import ua.spock.spock.service.CurrencyCacheService;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -16,38 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class LotDtoWrapper {
+public class LotDtoConstructor {
     @Autowired
     private BidService bidService;
     @Autowired
     private CurrencyCacheService currencyCache;
 
-    private List<LotDto> list = new ArrayList<>();
-
     public List<LotDto> getLotDto(List<Lot> lots, String currency) {
-        list.clear();
+        List<LotDto> list = new ArrayList<>();
         for (Lot lot : lots) {
             if (lot.getType() != LotType.CLOSED) {
-                list.add(wrap(lot, currency));
+                list.add(construct(lot, currency));
             }
         }
         return list;
     }
 
     public List<LotDto> getAllUserLotDto(List<Lot> lots, String currency) {
-        list.clear();
+        List<LotDto> list = new ArrayList<>();
         for (Lot lot : lots) {
-            list.add(wrap(lot, currency));
+            list.add(construct(lot, currency));
         }
         return list;
     }
 
-    public LotDto wrap(Lot lot, String currency) {
+    public LotDto construct(Lot lot, String currency) {
         LotDto lotDto = new LotDto();
         lotDto.setBidCount(bidService.getBidCountForLot(lot.getId()));
         lotDto.setTimeLeft(getTimeLeft(lot));
         lotDto.setCurrentPrice(getCurrentPrice(lot));
-        lotDto.setLot(lotCurrencyConverter(lot, currency));
+        updateLotPrice(lot, currency);
+        lotDto.setLot(lot);
         return lotDto;
     }
 
@@ -55,7 +52,7 @@ public class LotDtoWrapper {
         return lot.getMaxBid() == null ? lot.getStartPrice() : lot.getMaxBid().getValue();
     }
 
-    private Lot lotCurrencyConverter(Lot lot, String currency) {
+    private void updateLotPrice(Lot lot, String currency) {
         double rate = 1;
         if (currency.equals("USD")) {
             rate = currencyCache.getRates().get("USD");
@@ -78,7 +75,7 @@ public class LotDtoWrapper {
         BigDecimal quickBuyPrice = new BigDecimal(lot.getQuickBuyPrice());
         quickBuyPrice = quickBuyPrice.divide(BigDecimal.valueOf(rate), 2, BigDecimal.ROUND_CEILING);
         lot.setQuickBuyPrice(quickBuyPrice.doubleValue());
-        return lot;
+
     }
 
     private String getTimeLeft(Lot lot) {

@@ -1,9 +1,7 @@
 package ua.spock.spock.entity.dto;
 
-import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.Lot;
 
-@Service
 public class LotDto {
     private Lot lot;
     private String timeLeft;

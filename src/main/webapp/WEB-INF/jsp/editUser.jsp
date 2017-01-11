@@ -128,7 +128,7 @@
                     </div>
                     <div class="col-md-8">
                         <div class="lots-preview-wrapper user-lots-preview-wrapper">
-                            <c:forEach items="${lotsDto}" var="lotDto" begin="0" end="8">
+                            <c:forEach items="${lots}" var="lotDto" begin="0" end="8">
                                 <div class="col-md-4 col-sm-4">
                                     <a class="lot-preview-link" href="/lot/${lotDto.lot.id}">
                                         <div class="lot-preview-item jumbotron">

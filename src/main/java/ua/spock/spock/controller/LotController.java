@@ -53,7 +53,7 @@ public class LotController {
     }
 
     @RequestMapping("/category/{categoryId}")
-    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort,  @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer categoryId) {
+    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer categoryId) {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
@@ -83,7 +83,7 @@ public class LotController {
         model.addAttribute("user", user);
         model.addAttribute("lot", lot);
         model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("isStarted",isStarted);
+        model.addAttribute("isStarted", isStarted);
         model.addAttribute("isNotFinished", isNotFinished);
         model.addAttribute("endDate", endDate);
         model.addAttribute("currentPrice", currentPrice);

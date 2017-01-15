@@ -1,7 +1,7 @@
 package ua.spock.spock.dao.mapper;
 
 import org.junit.Test;
-import ua.spock.spock.controller.LotController;
+import ua.spock.spock.controller.util.LotDetailsWrapper;
 import ua.spock.spock.entity.Lot;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,8 +32,8 @@ public class LotControllerTest {
         oneHour.setEndDate(plus1hr);
         Lot minutes = new Lot();
         minutes.setEndDate(plus25min);
-        LotController controller = new LotController();
-        Method method = LotController.class.getDeclaredMethod("getTimeLeft", Lot.class);
+        LotDetailsWrapper controller = new LotDetailsWrapper();
+        Method method = LotDetailsWrapper.class.getDeclaredMethod("getTimeLeft", Lot.class);
         method.setAccessible(true);
         String timeLeft = (String) method.invoke(controller, days);
         assertEquals("3 days", timeLeft);

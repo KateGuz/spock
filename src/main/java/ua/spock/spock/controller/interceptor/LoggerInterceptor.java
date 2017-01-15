@@ -19,15 +19,17 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response, Object handler)
             throws Exception {
         HttpSession session = request.getSession();
-        String userEmail = "guest";
+        String userEmail;
         String requestId = UUID.randomUUID().toString();
         if (session != null && session.getAttribute("loggedUser") != null) {
             userEmail = ((User) session.getAttribute("loggedUser")).getEmail();
+        } else {
+            userEmail = "guest";
         }
         MDC.put("userEmail", userEmail);
         MDC.put("requestId", requestId);
         long startTime = System.currentTimeMillis();
-        request.setAttribute("startTime", startTime);
+        MDC.put("startTime", startTime);
         if (logger.isDebugEnabled()) {
             logger.debug("request processing started");
         }
@@ -39,7 +41,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             HttpServletRequest request, HttpServletResponse response,
             Object handler, ModelAndView modelAndView)
             throws Exception {
-        long startTime = (Long) request.getAttribute("startTime");
+        long startTime = (Long) MDC.get("startTime");
         long endTime = System.currentTimeMillis();
         long executeTime = endTime - startTime;
 

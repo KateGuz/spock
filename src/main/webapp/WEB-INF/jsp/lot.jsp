@@ -94,14 +94,16 @@
                                 </div>
                             </div>
                         </div>
-                        <c:if test="${!empty loggedUser && lotCurrencyValue.lot.type.id == 'I'}">
-                            <div class="lot-quick-buy">
-                                <button type="button" class="btn btn-default" id="quickBuy"
-                                        value="${lotCurrencyValue.lot.id}"
-                                        onclick="quickBuy()">Выкупить сейчас
-                                    за ${lotCurrencyValue.lot.quickBuyPrice} ${currency}
-                                </button>
-                            </div>
+                        <c:if test="${!empty loggedUser}">
+                            <c:if test="${lotDto.lot.quickBuyPrice != 0}">
+                                <div class="lot-quick-buy">
+                                    <button type="button" class="btn btn-default" id="quickBuy"
+                                            value="${lotDto.lot.id}"
+                                            onclick="quickBuy()">Выкупить сейчас
+                                        за ${lotDto.lot.quickBuyPrice} ${currency}
+                                    </button>
+                                </div>
+                            </c:if>
                             <div class="lot-subscribtion">
                                 <button type="button" class="btn btn-default">Подписаться на обновления</button>
                             </div>
@@ -110,58 +112,44 @@
                     <div class="col-md-7">
                         <div class="lot-details-wrapper">
                             <div class="lot-title">
-                                <span>${lotCurrencyValue.lot.title}</span>
+                                <span>${lotDto.lot.title}</span>
                             </div>
                             <div class="lot-category">
-                                Категория: ${lotCurrencyValue.lot.category.name}
+                                Категория: ${lotDto.lot.category.name}
                             </div>
                             <div class="lot-seller">
-                                Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
+                                Продавец: <a class="lot-author-link" href="/user/${lotDto.lot.user.id}">${lotDto.lot.user.name}</a>
                             </div>
                             <div class="lot-description">
-                                <span>${lotCurrencyValue.lot.description}</span>
+                                <span>${lotDto.lot.description}</span>
                             </div>
-
                             <div class="lot-price">
-                                <c:choose>
-                                    <c:when test="${empty lotCurrencyValue.lot.maxBid.value}">
-                                        <span>Максимальная ставка: ${lotCurrencyValue.lot.startPrice} ${currency} </span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span>Максимальная ставка: ${lotCurrencyValue.lot.maxBid.value} ${currency} </span>
-                                    </c:otherwise>
-                                </c:choose>
-
-                                <span class="lot-start-price">Стартовая цена: ${lotCurrencyValue.lot.startPrice} ${currency}</span>
+                                <span>Максимальная ставка: ${lotDto.currentPrice} ${currency} </span>
+                                <span class="lot-start-price">Стартовая цена: ${lotDto.lot.startPrice} ${currency}</span>
                             </div>
-                            <c:if test="${empty loggedUser || lotCurrencyValue.lot.type.id != 'I'}">
-                                <div class="lot-price">
-                                    <span>Купить сейчас за: ${lotCurrencyValue.lot.quickBuyPrice} ${currency}</span>
-                                </div>
-                            </c:if>
                             <div class="lot-time-left-and-participants">
                             <span>
                                 <c:choose>
-                                    <c:when test="${lotCurrencyValue.lot.type.id == 'C'}">
+                                    <c:when test="${lotDto.lot.type.id == 'C'}">
                                         <span>Торги окончены</span>
                                     </c:when>
                                     <c:otherwise>
                                         <c:choose>
-                                            <c:when test="${lotCurrencyValue.lot.type.id == 'I'}">
-                                                <span>Осталось: ${lotCurrencyValue.timeLeft}</span>
+                                            <c:when test="${lotDto.lot.type.id == 'I'}">
+                                                <span>Осталось: ${lotDto.timeLeft}</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span>Начало: ${lotCurrencyValue.lot.startDate}</span>
+                                                <span>Начало: ${lotDto.lot.startDate}</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise>
                                 </c:choose>
-                                (всего было размещено ${lotCurrencyValue.bidCount} ставок).
+                                (всего было размещено ${lotDto.bidCount} ставок)
                             </span>
                             </div>
 
                         </div>
-                        <c:if test="${lotCurrencyValue.lot.type.id == 'I'}">
+                        <c:if test="${lotDto.lot.type.id == 'I'}">
                             <div class="place-bid thumbnail">
                                 <c:choose>
                                     <c:when test="${empty loggedUser}">
@@ -172,18 +160,16 @@
                                         <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
                                         <form class="navbar-form navbar-nav">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="${currentPrice}"
-                                                       id="bid">
+                                                <input type="text" class="form-control" placeholder="${lotDto.currentPrice}" id="bid">
                                             </div>
                                             <div class="edit-field-wrapper">
-                                                <input type="hidden" value="${lotUAHValue.id}" id="lotId">
+                                                <input type="hidden" value="${lotDto.lot.id}" id="lotId">
                                             </div>
                                             <button type="submit" class="btn btn-default" value="${loggedUser.id}"
                                                     id="userId"
                                                     onclick="addBid()">Сделать ставку
                                             </button>
-                                            <p class="place-bid-min-step">*минимальный шаг: ${lotUAHValue.minStep}
-                                                UAH</p>
+                                            <p class="place-bid-min-step">*минимальный шаг: ${lotDto.lot.minStep} UAH</p>
                                         </form>
                                     </c:otherwise>
                                 </c:choose>

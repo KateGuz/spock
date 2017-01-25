@@ -1,4 +1,4 @@
-package ua.spock.spock.entity.dto;
+package ua.spock.spock.dto;
 
 import ua.spock.spock.entity.Lot;
 

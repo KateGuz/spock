@@ -6,13 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.entity.Currency;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.entity.UserType;
-import ua.spock.spock.entity.dto.LotDto;
+import ua.spock.spock.dto.LotDto;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
-import ua.spock.spock.service.LotDtoConstructor;
+import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.utils.UserJsonParser;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class UserController {
     @RequestMapping("/user/{id}/edit")
     public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
         if (session.getAttribute("loggedUser") != null) {
-            if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
+            if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType() == UserType.ADMIN)) {
                 if (currency != null) {
                     session.setAttribute("currency", currency);
                 }
@@ -37,29 +39,23 @@ public class UserController {
                 }
                 model.addAttribute("user", userService.get(id));
                 model.addAttribute("currency", session.getAttribute("currency"));
-                return "profile";
-            } else {
-                return "lots";
+                return "editUser";
             }
-        } else {
-            return "lots";
         }
+        return "error";
     }
 
     @RequestMapping(value = "/user/{id}/edit", method = RequestMethod.PUT)
     public ResponseEntity editUser(@PathVariable Integer id, @RequestBody String json, HttpSession session) {
         User user = UserJsonParser.jsonToUser(json);
         if (session.getAttribute("loggedUser") != null) {
-            if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
+            if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType() == UserType.ADMIN)) {
                 user.setId(id);
                 userService.edit(user);
                 return new ResponseEntity(HttpStatus.OK);
-            } else {
-                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/user/{id}")
@@ -72,9 +68,8 @@ public class UserController {
         }
         currency = (String) session.getAttribute("currency");
         model.addAttribute("user", userService.get(id));
-        List<LotDto> list = lotDtoConstructor.getAllUserLotDto(lotService.getUserLots(id), currency);
-        model.addAttribute("lots", list);
+        model.addAttribute("lots", lotDtoConstructor.constructListOfLots(lotService.getUserLots(id), Currency.valueOf(currency)));
         model.addAttribute("currency", currency);
-        return "editUser";
+        return "profile";
     }
 }

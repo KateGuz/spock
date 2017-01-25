@@ -7,13 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ua.spock.spock.entity.*;
-import ua.spock.spock.entity.dto.LotDto;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
-import ua.spock.spock.service.CategoryCacheService;
 import ua.spock.spock.service.LotService;
-import ua.spock.spock.service.UserService;
-import ua.spock.spock.service.LotDtoConstructor;
+import ua.spock.spock.dto.LotDtoConstructor;
+import ua.spock.spock.service.cache.CategoryCache;
 import ua.spock.spock.utils.LotJsonParser;
 
 import javax.servlet.http.HttpSession;
@@ -26,9 +24,7 @@ public class LotController {
     @Autowired
     private LotService lotService;
     @Autowired
-    private CategoryCacheService category;
-    @Autowired
-    private UserService userService;
+    private CategoryCache categoryCache;
     @Autowired
     private LotDtoConstructor lotDtoConstructor;
 
@@ -43,9 +39,9 @@ public class LotController {
         currency = (String) session.getAttribute("currency");
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
-        List<LotDto> list = lotDtoConstructor.getLotDto(lotService.getLots(lotFilter), currency);
-        model.addAttribute("lots", list);
-        model.addAttribute("categories", category.getAllCategories());
+        List<Lot> lots = lotService.getLots(lotFilter);
+        model.addAttribute("lots", lotDtoConstructor.constructListOfLots(lots, Currency.valueOf(currency)));
+        model.addAttribute("categories", categoryCache.getAllCategories());
         model.addAttribute("currency", currency);
         return "lots";
     }
@@ -64,9 +60,9 @@ public class LotController {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
-        List<LotDto> list = lotDtoConstructor.getLotDto(lotService.getLots(lotFilter), currency);
-        model.addAttribute("lots", list);
-        model.addAttribute("categories", category.getAllCategories());
+        List<Lot> lots = lotService.getLots(lotFilter);
+        model.addAttribute("lots", lotDtoConstructor.constructListOfLots(lots, Currency.valueOf(currency)));
+        model.addAttribute("categories", categoryCache.getAllCategories());
         model.addAttribute("currency", currency);
         return "lots";
     }
@@ -82,32 +78,22 @@ public class LotController {
         }
         currency = (String) session.getAttribute("currency");
         Lot lot = lotService.getById(lotId);
-        double currentPrice = lotDtoConstructor.getCurrentPrice(lot);
-        User user = userService.get(lot.getUser().getId());
-        model.addAttribute("user", user);
-        model.addAttribute("currentPrice", currentPrice);
+        model.addAttribute("lotDto", lotDtoConstructor.constructOneLot(lot, Currency.valueOf(currency)));
         model.addAttribute("currency", currency);
-        Lot tempLot = new Lot();
-        tempLot.setMinStep(lot.getMinStep());
-        tempLot.setId(lot.getId());
-        model.addAttribute("lotUAHValue", tempLot);
-        model.addAttribute("lotCurrencyValue", lotDtoConstructor.construct(lot, currency));
         return "lot";
     }
 
     @RequestMapping("/lot")
-    public String add(ModelMap model, @RequestParam(value = "currency", required = false) String
-            currency, HttpSession session) {
+    public String add(ModelMap model, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
         if (session.getAttribute("loggedUser") != null) {
             if (currency != null) {
                 session.setAttribute("currency", currency);
             }
-            model.addAttribute("categories", category.getAllCategories());
+            model.addAttribute("categories", categoryCache.getAllCategories());
             model.addAttribute("currency", session.getAttribute("currency"));
             return "addLot";
-        } else {
-            return "lots";
         }
+        return "error";
     }
 
     @RequestMapping(value = "/lot", method = RequestMethod.POST)
@@ -117,27 +103,21 @@ public class LotController {
             if ((((User) session.getAttribute("loggedUser")).getId() == lot.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
                 lotService.add(lot);
                 return new ResponseEntity(HttpStatus.OK);
-            } else {
-                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value = " /lot/{lotId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/lot/{lotId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteLot(@PathVariable("lotId") int id, HttpSession session) {
         Lot lot = lotService.getById(id);
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == lot.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
                 lotService.delete(id);
                 return new ResponseEntity(HttpStatus.OK);
-            } else {
-                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping("/lot/{lotId}/edit")
@@ -149,17 +129,14 @@ public class LotController {
                 if (currency != null) {
                     session.setAttribute("currency", currency);
                 }
-                List<Category> allCategories = category.getAllCategories();
+                List<Category> allCategories = categoryCache.getAllCategories();
                 model.addAttribute("lot", lot);
                 model.addAttribute("categories", allCategories);
                 model.addAttribute("currency", session.getAttribute("currency"));
                 return "editLot";
-            } else {
-                return "lots";
             }
-        } else {
-            return "lots";
         }
+        return "error";
     }
 
     @RequestMapping(value = "/lot/{id}", method = RequestMethod.PUT)
@@ -171,12 +148,9 @@ public class LotController {
                 lotService.edit(lot);
                 int userId = lot.getUser().getId();
                 return "redirect:/user/" + userId;
-            } else {
-                return "lots";
             }
-        } else {
-            return "lots";
         }
+        return "error";
     }
 
     @RequestMapping(value = "/lot/{lotId}/quickBuy", method = RequestMethod.POST)

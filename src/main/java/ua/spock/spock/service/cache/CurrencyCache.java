@@ -1,11 +1,10 @@
-package ua.spock.spock.service.impl;
+package ua.spock.spock.service.cache;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ua.spock.spock.service.CurrencyCacheService;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,11 +14,10 @@ import java.net.URL;
 import java.util.HashMap;
 
 @Service
-public class CurrencyCacheServiceImpl implements CurrencyCacheService {
+public class CurrencyCache {
 
     private HashMap<String, Double> rates = new HashMap<>();
 
-    @Override
     public HashMap<String, Double> getRates() {
         return new HashMap<>(rates);
     }
@@ -54,7 +52,6 @@ public class CurrencyCacheServiceImpl implements CurrencyCacheService {
         }
         JSONArray currencyForPeriodList = (JSONArray) object;
         JSONArray currencyForThisDay = (JSONArray) currencyForPeriodList.get(currencyForPeriodList.size() - 1);
-        rates.put("UAH", 1.0);
         rates.put("USD", Double.valueOf(String.valueOf(currencyForThisDay.get(1))));
         rates.put("EUR", Double.valueOf(String.valueOf(currencyForThisDay.get(2))));
     }

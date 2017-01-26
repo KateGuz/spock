@@ -20,12 +20,18 @@ public class QueryGenerator {
     public SqlQueryParameters generate(LotFilter lotFilter) {
         StringBuilder query = new StringBuilder();
         query.append(getLotsStatementSQL);
-        if (lotFilter.getCategoryId() != null) {
+        Integer categoryId = lotFilter.getCategoryId();
+        if (categoryId != null) {
             query.append(getLotsByCategoryStatementSQL);
-            parameters.setParameters(new MapSqlParameterSource("categoryId", lotFilter.getCategoryId()));
+            parameters.setParameters(new MapSqlParameterSource("categoryId", categoryId));
+            query.append(" AND ");
+        } else {
+            query.append(" WHERE ");
         }
-        if (lotFilter.getSortType() != null) {
-            query.append(getOrderByStatement(lotFilter.getSortType()));
+        query.append("l.type != 'C'");
+        SortType sortType = lotFilter.getSortType();
+        if (sortType != null) {
+            query.append(getOrderByStatement(sortType));
         }
         query.append(";");
         parameters.setQuery(query.toString());
@@ -34,14 +40,12 @@ public class QueryGenerator {
 
     private String getOrderByStatement(SortType sorting) {
         StringBuilder query = new StringBuilder(" ORDER BY");
-        if (sorting == PRICE_ASC) {
-            query.append(" l.startPrice ");
+        if (sorting == SortType.PRICE_ASC) {
+            query.append(" l.startPrice");
+        } else if (sorting == SortType.PRICE_DESC) {
+            query.append(" l.startPrice DESC");
         } else {
-            if (sorting.equals(PRICE_DESC)) {
-                query.append(" l.startPrice DESC ");
-            } else {
-                query.append(" l.endDate");
-            }
+            query.append(" l.endDate");
         }
         return query.toString();
     }

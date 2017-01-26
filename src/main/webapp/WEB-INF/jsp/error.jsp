@@ -10,12 +10,12 @@
     <title>Spock - лучший аукцион в мире!</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/ninja-slider.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <![endif]-->
+
 </head>
 <body>
 <!--Top section-->
@@ -78,64 +78,15 @@
 
 <!--Main section-->
 <section class="main-section">
-    <div class="user-wrapper">
-        <div class="user-details">
-            <form class="navbar-form navbar-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="user-load-avatar-wrapper">
-                                            <div class="thumbnail user-photo">
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjMtcxK2vElKxVOi9b1noqIKLvCEEsvr9wK4frJOnSHfxrt6rz9aiRz-4"><br>
-                                            </div>
-                                            <div class="user-load-avatar">
-                                                <input type="button" class="btn btn-default"
-                                                       value="Загрузить новое фото">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="user-info edit-user-info">
-                                            <div class="edit-field-wrapper">
-                                                <input type="text" class="form-control" value="${user.name}" size="30"
-                                                       required id="inputNameEdit">
-                                            </div>
-                                            <div class="edit-field-wrapper">
-                                                <p class="edit-user-label">Почта:</p>
-                                                <input type="text" class="form-control" value="${user.email}" size="30"
-                                                       required id="inputEmailEdit">
-                                            </div>
-                                            <div class="edit-field-wrapper">
-                                                <p class="edit-user-label">Пароль:</p>
-                                                <input type="password" class="form-control" value="${user.password}"
-                                                       size="30" required id="inputPasswordEdit">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="save-changes-button">
-                                <button type="submit" class="btn btn-success save-changes-button"
-                                        value="${loggedUser.id}" id="userId" onclick="editUser()">Сохранить изменения
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    <br>
+    <h3 class="text-center"> Oops... Something bad happened:( Please return to <a href="/">main page</a>. </h3>
+    <br>
 </section>
 <!--End of main section-->
 <!--Footer-->
 <section class="footer">
     <div class="footer-content">
-        <span>Spock</span></br>
+        <span>Spock</span>
         <span>Все права защищены</span>
     </div>
 </section>
@@ -198,11 +149,11 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery-3.1.1.js"></script>
+<script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
-<script src="/js/editUser.js"></script>
 <script src="/js/currencyConversion.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
-                                WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
+                                WHERE  (c.parentId =:categoryId OR c.id =:categoryId)"/>
     </bean>
     <bean id="getLotsByUserIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue

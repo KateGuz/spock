@@ -37,12 +37,9 @@ public class BidController {
                     bidService.add(bid);
                     return new ResponseEntity(HttpStatus.OK);
                 }
-            } else {
-                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 }
 

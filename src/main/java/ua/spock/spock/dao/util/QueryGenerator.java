@@ -16,14 +16,19 @@ public class QueryGenerator {
     private String getLotsStatementSQL;
     @Autowired
     private String getLotsByCategoryStatementSQL;
+    @Autowired
+    private String getLotCountStatementSQL;
 
-    public SqlQueryParameters generate(LotFilter lotFilter) {
+    public SqlQueryParameters generate(LotFilter lotFilter, int lotsPerPage) {
+        MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("offset", (lotFilter.getPage() - 1) * lotsPerPage);
+        paramsMap.addValue("lotsPerPage", lotsPerPage);
         StringBuilder query = new StringBuilder();
         query.append(getLotsStatementSQL);
         Integer categoryId = lotFilter.getCategoryId();
         if (categoryId != null) {
             query.append(getLotsByCategoryStatementSQL);
-            parameters.setParameters(new MapSqlParameterSource("categoryId", categoryId));
+            paramsMap.addValue("categoryId", categoryId);
             query.append(" AND ");
         } else {
             query.append(" WHERE ");
@@ -33,19 +38,38 @@ public class QueryGenerator {
         if (sortType != null) {
             query.append(getOrderByStatement(sortType));
         }
+        query.append(" LIMIT :offset, :lotsPerPage;");
+        parameters.setParameters(paramsMap);
+        parameters.setQuery(query.toString());
+        return parameters;
+    }
+
+    public SqlQueryParameters generateCount(LotFilter lotFilter) {
+        MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        StringBuilder query = new StringBuilder();
+        query.append(getLotCountStatementSQL);
+        if (lotFilter.getCategoryId() != null) {
+            query.append(getLotsByCategoryStatementSQL);
+            paramsMap.addValue("categoryId", lotFilter.getCategoryId());
+        } else {
+            query.append(" WHERE l.type != 'C'");
+        }
         query.append(";");
+        parameters.setParameters(paramsMap);
         parameters.setQuery(query.toString());
         return parameters;
     }
 
     private String getOrderByStatement(SortType sorting) {
         StringBuilder query = new StringBuilder(" ORDER BY");
-        if (sorting == SortType.PRICE_ASC) {
-            query.append(" l.startPrice");
-        } else if (sorting == SortType.PRICE_DESC) {
-            query.append(" l.startPrice DESC");
+        if (sorting == PRICE_ASC) {
+            query.append(" CASE WHEN l.maxBidId IS NULL THEN l.startPrice ELSE b.bid END");
         } else {
-            query.append(" l.endDate");
+            if (sorting.equals(PRICE_DESC)) {
+                query.append(" CASE WHEN l.maxBidId IS NULL THEN l.startPrice ELSE b.bid END DESC ");
+            } else {
+                query.append(" l.endDate");
+            }
         }
         return query.toString();
     }

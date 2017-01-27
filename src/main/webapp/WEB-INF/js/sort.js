@@ -9,9 +9,10 @@ $(document).ready(function () {
 
     $('#btnSortSoonest').click(function () {
         window.location.href = window.location.pathname + "?sortType=endSoonest";
-    });
 
+    });
+    
     $('#btnSortClear').click(function () {
-        window.location.href = window.location.pathname
+        window.location.href = window.location.origin + window.location.pathname;
     });
 });

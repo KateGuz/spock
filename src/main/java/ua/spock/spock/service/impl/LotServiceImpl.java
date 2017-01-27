@@ -19,6 +19,11 @@ public class LotServiceImpl implements LotService {
         return lotDao.get(lotFilter);
     }
 
+    @Override
+    public int getPageCount(LotFilter lotFilter) {
+        return lotDao.getPageCount(lotFilter);
+    }
+
     public Lot getById(int lotId) {
         return lotDao.getById(lotId);
     }

@@ -9,6 +9,7 @@ import ua.spock.spock.dao.LotDao;
 import ua.spock.spock.dao.mapper.LotRowMapper;
 import ua.spock.spock.dao.mapper.util.QueryType;
 import ua.spock.spock.dao.util.QueryGenerator;
+import ua.spock.spock.dao.util.SqlQueryParameters;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
 import ua.spock.spock.filter.LotFilter;
@@ -37,7 +38,7 @@ public class JdbcLotDao implements LotDao {
     private String updateMaxBidIdSQL;
     @Autowired
     private String closeLotSQL;
-
+    private final int LOTS_PER_PAGE = 9;
 
     @Override
     public Lot getById(int lotId) {
@@ -70,8 +71,22 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public List<Lot> get(LotFilter lotFilter) {
-        return namedParameterJdbcTemplate.query(queryGenerator.generate(lotFilter).getQuery(), queryGenerator.generate(lotFilter).getParameters(), ALL_LOTS_ROW_MAPPER);
+        SqlQueryParameters sqlQueryParameters = queryGenerator.generate(lotFilter, LOTS_PER_PAGE);
+        String query = sqlQueryParameters.getQuery();
+        MapSqlParameterSource params = sqlQueryParameters.getParameters();
+        return namedParameterJdbcTemplate.query(query, params, ALL_LOTS_ROW_MAPPER);
     }
+
+    @Override
+    public int getPageCount(LotFilter lotFilter) {
+        SqlQueryParameters sqlQueryParameters = queryGenerator.generateCount(lotFilter);
+        String query = sqlQueryParameters.getQuery();
+        MapSqlParameterSource params = sqlQueryParameters.getParameters();
+        int lotCount = namedParameterJdbcTemplate.queryForObject(query, params, Integer.class);
+        return (int) Math.ceil(lotCount * 1.0 / LOTS_PER_PAGE);
+
+    }
+
 
     @Override
     public void updateMaxBidId(Lot lot, int bidId) {

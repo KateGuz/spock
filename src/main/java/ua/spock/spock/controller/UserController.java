@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import ua.spock.spock.entity.Currency;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.entity.UserType;
-import ua.spock.spock.dto.LotDto;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.utils.UserJsonParser;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 public class UserController {
@@ -29,7 +27,10 @@ public class UserController {
 
     @RequestMapping("/user/{id}/edit")
     public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+        System.out.println(session.getAttribute("loggedUser"));
+
         if (session.getAttribute("loggedUser") != null) {
+            System.out.println(((User) session.getAttribute("loggedUser")).getId());
             if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType() == UserType.ADMIN)) {
                 if (currency != null) {
                     session.setAttribute("currency", currency);

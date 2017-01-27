@@ -29,7 +29,7 @@ public class LotController {
     private LotDtoConstructor lotDtoConstructor;
 
     @RequestMapping("/")
-    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
         }
@@ -39,16 +39,22 @@ public class LotController {
         currency = (String) session.getAttribute("currency");
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
+        lotFilter.setPage(page);
         List<Lot> lots = lotService.getLots(lotFilter);
+        int pageCount = lotService.getPageCount(lotFilter);
         model.addAttribute("lots", lotDtoConstructor.constructListOfLots(lots, Currency.valueOf(currency)));
         model.addAttribute("categories", categoryCache.getAllCategories());
         model.addAttribute("currency", currency);
+        model.addAttribute("page", page);
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("sortType", sort);
         return "lots";
     }
 
     @RequestMapping("/category/{categoryId}")
+
     public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String
-            sort, @RequestParam(value = "currency", required = false) String currency, @PathVariable Integer
+            sort, @RequestParam(value = "currency", required = false) String currency,@RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
                                            categoryId, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
@@ -60,10 +66,15 @@ public class LotController {
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
+        lotFilter.setPage(page);
         List<Lot> lots = lotService.getLots(lotFilter);
+        int pageCount = lotService.getPageCount(lotFilter);
         model.addAttribute("lots", lotDtoConstructor.constructListOfLots(lots, Currency.valueOf(currency)));
         model.addAttribute("categories", categoryCache.getAllCategories());
         model.addAttribute("currency", currency);
+        model.addAttribute("page", page);
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("sortType", sort);
         return "lots";
     }
 

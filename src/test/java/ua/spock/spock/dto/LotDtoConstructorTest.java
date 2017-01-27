@@ -1,6 +1,7 @@
 package ua.spock.spock.dto;
 
 import org.junit.Test;
+
 import ua.spock.spock.entity.Lot;
 
 import java.lang.reflect.InvocationTargetException;

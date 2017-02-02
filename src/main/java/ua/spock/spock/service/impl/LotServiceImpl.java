@@ -21,7 +21,6 @@ public class LotServiceImpl implements LotService {
 
     @Override
     public int getPageCount(LotFilter lotFilter) {
-
         return lotDao.getPageCount(lotFilter);
     }
 

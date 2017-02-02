@@ -10,7 +10,7 @@ import ua.spock.spock.entity.Category;
 import java.util.List;
 
 @Repository
-public class JdbcCategoryDao implements CategoryDao{
+public class JdbcCategoryDao implements CategoryDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired

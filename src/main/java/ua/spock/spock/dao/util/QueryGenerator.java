@@ -25,14 +25,18 @@ public class QueryGenerator {
         paramsMap.addValue("lotsPerPage", lotsPerPage);
         StringBuilder query = new StringBuilder();
         query.append(getLotsStatementSQL);
-        if (lotFilter.getCategoryId() != null) {
+        Integer categoryId = lotFilter.getCategoryId();
+        if (categoryId != null) {
             query.append(getLotsByCategoryStatementSQL);
-            paramsMap.addValue("categoryId", lotFilter.getCategoryId());
+            paramsMap.addValue("categoryId", categoryId);
+            query.append(" AND ");
         } else {
-            query.append(" WHERE l.type != 'C'");
+            query.append(" WHERE ");
         }
-        if (lotFilter.getSortType() != null) {
-            query.append(getOrderByStatement(lotFilter.getSortType()));
+        query.append("l.type != 'C'");
+        SortType sortType = lotFilter.getSortType();
+        if (sortType != null) {
+            query.append(getOrderByStatement(sortType));
         }
         query.append(" LIMIT :offset, :lotsPerPage;");
         parameters.setParameters(paramsMap);

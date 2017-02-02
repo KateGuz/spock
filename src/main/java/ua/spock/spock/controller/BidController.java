@@ -1,6 +1,5 @@
 package ua.spock.spock.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +36,9 @@ public class BidController {
                     bidService.add(bid);
                     return new ResponseEntity(HttpStatus.OK);
                 }
-            } else {
-                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 }
 

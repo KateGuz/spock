@@ -24,6 +24,5 @@ public class JsonParser {
         } catch (ParseException e) {
             throw new RuntimeException("Error occurred while converting json to user", e);
         }
-
     }
 }

@@ -45,14 +45,22 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">UAH<span class="caret"></span></a>
+                           aria-expanded="false">${currency}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">USD</a></li>
-                            <li><a href="">EUR</a></li>
-                            <li><a href="">UAH</a></li>
+                            <li>
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -90,8 +98,9 @@
                                     <select class="form-control" id="categories">
                                         <c:forEach items="${categories}" var="parent">
                                             <optgroup label="${parent.name}">
-                                            <c:forEach items="${parent.children}" var="category">
-                                                <option value="${category.id}" id="categoryId">${category.name}</option>
+                                                <c:forEach items="${parent.children}" var="category">
+                                                    <option value="${category.id}"
+                                                            id="categoryId">${category.name}</option>
                                                 </c:forEach>
                                             </optgroup>
                                         </c:forEach>
@@ -136,7 +145,8 @@
                         <div class="container">
                             <div class="row">
                                 <div class="save-changes-button col-md-12">
-                                    <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}" id="userId"
+                                    <button type="submit" class="btn btn-success save-changes-button"
+                                            value="${loggedUser.id}" id="userId"
                                             onclick="addLot()">Создать лот
                                     </button>
                                 </div>
@@ -201,8 +211,10 @@
                 <form id="dataForm">
                     <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
                     <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
-                    <input type="password" required name="password" placeholder="Пароль" id="inputPasswordSignUp"><br><br>
-                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся</button>
+                    <input type="password" required name="password" placeholder="Пароль"
+                           id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся
+                    </button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -221,5 +233,6 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/addLot.js"></script>
+<script src="/js/currencyConversion.js"></script>
 </body>
 </html>

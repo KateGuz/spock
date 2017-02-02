@@ -25,9 +25,8 @@ public class UserSecurityController {
             userService.add(user);
             session.setAttribute("loggedUser", user);
             return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -37,9 +36,8 @@ public class UserSecurityController {
         if (user != null) {
             session.setAttribute("loggedUser", user);
             return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

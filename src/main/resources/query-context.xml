@@ -75,4 +75,16 @@
     <bean id="closeLotSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET type=:type WHERE id=:id;"/>
     </bean>
+    <bean id="getImageSQL" class="java.lang.String">
+        <constructor-arg value="SELECT image FROM lotimage WHERE id = :id;"/>
+    </bean>
+    <bean id="getLotImageIdsSQL" class="java.lang.String">
+        <constructor-arg value="SELECT id FROM lotimage WHERE lotId = :lotId;"/>
+    </bean>
+    <bean id="getLotMainImageIdsSQL" class="java.lang.String">
+        <constructor-arg value="SELECT id, lotId FROM lotimage WHERE lotId = :lotIds;"/>
+    </bean>
+    <bean id="saveImageSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO lotimage (image, lotId) VALUES (:image, :lotId);"/>
+    </bean>
 </beans>

@@ -49,7 +49,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         if (logger.isDebugEnabled()) {
             logger.debug("request processing completed, executeTime : " + executeTime + "ms");
         }
-
         MDC.clear();
     }
 }

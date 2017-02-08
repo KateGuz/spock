@@ -3,7 +3,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C://spock/log/spock_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>C:/spock/log/spock_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 
             <maxHistory>10</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy
@@ -12,12 +12,12 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]%X{requestId}%X{userEmail} - %m%n</pattern>
+            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]%X{space}%X{requestId}%X{space}%X{userEmail} - %m%n</pattern>
         </encoder>
     </appender>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{ABSOLUTE} [%t]%X{requestId}%X{userEmail} %p %c - %m%n</pattern>
+            <pattern>%d{ISO8601} [%t]%X{space}%X{requestId}%X{space}%X{userEmail} %p %c - %m%n</pattern>
         </encoder>
     </appender>
     <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
@@ -31,7 +31,7 @@
         <from>spockemailsender@gmail.com</from>
         <subject>SPOCK ERROR MESSAGE: %m</subject>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]%X{requestId}%X{userEmail} - %m%n</pattern>
+            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]%X{space}%X{requestId}%X{space}%X{userEmail} - %m%n</pattern>
         </layout>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>

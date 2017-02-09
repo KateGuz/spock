@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface ImageDao {
     byte[] getImage(int imageId);
-    List<Integer> getIds(int lotId);
+    List<Integer> getLotImagesId(int lotId);
     Map<Integer, Integer> getIds(List<Integer> lotIds);
     void saveImage(int lotId, InputStream imageStream);
 }

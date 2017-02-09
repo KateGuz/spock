@@ -163,7 +163,7 @@
                                                     </c:choose>
                                                 </div>
                                                 <div class="thumbnail lot-preview-thumbnail">
-                                                    <img src="/img/1.jpg">
+                                                    <img src="/image/${lotDto.lotImagesId.get(0)}.jpg">
                                                     <div class="lot-preview-title">
                                                         <span>${lotDto.lot.title}</span>
                                                     </div>

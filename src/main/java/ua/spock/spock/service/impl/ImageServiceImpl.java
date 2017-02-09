@@ -22,8 +22,8 @@ public class ImageServiceImpl implements ImageService{
     }
 
     @Override
-    public List<Integer> getIds(int lotId) {
-        return imageDao.getIds(lotId);
+    public List<Integer> getLotImagesId(int lotId) {
+        return imageDao.getLotImagesId(lotId);
     }
 
     @Override

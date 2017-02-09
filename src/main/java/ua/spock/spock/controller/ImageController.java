@@ -26,9 +26,9 @@ public class ImageController {
         response.getOutputStream().write(image);
     }
 
-    @RequestMapping(value = "/lot/image", method = RequestMethod.POST)
-    public ResponseEntity uploadImage(@RequestParam CommonsMultipartFile image) throws IOException {
-        imageService.saveImage(1, image.getInputStream());
+    @RequestMapping(value = "/lot/{lotId}/image", method = RequestMethod.POST)
+    public ResponseEntity uploadImage(@RequestParam CommonsMultipartFile image, @PathVariable int lotId) throws IOException {
+        imageService.saveImage(lotId, image.getInputStream());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

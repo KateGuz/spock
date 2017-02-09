@@ -80,10 +80,10 @@
         <constructor-arg value="UPDATE lot SET type=:type WHERE id=:id;"/>
     </bean>
     <bean id="getImageSQL" class="java.lang.String">
-        <constructor-arg value="SELECT image FROM lotimage WHERE id = :id;"/>
+        <constructor-arg value="SELECT image FROM lotimage WHERE id = :imageId;"/>
     </bean>
     <bean id="getLotImageIdsSQL" class="java.lang.String">
-        <constructor-arg value="SELECT id FROM lotimage WHERE lotId = :lotId;"/>
+        <constructor-arg value="SELECT id FROM lotimage WHERE lotId = :lotId ORDER BY type DESC;"/>
     </bean>
     <bean id="getLotMainImageIdsSQL" class="java.lang.String">
         <constructor-arg value="SELECT id, lotId FROM lotimage WHERE lotId = :lotIds;"/>

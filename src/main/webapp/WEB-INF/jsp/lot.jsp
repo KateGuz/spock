@@ -87,7 +87,7 @@
                             <div id="ninja-slider">
                                 <div class="inner">
                                     <ul>
-                                        <c:forEach items="${lotDto.lotImagesId}" var="id">
+                                        <c:forEach items="${lotDto.lot.imageIds}" var="id">
                                             <li><a class="ns-img" href="/image/${id}.jpg"></a></li>
                                         </c:forEach>
                                     </ul>
@@ -144,7 +144,7 @@
                                         </c:choose>
                                     </c:otherwise>
                                 </c:choose>
-                                (всего было размещено ${lotDto.bidCount} ставок)
+                                (всего было размещено ${lotDto.lot.bidCount} ставок)
                             </span>
                             </div>
 
@@ -169,7 +169,7 @@
                                                     id="userId"
                                                     onclick="addBid()">Сделать ставку
                                             </button>
-                                            <p class="place-bid-min-step">*минимальный шаг: ${lotDto.lot.minStep} UAH</p>
+                                            <p class="place-bid-min-step">*минимальный шаг: ${lotDto.lot.minStep} ${currency}</p>
                                         </form>
                                     </c:otherwise>
                                 </c:choose>

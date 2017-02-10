@@ -14,6 +14,8 @@ public class Lot {
     private double startPrice;
     private double minStep;
     private Bid maxBid;
+    private int bidCount;
+    private String[] imageIds;
     private double quickBuyPrice;
     private LotType type;
 
@@ -119,6 +121,22 @@ public class Lot {
 
     public void setType(LotType type) {
         this.type = type;
+    }
+
+    public int getBidCount() {
+        return bidCount;
+    }
+
+    public void setBidCount(int bidCount) {
+        this.bidCount = bidCount;
+    }
+
+    public String[] getImageIds() {
+        return imageIds;
+    }
+
+    public void setImageIds(String[] imageIds) {
+        this.imageIds = imageIds;
     }
 
     @Override

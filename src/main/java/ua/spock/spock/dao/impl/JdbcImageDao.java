@@ -5,23 +5,15 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.ImageDao;
-import ua.spock.spock.dao.mapper.LotMainImageIdsExtractor;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 
 @Repository
-public class JdbcImageDao implements ImageDao{
-    private static final LotMainImageIdsExtractor LOT_MAIN_IMAGE_IDS_EXTRACTOR = new LotMainImageIdsExtractor();
+public class JdbcImageDao implements ImageDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
     private String getImageSQL;
-    @Autowired
-    private String getLotImageIdsSQL;
-    @Autowired
-    private String getLotMainImageIdsSQL;
     @Autowired
     private String saveImageSQL;
 
@@ -30,20 +22,6 @@ public class JdbcImageDao implements ImageDao{
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("imageId", imageId);
         return namedParameterJdbcTemplate.queryForObject(getImageSQL, params, byte[].class);
-    }
-
-    @Override
-    public List<Integer> getLotImagesId(int lotId) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("lotId", lotId);
-        return namedParameterJdbcTemplate.queryForList(getLotImageIdsSQL, params, Integer.class);
-    }
-
-    @Override
-    public Map<Integer, Integer> getIds(List<Integer> lotIds) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("lotIds", lotIds);
-        return namedParameterJdbcTemplate.query(getLotMainImageIdsSQL, params, LOT_MAIN_IMAGE_IDS_EXTRACTOR);
     }
 
     @Override

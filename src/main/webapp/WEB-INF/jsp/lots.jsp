@@ -163,7 +163,7 @@
                                                     </c:choose>
                                                 </div>
                                                 <div class="thumbnail lot-preview-thumbnail">
-                                                    <img src="/image/${lotDto.lotImagesId.get(0)}.jpg">
+                                                    <img src="/image/${lotDto.lot.imageIds[0]}.jpg">
                                                     <div class="lot-preview-title">
                                                         <span>${lotDto.lot.title}</span>
                                                     </div>
@@ -172,7 +172,7 @@
                                                     <span>Максимальная ставка:  ${lotDto.currentPrice} ${currency}</span>
                                                 </div>
                                                 <div>
-                                                    <span>Всего ставок: ${lotDto.bidCount}</span>
+                                                    <span>Всего ставок: ${lotDto.lot.bidCount}</span>
                                                 </div>
                                                 <c:choose>
                                                     <c:when test="${lotDto.lot.type.id == 'I'}">

@@ -6,12 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.entity.*;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
-import ua.spock.spock.service.ImageService;
 import ua.spock.spock.service.LotService;
-import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.service.cache.CategoryCache;
 import ua.spock.spock.utils.LotJsonParser;
 
@@ -28,8 +27,6 @@ public class LotController {
     private CategoryCache categoryCache;
     @Autowired
     private LotDtoConstructor lotDtoConstructor;
-    @Autowired
-    private ImageService imageService;
 
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, HttpSession session) {
@@ -57,7 +54,7 @@ public class LotController {
     @RequestMapping("/category/{categoryId}")
 
     public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String
-            sort, @RequestParam(value = "currency", required = false) String currency,@RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
+            sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
                                            categoryId, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
@@ -138,16 +135,13 @@ public class LotController {
     public String editLot(ModelMap model, @PathVariable int lotId,
                           @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
         Lot lot = lotService.getById(lotId);
-        List<Integer> lotImagesId = imageService.getLotImagesId(lotId);
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == lot.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
                 if (currency != null) {
                     session.setAttribute("currency", currency);
                 }
                 List<Category> allCategories = categoryCache.getAllCategories();
-
                 model.addAttribute("lot", lot);
-                model.addAttribute("lotImagesId", lotImagesId);
                 model.addAttribute("categories", allCategories);
                 model.addAttribute("currency", session.getAttribute("currency"));
                 return "editLot";

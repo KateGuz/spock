@@ -34,6 +34,7 @@ public class QueryGenerator {
             query.append(" WHERE ");
         }
         query.append("l.type != 'C'");
+        query.append(" GROUP BY l.id");
         SortType sortType = lotFilter.getSortType();
         if (sortType != null) {
             query.append(getOrderByStatement(sortType));

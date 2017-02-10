@@ -37,6 +37,8 @@ public class LotRowMapper implements RowMapper<Lot> {
             lot.setCategory(getCategory(resultSet));
             lot.setUser(getUser(resultSet));
         }
+        lot.setImageIds(resultSet.getString("imgIds").split(","));
+        lot.setBidCount(resultSet.getInt("bidCount"));
         return lot;
     }
 

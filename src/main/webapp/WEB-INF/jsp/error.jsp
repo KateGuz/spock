@@ -80,7 +80,16 @@
 <section class="main-section">
     <br>
     <h3 class="text-center"> Oops... Something bad happened:( Please return to <a href="/">main page</a>. </h3>
+    <h5 class="text-center"> To see information about exception right click to view page source. </h5>
+
     <br>
+
+    <!--
+    Failed URL: ${url}
+    Exception:  ${exception.message}
+        <c:forEach items="${exception.stackTrace}" var="ste">    ${ste}
+    </c:forEach>
+  -->
 </section>
 <!--End of main section-->
 <!--Footer-->

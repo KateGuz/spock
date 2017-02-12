@@ -1,6 +1,7 @@
 package ua.spock.spock.service;
 
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.ReportOption;
 import ua.spock.spock.filter.LotFilter;
 
 
@@ -16,4 +17,5 @@ public interface LotService {
     void edit(Lot lot);
     void updateMaxBidId(Lot lot, int bidId);
     void closeLot(Lot lot);
+    List<Lot> getLotsForReport(ReportOption reportOption);
 }

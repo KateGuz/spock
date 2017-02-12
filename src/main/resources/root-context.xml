@@ -21,6 +21,14 @@
         <property name="password" value="${password}"/>
     </bean>
 
+    <bean id="username" class="java.lang.String">
+        <constructor-arg value="shalimovtest@gmail.com"/>
+    </bean>
+    <bean id="password" class="java.lang.String">
+        <constructor-arg value="ewqdsacxz"/>
+    </bean>
+
+
     <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>
     </bean>

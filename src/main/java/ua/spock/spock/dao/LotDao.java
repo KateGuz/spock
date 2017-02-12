@@ -1,6 +1,7 @@
 package ua.spock.spock.dao;
 
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.ReportOption;
 import ua.spock.spock.filter.LotFilter;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface LotDao {
     void edit(Lot lot);
     void updateMaxBidId(Lot lot, int bidId);
     void closeLot(Lot lot);
+    List<Lot> getLotsForReport(ReportOption reportOption);
 }

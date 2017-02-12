@@ -12,6 +12,7 @@ import ua.spock.spock.dao.util.QueryGenerator;
 import ua.spock.spock.dao.util.SqlQueryParameters;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
+import ua.spock.spock.entity.ReportOption;
 import ua.spock.spock.filter.LotFilter;
 
 import java.util.List;
@@ -36,6 +37,8 @@ public class JdbcLotDao implements LotDao {
     private String editLotSQL;
     @Autowired
     private String updateMaxBidIdSQL;
+    @Autowired
+    private String getLotsForReportStatementSQL;
     @Autowired
     private String closeLotSQL;
     private final int LOTS_PER_PAGE = 9;
@@ -102,6 +105,20 @@ public class JdbcLotDao implements LotDao {
         params.addValue("id", lot.getId());
         params.addValue("type", LotType.CLOSED.getId());
         namedParameterJdbcTemplate.update(closeLotSQL, params);
+    }
+
+    @Override
+    public List<Lot> getLotsForReport(ReportOption reportOption) {
+        StringBuilder queryy = new StringBuilder();
+        queryy.append(getLotsForReportStatementSQL);
+        queryy.append("WHERE (");
+        if (reportOption.getType().equals("started")) {
+            queryy.append("l.startDate>'").append(reportOption.getStartDate()).append("' AND ").append("l.startDate<'").append(reportOption.getEndDate()).append("');");
+        } else {
+            queryy.append("l.endDate>'").append(reportOption.getStartDate()).append("' AND ").append("l.endDate<'").append(reportOption.getEndDate()).append("');");
+        }
+
+        return namedParameterJdbcTemplate.query(queryy.toString(), LOT_ROW_MAPPER);
     }
 
     private MapSqlParameterSource fillParams(Lot lot) {

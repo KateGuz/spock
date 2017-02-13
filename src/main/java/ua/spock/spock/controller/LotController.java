@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.entity.*;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.LotService;
-import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.service.cache.CategoryCache;
 import ua.spock.spock.utils.LotJsonParser;
 

@@ -88,8 +88,8 @@
                                 <div id="ninja-slider">
                                     <div class="inner">
                                         <ul>
-                                            <c:forEach var="i" begin="0" end="3">
-                                                <li><a class="ns-img" href="/img/logo.png"></a></li>
+                                            <c:forEach items="${lot.imageIds}" var="id">
+                                                <li><a class="ns-img" href="/image/${id}.jpg"></a></li>
                                             </c:forEach>
                                         </ul>
                                     </div>

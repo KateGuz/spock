@@ -4,16 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="getLotsStatementSQL" class="java.lang.String">
-        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
-                                FROM lot AS l
-                                left JOIN bid AS b ON b.id=l.maxBidId"/>
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type,
+                                l.maxBidId, b.bid AS maxBidValue, COUNT(bids.id) as bidCount, GROUP_CONCAT(DISTINCT i.id ORDER BY i.type DESC, i.id SEPARATOR ',') imgIds
+                                FROM lot AS l left JOIN bid AS b ON b.id=l.maxBidId LEFT JOIN bid AS bids ON b.lotId=l.id
+                                LEFT JOIN lotimage AS i ON i.lotId=l.id"/>
     </bean>
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
 
                                 WHERE  (c.parentId =:categoryId OR c.id =:categoryId)"/>
-                                <!--WHERE  (c.parentId =:categoryId OR c.id =:categoryId) AND (l.type !='C')"/>-->
     </bean>
 
     <bean id="getLotCountStatementSQL" class="java.lang.String">
@@ -21,21 +21,27 @@
 
 </bean>
     <bean id="getLotsByUserIdSQL" class="java.lang.String">
-        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+        <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId,
+                                b.bid AS maxBidValue, COUNT(bids.id) as bidCount, GROUP_CONCAT(DISTINCT i.id ORDER BY i.type DESC, i.id SEPARATOR ',') imgIds
                                 FROM lot AS l
                                 left JOIN bid AS b ON b.bid=l.maxBidId
+                                LEFT JOIN bid AS bids ON b.lotId=l.id
+                                LEFT JOIN lotimage AS i ON i.lotId=l.id
                                 JOIN user AS u ON l.userId=u.id
-                                WHERE  u.id =:userId;"/>
+                                WHERE  u.id =:userId
+                                GROUP BY l.id;"/>
     </bean>
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
-                                l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep,
-                                l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+                                l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue,
+                                COUNT(bids.id) as bidCount, GROUP_CONCAT(DISTINCT i.id ORDER BY i.type DESC, i.id SEPARATOR ',') imgIds
                                 FROM lot AS l
                                 JOIN user AS u ON u.id=l.userId
                                 JOIN category AS c ON c.id=l.categoryId
                                 JOIN category AS cp ON cp.id=c.parentId
                                 left JOIN bid as b ON b.id=l.maxBidId
+                                LEFT JOIN bid AS bids ON b.lotId=l.id
+                                LEFT JOIN lotimage AS i ON i.lotId=l.id
                                 WHERE l.id =:lotId;"/>
     </bean>
 
@@ -78,5 +84,11 @@
     </bean>
     <bean id="closeLotSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET type=:type WHERE id=:id;"/>
+    </bean>
+    <bean id="getImageSQL" class="java.lang.String">
+        <constructor-arg value="SELECT image FROM lotimage WHERE id = :imageId;"/>
+    </bean>
+    <bean id="saveImageSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO lotimage (image, lotId) VALUES (:image, :lotId);"/>
     </bean>
 </beans>

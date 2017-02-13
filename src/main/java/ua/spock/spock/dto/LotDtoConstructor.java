@@ -2,10 +2,8 @@ package ua.spock.spock.dto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ua.spock.spock.entity.Currency;
 import ua.spock.spock.entity.Lot;
-import ua.spock.spock.service.BidService;
 import ua.spock.spock.service.cache.CurrencyCache;
 
 import java.math.BigDecimal;
@@ -17,10 +15,7 @@ import java.util.List;
 @Service
 public class LotDtoConstructor {
     @Autowired
-    private BidService bidService;
-    @Autowired
     private CurrencyCache currencyCache;
-
 
     public List<LotDto> constructListOfLots(List<Lot> lots, Currency currency) {
         List<LotDto> list = new ArrayList<>();
@@ -32,7 +27,6 @@ public class LotDtoConstructor {
 
     public LotDto constructOneLot(Lot lot, Currency currency) {
         LotDto lotDto = new LotDto();
-        lotDto.setBidCount(bidService.getBidCountForLot(lot.getId()));
         lotDto.setTimeLeft(getTimeLeft(lot));
         updateLotPrices(lotDto, lot, currency);
         lotDto.setLot(lot);

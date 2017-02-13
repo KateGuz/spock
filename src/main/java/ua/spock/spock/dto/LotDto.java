@@ -5,7 +5,6 @@ import ua.spock.spock.entity.Lot;
 public class LotDto {
     private Lot lot;
     private String timeLeft;
-    private int bidCount;
     private double currentPrice;
 
     public Lot getLot() {
@@ -22,14 +21,6 @@ public class LotDto {
 
     public void setTimeLeft(String timeLeft) {
         this.timeLeft = timeLeft;
-    }
-
-    public int getBidCount() {
-        return bidCount;
-    }
-
-    public void setBidCount(int bidCount) {
-        this.bidCount = bidCount;
     }
 
     public double getCurrentPrice() {

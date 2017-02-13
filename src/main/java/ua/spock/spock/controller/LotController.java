@@ -54,7 +54,7 @@ public class LotController {
     @RequestMapping("/category/{categoryId}")
 
     public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String
-            sort, @RequestParam(value = "currency", required = false) String currency,@RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
+            sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
                                            categoryId, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);

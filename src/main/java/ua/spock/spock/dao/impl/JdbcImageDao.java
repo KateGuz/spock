@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.ImageDao;
+import ua.spock.spock.entity.Image;
 
 import java.io.InputStream;
 
@@ -18,10 +19,12 @@ public class JdbcImageDao implements ImageDao {
     private String saveImageSQL;
 
     @Override
-    public byte[] getImage(int imageId) {
+    public Image getImage(int imageId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("imageId", imageId);
-        return namedParameterJdbcTemplate.queryForObject(getImageSQL, params, byte[].class);
+        Image image=new Image();
+         image.setImage(namedParameterJdbcTemplate.queryForObject(getImageSQL, params, byte[].class));
+        return image;
     }
 
     @Override

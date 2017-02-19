@@ -19,7 +19,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @RequestMapping(value = "/image/{imageId}.jpg")
+    @RequestMapping(value = "/image/{imageId}")
     public void getImage(HttpServletResponse response, @PathVariable int imageId) throws IOException {
         response.setContentType("image/jpg");
         byte[] image = imageService.getImage(imageId);

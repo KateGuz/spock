@@ -1,9 +1,11 @@
 package ua.spock.spock.dao;
 
+import ua.spock.spock.entity.Image;
+
 import java.io.InputStream;
 
 public interface ImageDao {
-    byte[] getImage(int imageId);
+    Image getImage(int imageId);
 
     void saveImage(int lotId, InputStream imageStream);
 }

@@ -88,7 +88,7 @@
                                 <div class="inner">
                                     <ul>
                                         <c:forEach items="${lotDto.lot.imageIds}" var="id">
-                                            <li><a class="ns-img" href="/image/${id}.jpg"></a></li>
+                                            <li><a class="ns-img" href="/image/${id}"></a></li>
                                         </c:forEach>
                                     </ul>
                                 </div>

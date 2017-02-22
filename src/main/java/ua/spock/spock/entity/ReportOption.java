@@ -6,8 +6,9 @@ import java.time.LocalDateTime;
 public class ReportOption {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String type;
+    private ReportOptionType type;
     private String email;
+    private String userName;
     private String documentName;
 
     public LocalDateTime getStartDate() {
@@ -26,11 +27,11 @@ public class ReportOption {
         this.endDate = endDate;
     }
 
-    public String getType() {
+    public ReportOptionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ReportOptionType type) {
         this.type = type;
     }
 
@@ -40,6 +41,14 @@ public class ReportOption {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDocumentName() {
@@ -57,6 +66,7 @@ public class ReportOption {
                 ", endDate=" + endDate +
                 ", type='" + type + '\'' +
                 ", email='" + email + '\'' +
+                ", userName='" + userName + '\'' +
                 ", documentName='" + documentName + '\'' +
                 '}';
     }

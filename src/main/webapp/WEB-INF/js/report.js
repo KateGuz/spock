@@ -7,7 +7,6 @@ function report() {
     
     var json = '{"startDate" :"' + startDate +
         '", "type" :"' + type +
-        '", "userEmail" :"' + userEmail +
         '", "endDate" :"' + endDate + '"}';
 
     $.ajax({

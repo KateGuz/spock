@@ -21,13 +21,9 @@
         <property name="password" value="${password}"/>
     </bean>
 
-    <bean id="username" class="java.lang.String">
-        <constructor-arg value="shalimovtest@gmail.com"/>
+    <bean id="mailSenderProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:mailSender.properties"/>
     </bean>
-    <bean id="password" class="java.lang.String">
-        <constructor-arg value="ewqdsacxz"/>
-    </bean>
-
 
     <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>

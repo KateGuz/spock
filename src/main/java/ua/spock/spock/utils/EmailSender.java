@@ -1,38 +1,31 @@
 package ua.spock.spock.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Properties;
 
 @Service
 public class EmailSender {
-    @Autowired
+    @Resource(name="mailSenderProperties")
+    private Properties mailSenderProperties;
     private String username;
-    @Autowired
     private String password;
-    private Properties props;
 
-    public EmailSender() {
-        props = new Properties();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("mailSender.properties");
-        try {
-            props.load(inputStream);
-        } catch (IOException e) {
-
-            throw new RuntimeException(e);
-        }
+    @PostConstruct
+    private void init() {
+        username = mailSenderProperties.getProperty("username");
+        password = mailSenderProperties.getProperty("password");
     }
 
     public void sendEmail(String toEmail, String documentName) {
-        Session session = Session.getDefaultInstance(props, new Authenticator() {
+        Session session = Session.getDefaultInstance(mailSenderProperties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
@@ -58,7 +51,7 @@ public class EmailSender {
             throw new RuntimeException(e);
         }
         String result;
-        result = "http://" + host + ":8080/spock/report/" + documentName+".xls";
+        result = "http://" + host + ":8080/report/" + documentName+".xlsx";
         return result;
     }
 }

@@ -283,7 +283,7 @@
     </div>
 </div>
 
-<!-- Sign in -->
+<!-- Generate report -->
 <div id="report" class="modal fade registration-form" role="dialog">
     <div class="modal-dialog">
 
@@ -310,11 +310,6 @@
                         Аукционы закончившиеся в выбранный период.
                     </label>
                 </div>
-
-                <div class="edit-field-wrapper">
-                    <input type="hidden" value="${user.email}" id="userEmail">
-                </div>
-
                 <button class="btn-success enter-button" data-dismiss="modal" onclick="report()">Подготовить отчет
                 </button>
                 <br>

@@ -13,7 +13,6 @@ import ua.spock.spock.entity.UserType;
 import ua.spock.spock.service.ReportService;
 import ua.spock.spock.utils.ReportOptionJsonParser;
 
-
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -23,9 +22,11 @@ public class ReportController {
 
     @RequestMapping(value = "/report", method = RequestMethod.POST)
     public ResponseEntity createReport(@RequestBody String json, HttpSession session) {
-        if (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN)) {
-            ReportOption reportOption = ReportOptionJsonParser.jsonToReportOption(json);
-            reportService.createReport(reportOption);
+        User user = (User) session.getAttribute("loggedUser");
+        if (user.getType().equals(UserType.ADMIN)) {
+            ReportOption reportOption = ReportOptionJsonParser.jsonToReportOption(json, user.getName());
+            reportOption.setEmail(user.getEmail());
+            reportService.scheduleReport(reportOption);
             return new ResponseEntity(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);

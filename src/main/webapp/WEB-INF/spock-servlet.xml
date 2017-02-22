@@ -13,6 +13,7 @@
     <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
     <mvc:resources mapping="/img/**" location="/WEB-INF/img/"/>
     <mvc:resources mapping="/fonts/**" location="/WEB-INF/fonts/"/>
+    <mvc:resources mapping="/report/**" location="/report/"/>
 
     <mvc:interceptors>
         <bean class="ua.spock.spock.controller.interceptor.LoggerInterceptor"/>

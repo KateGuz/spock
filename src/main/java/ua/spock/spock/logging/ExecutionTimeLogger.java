@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExecutionTimeLogger {
+
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        Logger logger = LoggerFactory.getLogger(joinPoint.getClass());
+      //  Logger logger = LoggerFactory.getLogger(joinPoint.getClass());
+        Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
         String className = joinPoint.getTarget().getClass().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
         long start = System.currentTimeMillis();

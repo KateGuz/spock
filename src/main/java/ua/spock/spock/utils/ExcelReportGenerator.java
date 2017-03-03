@@ -8,9 +8,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.Report;
 import ua.spock.spock.service.BidService;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -19,7 +21,7 @@ public class ExcelReportGenerator {
     private BidService bidService;
 
     @SuppressWarnings("deprecation")
-    public InputStream createReport(List<Lot> lots, String name) {
+    public Report createReport(List<Lot> lots, String name) {
         Workbook book = new XSSFWorkbook();
         ByteArrayOutputStream bookOutputStream = new ByteArrayOutputStream();
         Sheet sheet = book.createSheet(name);
@@ -56,7 +58,9 @@ public class ExcelReportGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new ByteArrayInputStream(bookOutputStream.toByteArray());
+        Report report = new Report();
+        report.setBody(bookOutputStream.toByteArray());
+        return report;
     }
 
     private void setSheetHeader(Sheet sheet) {

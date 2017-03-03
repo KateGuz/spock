@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ReportRequestJsonParser {
-    public static ReportRequest jsonToReportOption(String json) {
+    public static ReportRequest jsonToReportRequest(String json) {
         JSONParser parser = new JSONParser();
         try {
             Object object = parser.parse(json);

@@ -1,5 +1,7 @@
 package ua.spock.spock.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -15,8 +17,11 @@ import java.util.Properties;
 public class EmailSender {
     @Resource(name = "mailSenderProperties")
     private Properties mailSenderProperties;
+    @Resource(name = "applicationProperties")
+    private Properties applicationProperties;
     private String username;
     private String password;
+    private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
     @PostConstruct
     private void init() {
@@ -38,6 +43,7 @@ public class EmailSender {
             message.setText(actionLink(reportId, documentName));
 
             Transport.send(message);
+            logger.info("Report id={} notification message was sent to {}", reportId, toEmail);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -50,8 +56,14 @@ public class EmailSender {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
+        String port = applicationProperties.getProperty("server.port");
         String result;
-        result = "http://" + host + ":8080/report/" + reportId + "/" + documentName + ".xlsx";
+        if ("80".equals(port)) {
+            result = "http://" + host + "/report/" + reportId + "/" + documentName + ".xlsx";
+        } else {
+            result = "http://" + host + ":" + port + "/report/" + reportId + "/" + documentName + ".xlsx";
+        }
+
         return result;
     }
 }

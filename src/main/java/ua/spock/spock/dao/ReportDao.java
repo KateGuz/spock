@@ -1,11 +1,11 @@
 package ua.spock.spock.dao;
 
-import java.io.InputStream;
+import ua.spock.spock.entity.Report;
 
 public interface ReportDao {
-    int saveReport(InputStream report);
+    int saveReport(Report report);
 
-    byte[] getReport(int reportId);
+    Report getReport(int reportId);
 
     void cleanReports();
 }

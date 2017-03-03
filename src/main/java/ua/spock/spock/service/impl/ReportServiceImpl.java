@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.ReportDao;
+import ua.spock.spock.entity.Report;
 import ua.spock.spock.entity.ReportRequest;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.ReportService;
 import ua.spock.spock.utils.EmailSender;
 import ua.spock.spock.utils.ExcelReportGenerator;
 
-import java.io.InputStream;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
@@ -31,12 +31,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public int saveReport(InputStream report) {
-        return reportDao.saveReport(report);
-    }
-
-    @Override
-    public byte[] getReport(int reportId) {
+    public Report getReport(int reportId) {
         return reportDao.getReport(reportId);
     }
 
@@ -44,7 +39,7 @@ public class ReportServiceImpl implements ReportService {
     private void processReports() {
         while (!queue.isEmpty()) {
             ReportRequest reportRequest = queue.poll();
-            InputStream report = excelReportGenerator.createReport(lotService.getLotsForReport(reportRequest),
+            Report report = excelReportGenerator.createReport(lotService.getLotsForReport(reportRequest),
                     reportRequest.getDocumentName());
             int reportId = reportDao.saveReport(report);
             emailSender.sendEmail(reportRequest.getEmail(), reportId, reportRequest.getDocumentName());

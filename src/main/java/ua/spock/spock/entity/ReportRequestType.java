@@ -14,7 +14,7 @@ public enum ReportRequestType {
                 return reportRequestType;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No reportType found for id: " + id);
     }
 
     public String getId() {

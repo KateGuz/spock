@@ -4,8 +4,8 @@ package ua.spock.spock.dao.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
-import ua.spock.spock.entity.ReportOption;
-import ua.spock.spock.entity.ReportOptionType;
+import ua.spock.spock.entity.ReportRequest;
+import ua.spock.spock.entity.ReportRequestType;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.filter.LotFilter;
 
@@ -64,16 +64,16 @@ public class QueryGenerator {
         return parameters;
     }
 
-    public String generateReportQuery(ReportOption reportOption) {
+    public String generateReportQuery(ReportRequest reportRequest) {
         StringBuilder query = new StringBuilder();
         query.append(getLotsForReportStatementSQL);
         query.append("WHERE (");
-        if (reportOption.getType() == ReportOptionType.STARTED) {
-            query.append("l.startDate>'").append(reportOption.getStartDate()).append("' AND ").
-                    append("l.startDate<'").append(reportOption.getEndDate()).append("');");
+        if (reportRequest.getType() == ReportRequestType.STARTED_LOTS) {
+            query.append("l.startDate>'").append(reportRequest.getStartDate()).append("' AND ").
+                    append("l.startDate<'").append(reportRequest.getEndDate()).append("');");
         } else {
-            query.append("l.endDate>'").append(reportOption.getStartDate()).append("' AND ").
-                    append("l.endDate<'").append(reportOption.getEndDate()).append("');");
+            query.append("l.endDate>'").append(reportRequest.getStartDate()).append("' AND ").
+                    append("l.endDate<'").append(reportRequest.getEndDate()).append("');");
         }
         return query.toString();
     }

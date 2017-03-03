@@ -13,7 +13,7 @@ import java.util.Properties;
 
 @Service
 public class EmailSender {
-    @Resource(name="mailSenderProperties")
+    @Resource(name = "mailSenderProperties")
     private Properties mailSenderProperties;
     private String username;
     private String password;
@@ -24,7 +24,7 @@ public class EmailSender {
         password = mailSenderProperties.getProperty("password");
     }
 
-    public void sendEmail(String toEmail, String documentName) {
+    public void sendEmail(String toEmail, int reportId, String documentName) {
         Session session = Session.getDefaultInstance(mailSenderProperties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -35,7 +35,7 @@ public class EmailSender {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("Report");
-            message.setText(actionLink(documentName));
+            message.setText(actionLink(reportId, documentName));
 
             Transport.send(message);
         } catch (MessagingException e) {
@@ -43,7 +43,7 @@ public class EmailSender {
         }
     }
 
-    private String actionLink(String documentName) {
+    private String actionLink(int reportId, String documentName) {
         String host;
         try {
             host = InetAddress.getLocalHost().getCanonicalHostName();
@@ -51,7 +51,7 @@ public class EmailSender {
             throw new RuntimeException(e);
         }
         String result;
-        result = "http://" + host + ":8080/report/" + documentName+".xlsx";
+        result = "http://" + host + ":8080/report/" + reportId + "/" + documentName + ".xlsx";
         return result;
     }
 }

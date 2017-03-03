@@ -91,4 +91,13 @@
                                 left JOIN bid as b ON b.id=l.maxBidId
                                  "/>
     </bean>
+    <bean id="saveReportSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO report (report) VALUES (:report);"/>
+    </bean>
+    <bean id="getReportSQL" class="java.lang.String">
+        <constructor-arg value="SELECT report FROM report WHERE id=:reportId;"/>
+    </bean>
+    <bean id="cleanReportsSQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM report;"/>
+    </bean>
 </beans>

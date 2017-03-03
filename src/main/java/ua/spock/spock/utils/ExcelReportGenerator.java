@@ -10,24 +10,18 @@ import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.service.BidService;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 @Service
 public class ExcelReportGenerator {
     @Autowired
     private BidService bidService;
-    @Autowired
-    private ServletContext servletContext;
-    private String reportFolderPath;
 
     @SuppressWarnings("deprecation")
-    public void createReport(List<Lot> lots, String name) {
-        String file = reportFolderPath + name + ".xlsx";
+    public InputStream createReport(List<Lot> lots, String name) {
         Workbook book = new XSSFWorkbook();
+        ByteArrayOutputStream bookOutputStream = new ByteArrayOutputStream();
         Sheet sheet = book.createSheet(name);
         int rowNum = 1;
         setSheetHeader(sheet);
@@ -57,25 +51,22 @@ public class ExcelReportGenerator {
                 maxBid.setCellValue(String.valueOf(lot.getMaxBid()));
             }
         }
-        try (FileOutputStream stream = new FileOutputStream(file)) {
-            book.write(stream);
+        try {
+            book.write(bookOutputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return new ByteArrayInputStream(bookOutputStream.toByteArray());
     }
 
     private void setSheetHeader(Sheet sheet) {
         Row row = sheet.createRow(0);
         String[] headers = {"Lot id", "Title", "Description", "Category", "Start price",
-                "Start date", "End date","Amount of bids", "Max bid"};
+                "Start date", "End date", "Amount of bids", "Max bid"};
         for (int col = 0; col < 9; col++) {
             Cell cell = row.createCell(col);
             cell.setCellValue(headers[col]);
         }
     }
 
-    @PostConstruct
-    private void setReportFolderPath() {
-        reportFolderPath = servletContext.getRealPath("/report/");
-    }
 }

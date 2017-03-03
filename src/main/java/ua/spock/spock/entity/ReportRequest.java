@@ -3,12 +3,11 @@ package ua.spock.spock.entity;
 
 import java.time.LocalDateTime;
 
-public class ReportOption {
+public class ReportRequest {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private ReportOptionType type;
+    private ReportRequestType type;
     private String email;
-    private String userName;
     private String documentName;
 
     public LocalDateTime getStartDate() {
@@ -27,11 +26,11 @@ public class ReportOption {
         this.endDate = endDate;
     }
 
-    public ReportOptionType getType() {
+    public ReportRequestType getType() {
         return type;
     }
 
-    public void setType(ReportOptionType type) {
+    public void setType(ReportRequestType type) {
         this.type = type;
     }
 
@@ -41,14 +40,6 @@ public class ReportOption {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getDocumentName() {
@@ -61,12 +52,11 @@ public class ReportOption {
 
     @Override
     public String toString() {
-        return "ReportOption{" +
+        return "ReportRequest{" +
                 "startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", type='" + type + '\'' +
                 ", email='" + email + '\'' +
-                ", userName='" + userName + '\'' +
                 ", documentName='" + documentName + '\'' +
                 '}';
     }

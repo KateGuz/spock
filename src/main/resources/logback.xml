@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>E://spock/log/spock.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>E://spock/log/spock_%d{yyyy-MM-dd}.log.%i</fileNamePattern>
+            <fileNamePattern>C:/spock/log/spock_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 
             <maxHistory>10</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100KB</maxFileSize>
+                <maxFileSize>5MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]-%m%n
-            </pattern>
+            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]%X{space}%X{requestId}%X{space}%X{userEmail} - %m%n</pattern>
         </encoder>
+    </appender>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [%t]%X{space}%X{requestId}%X{space}%X{userEmail} %p %c - %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>smtp.gmail.com</smtpHost>
+        <smtpPort>587</smtpPort>
+        <STARTTLS>true</STARTTLS>
+        <username>spockemailsender@gmail.com</username>
+        <password>Borjomi05</password>
+
+        <to>d.zrazhevskiy@gmail.com</to>
+        <from>spockemailsender@gmail.com</from>
+        <subject>SPOCK ERROR MESSAGE: %m</subject>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{ISO8601} [%-5p][%-16.16t][%20c{-4}]%X{space}%X{requestId}%X{space}%X{userEmail} - %m%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
     </appender>
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="EMAIL"/>
     </root>
 </configuration>

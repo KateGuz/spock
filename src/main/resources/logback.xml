@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <property resource="application.properties"/>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>C:/spock/log/spock.log</file>
+        <file>${log.dir}/spock.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:/spock/log/spock_%d{yyyy-MM-dd}.log.%i</fileNamePattern>
+            <fileNamePattern>${log.dir}/spock_%d{yyyy-MM-dd}.log.%i</fileNamePattern>
 
             <maxHistory>10</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy

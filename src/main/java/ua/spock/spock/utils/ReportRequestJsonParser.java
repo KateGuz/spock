@@ -26,8 +26,6 @@ public class ReportRequestJsonParser {
             reportRequest.setDocumentName("report-" + LocalDateTime.now().format(dateTimeFormatter));
             String type = String.valueOf(jsonObject.get("type"));
             reportRequest.setType(ReportRequestType.getReportRequestTypeById(type));
-            System.out.println(json);
-            System.out.println(reportRequest);
             return reportRequest;
         } catch (ParseException e) {
             throw new RuntimeException("Error occurred while converting json to user", e);

@@ -23,12 +23,14 @@ import java.io.IOException;
 public class ReportController {
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private ReportRequestJsonParser parser;
 
     @RequestMapping(value = "/report", method = RequestMethod.POST)
     public ResponseEntity createReport(@RequestBody String json, HttpSession session) {
         User user = (User) session.getAttribute("loggedUser");
         if (user.getType().equals(UserType.ADMIN)) {
-            ReportRequest reportRequest = ReportRequestJsonParser.jsonToReportRequest(json);
+            ReportRequest reportRequest = parser.jsonToReportRequest(json);
             reportRequest.setEmail(user.getEmail());
             reportService.scheduleReport(reportRequest);
             return new ResponseEntity(HttpStatus.OK);

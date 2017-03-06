@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.LotDao;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.ReportRequest;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.LotService;
 
@@ -56,5 +57,10 @@ public class LotServiceImpl implements LotService {
     @Override
     public void closeLot(Lot lot) {
         lotDao.closeLot(lot);
+    }
+
+    @Override
+    public List<Lot> getLotsForReport(ReportRequest reportRequest) {
+        return lotDao.getLotsForReport(reportRequest);
     }
 }

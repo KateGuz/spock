@@ -79,4 +79,25 @@
     <bean id="closeLotSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET type=:type WHERE id=:id;"/>
     </bean>
+
+    <bean id="getLotsForReportStatementSQL" class="java.lang.String">
+        <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
+                                l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep,
+                                l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+                                FROM lot AS l
+                                 JOIN user AS u ON u.id=l.userId
+                                JOIN category AS c ON c.id=l.categoryId
+                                JOIN category AS cp ON cp.id=c.parentId
+                                left JOIN bid as b ON b.id=l.maxBidId
+                                 "/>
+    </bean>
+    <bean id="saveReportSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO report (report) VALUES (:report);"/>
+    </bean>
+    <bean id="getReportSQL" class="java.lang.String">
+        <constructor-arg value="SELECT report FROM report WHERE id=:reportId;"/>
+    </bean>
+    <bean id="cleanReportsSQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM report;"/>
+    </bean>
 </beans>

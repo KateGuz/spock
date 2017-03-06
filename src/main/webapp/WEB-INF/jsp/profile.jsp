@@ -120,7 +120,8 @@
                                         <a class="btn btn-success" href="/lot">Добавить новый лот</a>
                                     </form>
                                     <div class="user-report-generation">
-                                        <button type="button" class="btn btn-default">Генерировать отчет</button>
+                                        <a class="btn btn-default" data-toggle="modal" href="#report"
+                                           data-target="#report">Генерировать отчет</a>
                                     </div>
                                 </c:when>
                             </c:choose>
@@ -282,6 +283,46 @@
     </div>
 </div>
 
+<!-- Generate report -->
+<div id="report" class="modal fade registration-form" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Генерация отчетов</h4>
+            </div>
+            <div class="modal-body">
+                <span>Начальная дата:</span>
+                <input type="datetime-local" class="form-control" required id="startDate"><br><br>
+                <span>Конечная дата:</span>
+                <input type="datetime-local" class="form-control" required id="endDate"><br>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="started" value="started" checked>
+                        Аукционы начавшиеся в выбранный период.
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="ended" value="ended">
+                        Аукционы закончившиеся в выбранный период.
+                    </label>
+                </div>
+                <button class="btn-success enter-button" data-dismiss="modal" onclick="report()">Подготовить отчет
+                </button>
+                <br>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Выйти</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery-3.1.1.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
@@ -291,6 +332,7 @@
 <script src="/js/signUp.js"></script>
 <script src="/js/editUser.js"></script>
 <script src="/js/deleteLot.js"></script>
+<script src="/js/report.js"></script>
 <script src="/js/currencyConversion.js"></script>
 </body>
 </html>

@@ -12,6 +12,7 @@ import ua.spock.spock.dao.util.QueryGenerator;
 import ua.spock.spock.dao.util.SqlQueryParameters;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
+import ua.spock.spock.entity.ReportRequest;
 import ua.spock.spock.filter.LotFilter;
 
 import java.util.List;
@@ -102,6 +103,12 @@ public class JdbcLotDao implements LotDao {
         params.addValue("id", lot.getId());
         params.addValue("type", LotType.CLOSED.getId());
         namedParameterJdbcTemplate.update(closeLotSQL, params);
+    }
+
+    @Override
+    public List<Lot> getLotsForReport(ReportRequest reportRequest) {
+        String query = queryGenerator.generateReportQuery(reportRequest);
+        return namedParameterJdbcTemplate.query(query, LOT_ROW_MAPPER);
     }
 
     private MapSqlParameterSource fillParams(Lot lot) {

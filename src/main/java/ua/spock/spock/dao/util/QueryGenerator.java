@@ -4,6 +4,8 @@ package ua.spock.spock.dao.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
+import ua.spock.spock.entity.ReportRequest;
+import ua.spock.spock.entity.ReportRequestType;
 import ua.spock.spock.entity.SortType;
 import ua.spock.spock.filter.LotFilter;
 
@@ -18,6 +20,8 @@ public class QueryGenerator {
     private String getLotsByCategoryStatementSQL;
     @Autowired
     private String getLotCountStatementSQL;
+    @Autowired
+    private String getLotsForReportStatementSQL;
 
     public SqlQueryParameters generate(LotFilter lotFilter, int lotsPerPage) {
         MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -58,6 +62,20 @@ public class QueryGenerator {
         parameters.setParameters(paramsMap);
         parameters.setQuery(query.toString());
         return parameters;
+    }
+
+    public String generateReportQuery(ReportRequest reportRequest) {
+        StringBuilder query = new StringBuilder();
+        query.append(getLotsForReportStatementSQL);
+        query.append("WHERE (");
+        if (reportRequest.getType() == ReportRequestType.STARTED_LOTS) {
+            query.append("l.startDate>'").append(reportRequest.getStartDate()).append("' AND ").
+                    append("l.startDate<'").append(reportRequest.getEndDate()).append("');");
+        } else {
+            query.append("l.endDate>'").append(reportRequest.getStartDate()).append("' AND ").
+                    append("l.endDate<'").append(reportRequest.getEndDate()).append("');");
+        }
+        return query.toString();
     }
 
     private String getOrderByStatement(SortType sorting) {

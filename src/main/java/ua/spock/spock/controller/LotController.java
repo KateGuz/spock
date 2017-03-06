@@ -28,6 +28,8 @@ public class LotController {
     @Autowired
     private LotDtoConstructor lotDtoConstructor;
 
+
+
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, HttpSession session) {
         if (currency != null) {

@@ -1,22 +1,22 @@
 package ua.spock.spock.entity;
 
 public class Image {
-    private int lotId;
-    private byte[] image;
+    private int id;
+    private byte[] bytes;
 
-    public int getLotId() {
-        return lotId;
+    public byte[] getBytes() {
+        return bytes;
     }
 
-    public void setLotId(int lotId) {
-        this.lotId = lotId;
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
 
-    public byte[] getImage() {
-        return image;
+    public int getId() {
+        return id;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setId(int id) {
+        this.id = id;
     }
 }

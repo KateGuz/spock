@@ -86,14 +86,15 @@
                     <div class="panel-group" id="accordion">
                         <c:forEach items="${categories}" var="parent">
                             <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="category-parent-link" data-toggle="collapse" data-parent="#accordion" href="#collapse${parent.id}">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </a>
-                                            <a href="/category/${parent.id}">${parent.name}</a>
-                                        </h4>
-                                    </div>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="category-parent-link" data-toggle="collapse" data-parent="#accordion"
+                                           href="#collapse${parent.id}">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </a>
+                                        <a href="/category/${parent.id}">${parent.name}</a>
+                                    </h4>
+                                </div>
                                 <div id="collapse${parent.id}" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <table class="table">
@@ -192,19 +193,24 @@
                         <c:if test="${pageCount > 1}">
                             <c:set var="start" value="${page - 2 < 1 ? 1 : page - 2}"/>
                             <c:set var="end" value="${start + 4 > pageCount ? pageCount : start + 4}"/>
-                            <c:if test="${page < end + 2}"><c:set var="start" value="${end - 4 < 1 ? 1 : end - 4}"/></c:if>
+                            <c:if test="${page < end + 2}"><c:set var="start"
+                                                                  value="${end - 4 < 1 ? 1 : end - 4}"/></c:if>
                             <nav aria-label="Page navigation" class="lots-pagination">
                                 <ul class="pagination">
                                     <li>
-                                        <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1" aria-label="First">
+                                        <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=1"
+                                           aria-label="First">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
                                     <c:forEach var="currentPage" begin="${start}" end="${end}">
-                                        <li<c:if test="${page == currentPage}"> class="active"</c:if>><a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${currentPage}">${currentPage}</a></li>
+                                        <li<c:if test="${page == currentPage}"> class="active"</c:if>><a
+                                                href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${currentPage}">${currentPage}</a>
+                                        </li>
                                     </c:forEach>
                                     <li>
-                                        <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${pageCount}" aria-label="Last">
+                                        <a href="?<c:if test="${not empty sortType}">sortType=${sortType}&</c:if>page=${pageCount}"
+                                           aria-label="Last">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>

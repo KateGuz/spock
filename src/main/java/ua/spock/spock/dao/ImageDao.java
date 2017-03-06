@@ -7,5 +7,11 @@ import java.io.InputStream;
 public interface ImageDao {
     Image getImage(int imageId);
 
-    void saveImage(int lotId, InputStream imageStream);
+    Image getUserImage(int userId);
+
+    void saveUserImage(Image image);
+
+    void savePrimaryLotImage(Image image);
+
+    void saveSecondaryLotImage(Image image);
 }

@@ -95,13 +95,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="lot-load-new-main-image">
-                                <input type="button" class="btn btn-default" value="Загрузить новое основное фото">
-                            </div>
-                            <div class="lot-load-new-additional-images">
-                                <input type="button" class="btn btn-default"
-                                       value="Загрузить новые дополнительные фото">
-                            </div>
+
+                            <span>Загрузить основное фото:</span>
+                            <form  enctype="multipart/form-data">
+                                <input  name="lotImage" id="primaryLotImageId" type="file" /><br/>
+                            </form>
+
+                            <span>Загрузить дополнительное фото:</span>
+                            <form  enctype="multipart/form-data">
+                                <input  name="lotImage" id="secondaryLotImageId" type="file" /><br/>
+                            </form>
                         </div>
                         <div class="col-md-7">
                             <div class="edit-lot-details-wrapper">
@@ -173,7 +176,7 @@
                     <div class="row">
                         <div class="save-changes-button">
                             <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}"
-                                    id="userId" onclick="editLot()">Сохранить изменения
+                                    id="userId" onclick="editLot();uploadPrimaryLotImage();uploadSecondaryLotImage()">Сохранить изменения
                             </button>
                         </div>
                     </div>
@@ -259,5 +262,7 @@
 <script src="/js/editLot.js"></script>
 <script src="/js/ninja-slider.js"></script>
 <script src="/js/currencyConversion.js"></script>
+<script src="/js/sendPrimaryLotImage.js"></script>
+<script src="/js/sendSecondaryLotImage.js"></script>
 </body>
 </html>

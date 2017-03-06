@@ -1,9 +1,17 @@
 package ua.spock.spock.service;
 
+import ua.spock.spock.entity.Image;
+
 import java.io.InputStream;
 
 public interface ImageService {
-    byte[] getImage(int imageId);
+    Image getImage(int imageId);
 
-    void saveImage(int lotId, InputStream imageStream);
+    Image getUserImage(int userId);
+
+    void saveUserImage(Image image);
+
+    void savePrimaryLotImage(Image image);
+
+    void saveSecondaryLotImage(Image image);
 }

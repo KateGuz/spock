@@ -88,7 +88,20 @@
     <bean id="getImageSQL" class="java.lang.String">
         <constructor-arg value="SELECT image FROM lotimage WHERE id = :imageId;"/>
     </bean>
-    <bean id="saveImageSQL" class="java.lang.String">
-        <constructor-arg value="INSERT INTO lotimage (image, lotId) VALUES (:image, :lotId);"/>
+    <bean id="savePrimaryLotImageSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE lotimage SET image=:image WHERE lotId=:lotId AND type=:type;"/>
     </bean>
+    <bean id="saveSecondaryLotImageSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO lotimage (image,type,lotId) VALUES (:image,:type,:lotId);"/>
+    </bean>
+
+    <bean id="saveUserImageSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE user SET image=:image WHERE id=:userId;"/>
+    </bean>
+
+    <bean id="getUserImageSQL" class="java.lang.String">
+        <constructor-arg value="SELECT image FROM user WHERE id = :userId;"/>
+    </bean>
+
+
 </beans>

@@ -86,7 +86,9 @@
                 <div class="row">
                     <div class="col-md-4 user-details-wrapper">
                         <div class="thumbnail user-photo">
-                            <img src="/img/1.jpg">
+
+                            <%--<img src="/img/1.jpg">--%>
+                            <img src="/userImage/${user.id}">
                         </div>
                         <div class="user-info">
                             <div class="user-name-wrapper">

@@ -27,8 +27,6 @@ public class UserController {
 
     @RequestMapping("/user/{id}/edit")
     public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
-        System.out.println(session.getAttribute("loggedUser"));
-
         if (session.getAttribute("loggedUser") != null) {
             System.out.println(((User) session.getAttribute("loggedUser")).getId());
             if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType() == UserType.ADMIN)) {

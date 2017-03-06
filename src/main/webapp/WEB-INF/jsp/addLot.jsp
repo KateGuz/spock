@@ -111,13 +111,20 @@
                                     <textarea class="form-control" rows="7" cols="50" required placeholder="Описание"
                                               id="description"></textarea>
                                 </div>
-                                <div class="lot-load-main-image">
-                                    <button type="button" class="btn btn-default">Загрузить основное фото</button>
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-default">Загрузить дополнительные фото</button>
-                                </div>
+
+                                <span>Загрузить основное фото:</span>
+                                    <form  enctype="multipart/form-data">
+                                        <input  name="lotImage" id="primaryLotImageId" type="file" /><br/>
+                                    </form>
+
+                                <span>Загрузить дополнительное фото:</span>
+                                <form  enctype="multipart/form-data">
+                                    <input  name="lotImage" id="secondaryLotImageId" type="file" /><br/>
+                                </form>
+
                             </div>
+
+
                         </div>
                         <div class="col-md-6 add-lot-right-column">
                             <div class="edit-field-wrapper">
@@ -147,7 +154,7 @@
                                 <div class="save-changes-button col-md-12">
                                     <button type="submit" class="btn btn-success save-changes-button"
                                             value="${loggedUser.id}" id="userId"
-                                            onclick="addLot()">Создать лот
+                                            onclick="addLot();uploadPrimaryLotImage();uploadSecondaryLotImage()">Создать лот
                                     </button>
                                 </div>
                             </div>
@@ -234,5 +241,7 @@
 <script src="/js/signUp.js"></script>
 <script src="/js/addLot.js"></script>
 <script src="/js/currencyConversion.js"></script>
+<script src="/js/sendPrimaryLotImage.js"></script>
+<script src="/js/sendSecondaryLotImage.js"></script>
 </body>
 </html>

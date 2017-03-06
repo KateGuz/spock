@@ -1,6 +1,4 @@
 function editUser() {
-    // $("#dataForm").validate();
-
     var name = $("#inputNameEdit").val();
     var email = $("#inputEmailEdit").val();
     var password = $("#inputPasswordEdit").val();

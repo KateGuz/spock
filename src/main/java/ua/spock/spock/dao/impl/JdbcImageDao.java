@@ -16,22 +16,55 @@ public class JdbcImageDao implements ImageDao {
     @Autowired
     private String getImageSQL;
     @Autowired
-    private String saveImageSQL;
+    private String getUserImageSQL;
+    @Autowired
+    private String savePrimaryLotImageSQL;
+    @Autowired
+    private String saveSecondaryLotImageSQL;
+    @Autowired
+    private String saveUserImageSQL;
 
     @Override
     public Image getImage(int imageId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("imageId", imageId);
-        Image image=new Image();
-         image.setImage(namedParameterJdbcTemplate.queryForObject(getImageSQL, params, byte[].class));
+        Image image = new Image();
+        image.setBytes(namedParameterJdbcTemplate.queryForObject(getImageSQL, params, byte[].class));
         return image;
     }
 
     @Override
-    public void saveImage(int lotId, InputStream imageStream) {
+    public Image getUserImage(int userId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("lotId", lotId);
-        params.addValue("image", imageStream);
-        namedParameterJdbcTemplate.update(saveImageSQL, params);
+        params.addValue("userId", userId);
+        Image image = new Image();
+        image.setBytes(namedParameterJdbcTemplate.queryForObject(getUserImageSQL, params, byte[].class));
+        return image;
+    }
+
+    @Override
+    public void saveUserImage(Image image) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userId", image.getId());
+        params.addValue("image", image.getBytes());
+        namedParameterJdbcTemplate.update(saveUserImageSQL, params);
+    }
+
+    @Override
+    public void savePrimaryLotImage(Image image) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("lotId", image.getId());
+        params.addValue("type", "M");
+        params.addValue("image", image.getBytes());
+        namedParameterJdbcTemplate.update(savePrimaryLotImageSQL, params);
+    }
+
+    @Override
+    public void saveSecondaryLotImage(Image image) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("lotId", image.getId());
+        params.addValue("type", "C");
+        params.addValue("image", image.getBytes());
+        namedParameterJdbcTemplate.update(saveSecondaryLotImageSQL, params);
     }
 }

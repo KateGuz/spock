@@ -89,12 +89,14 @@
                                     <div class="col-md-6">
                                         <div class="user-load-avatar-wrapper">
                                             <div class="thumbnail user-photo">
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjMtcxK2vElKxVOi9b1noqIKLvCEEsvr9wK4frJOnSHfxrt6rz9aiRz-4"><br>
+                                                <img src="/userImage/${user.id}">
+                                                <%--<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjMtcxK2vElKxVOi9b1noqIKLvCEEsvr9wK4frJOnSHfxrt6rz9aiRz-4"><br>--%>
                                             </div>
-                                            <div class="user-load-avatar">
-                                                <input type="button" class="btn btn-default"
-                                                       value="Загрузить новое фото">
-                                            </div>
+                                            <form  enctype="multipart/form-data">
+                                                <input  name="userImage" id="userImage" type="file" /><br/>
+                                            </form>
+
+                                            <%--<button value="Submit" class="btn btn-default" onclick="uploadFormData()" >Загрузить новое фото</button>--%>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -119,7 +121,7 @@
                             </div>
                             <div class="save-changes-button">
                                 <button type="submit" class="btn btn-success save-changes-button"
-                                        value="${loggedUser.id}" id="userId" onclick="editUser()">Сохранить изменения
+                                        value="${loggedUser.id}" id="userId" onclick="editUser();uploadUserImage()">Сохранить изменения
                                 </button>
                             </div>
 
@@ -203,6 +205,7 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/editUser.js"></script>
+<script src="/js/sendUserImage.js"></script>
 <script src="/js/currencyConversion.js"></script>
 </body>
 </html>

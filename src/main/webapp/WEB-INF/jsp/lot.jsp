@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/ninja-slider.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
@@ -43,14 +43,22 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">UAH<span class="caret"></span></a>
+                           aria-expanded="false">${currency}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">USD</a></li>
-                            <li><a href="">EUR</a></li>
-                            <li><a href="">UAH</a></li>
+                            <li>
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -72,71 +80,112 @@
 <section class="main-section">
     <div class="lot-wrapper">
         <div class="lot-details">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="lot-image-slider-wrapper">
-                        <div id="ninja-slider">
-                            <div class="inner">
-                                <ul>
-                                    <c:forEach var="i" begin="0" end="3">
-                                        <li><a class="ns-img" href="../img/logo.png"></a></li>
-                                    </c:forEach>
-                                </ul>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="lot-image-slider-wrapper">
+                            <div id="ninja-slider">
+                                <div class="inner">
+                                    <ul>
+                                        <c:forEach var="i" begin="0" end="3">
+                                            <li><a class="ns-img" href="../img/logo.png"></a></li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="lot-quick-buy">
-                        <button type="button" class="btn btn-default">Выкупить сейчас за ${lot.quickBuyPrice} UAH
-                        </button>
-                    </div>
-                    <div class="lot-subscribtion">
-                        <button type="button" class="btn btn-default">Подписаться на обновления</button>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="lot-details-wrapper">
-                        <div class="lot-title">
-                            <span>${lot.title}</span>
-                        </div>
-                        <div>
-                            Продавец: <a class="lot-author-link" href="/user/${user.id}">${user.name}</a>
-                        </div>
-                        <div class="lot-description">
-                            <span>${lot.description}</span>
-                        </div>
-
-                        <div class="lot-price">
-                            <span>Максимальная ставка: ${lot.maxBid.value} UAH </span>
-                            <span class="lot-start-price">Стартовая цена: ${lot.startPrice} UAH</span>
-                        </div>
-                        <div class="lot-time-left-and-participants">
-                            <span>До конца аукциона осталось ${timeLeft} (всего было размещено ${bidCount} ставок).</span>
-                        </div>
-
-                    </div>
-                    <div class="place-bid thumbnail">
-                        <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
-                        <form class="navbar-form navbar-nav">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="${currentPrice}">
+                        <c:if test="${!empty loggedUser}">
+                            <c:if test="${lotDto.lot.quickBuyPrice != 0}">
+                                <div class="lot-quick-buy">
+                                    <button type="button" class="btn btn-default" id="quickBuy"
+                                            value="${lotDto.lot.id}"
+                                            onclick="quickBuy()">Выкупить сейчас
+                                        за ${lotDto.lot.quickBuyPrice} ${currency}
+                                    </button>
+                                </div>
+                            </c:if>
+                            <div class="lot-subscribtion">
+                                <button type="button" class="btn btn-default">Подписаться на обновления</button>
                             </div>
-                            <button type="submit" class="btn btn-default">Сделать ставку</button>
-                            <p class="place-bid-min-step">*минимальный шаг: ${lot.minStep} UAH</p>
-                        </form>
+                        </c:if>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="lot-details-wrapper">
+                            <div class="lot-title">
+                                <span>${lotDto.lot.title}</span>
+                            </div>
+                            <div class="lot-category">
+                                Категория: ${lotDto.lot.category.name}
+                            </div>
+                            <div class="lot-seller">
+                                Продавец: <a class="lot-author-link" href="/user/${lotDto.lot.user.id}">${lotDto.lot.user.name}</a>
+                            </div>
+                            <div class="lot-description">
+                                <span>${lotDto.lot.description}</span>
+                            </div>
+                            <div class="lot-price">
+                                <span>Максимальная ставка: ${lotDto.currentPrice} ${currency} </span>
+                                <span class="lot-start-price">Стартовая цена: ${lotDto.lot.startPrice} ${currency}</span>
+                            </div>
+                            <div class="lot-time-left-and-participants">
+                            <span>
+                                <c:choose>
+                                    <c:when test="${lotDto.lot.type.id == 'C'}">
+                                        <span>Торги окончены</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${lotDto.lot.type.id == 'I'}">
+                                                <span>Осталось: ${lotDto.timeLeft}</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span>Начало: ${lotDto.lot.startDate}</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
+                                (всего было размещено ${lotDto.bidCount} ставок)
+                            </span>
+                            </div>
 
+                        </div>
+                        <c:if test="${lotDto.lot.type.id == 'I'}">
+                            <div class="place-bid thumbnail">
+                                <c:choose>
+                                    <c:when test="${empty loggedUser}">
+                                        <p><a data-toggle="modal" href="#signIn" data-target="#signIn">Войдите/зарегистрируйтесь</a>,
+                                            если хотите сделать ставку или купить лот сейчас.</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p class="place-bid-title">Понравился товар - разместите свою ставку!</p>
+                                        <form class="navbar-form navbar-nav">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="${lotDto.currentPrice}" id="bid">
+                                            </div>
+                                            <div class="edit-field-wrapper">
+                                                <input type="hidden" value="${lotDto.lot.id}" id="lotId">
+                                            </div>
+                                            <button type="submit" class="btn btn-default" value="${loggedUser.id}"
+                                                    id="userId"
+                                                    onclick="addBid()">Сделать ставку
+                                            </button>
+                                            <p class="place-bid-min-step">*минимальный шаг: ${lotDto.lot.minStep} UAH</p>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </section>
 <!--End of main section-->
 <!--Footer-->
 <section class="footer">
     <div class="footer-content">
-        <span>Spock</span></br>
+        <span>Spock</span>
         <span>Все права защищены</span>
     </div>
 </section>
@@ -198,12 +247,15 @@
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
+<script src="/js/addBid.js"></script>
 <script src="/js/ninja-slider.js"></script>
+<script src="/js/quickBuy.js"></script>
+<script src="/js/currencyConversion.js"></script>
 </body>
 </html>

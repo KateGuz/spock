@@ -4,13 +4,12 @@ function addLot() {
     var description = $("#description").val();
     var startPrice = $("#startPrice").val();
     var minStep = $("#minStep").val();
-    var categoryId = $("#categoryId").val();
+    var categoryId = document.getElementById("categories").value;
     var startDate = $("#startDate").val();
     var endDate = $("#endDate").val();
     var quickBuyPrice = $("#quickBuyPrice").val();
     var userId = $("#userId").val();
-
-
+    
     var json = '{"title" :"' + title +
         '", "description" :"' + description +
         '", "startPrice" :"' + startPrice +
@@ -30,7 +29,7 @@ function addLot() {
             top.location.href = 'user/'+userId;
         },
         error: function () {
-            alert("Не удалось создать лот");
+            alert("Не удалось создать лот.");
         }
     })
 }

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Spock - лучший аукцион в мире!</title>
-    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/ninja-slider.css" rel="stylesheet">
     <link href="/css/media.css" rel="stylesheet">
@@ -16,8 +16,7 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
     <![endif]-->
 </head>
 <body>
@@ -46,14 +45,22 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">UAH<span class="caret"></span></a>
+                           aria-expanded="false">${currency}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">USD</a></li>
-                            <li><a href="">EUR</a></li>
-                            <li><a href="">UAH</a></li>
+                            <li>
+                                <button id="btnCurrencyUSD" type="button" class="btn btn-link">USD
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyEUR" type="button" class="btn btn-link">EUR
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnCurrencyUAH" type="button" class="btn btn-link">UAH
+                                </button>
+                            </li>
                         </ul>
                     </li>
-
                     <c:choose>
                         <c:when test="${empty loggedUser}">
                             <li><a data-toggle="modal" href="#signIn" data-target="#signIn">Вход / Регистрация</a></li>
@@ -88,11 +95,12 @@
                                 <!-- Categories dropdown -->
                                 <div class="category-pick-wrapper edit-field-wrapper">
                                     <span>Категория:</span>
-                                    <select class="form-control">
+                                    <select class="form-control" id="categories">
                                         <c:forEach items="${categories}" var="parent">
                                             <optgroup label="${parent.name}">
-                                            <c:forEach items="${parent.children}" var="category">
-                                                <option value="${category.id}" id="categoryId">"${category.name}"</option>
+                                                <c:forEach items="${parent.children}" var="category">
+                                                    <option value="${category.id}"
+                                                            id="categoryId">${category.name}</option>
                                                 </c:forEach>
                                             </optgroup>
                                         </c:forEach>
@@ -137,7 +145,8 @@
                         <div class="container">
                             <div class="row">
                                 <div class="save-changes-button col-md-12">
-                                    <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}" id="userId"
+                                    <button type="submit" class="btn btn-success save-changes-button"
+                                            value="${loggedUser.id}" id="userId"
                                             onclick="addLot()">Создать лот
                                     </button>
                                 </div>
@@ -202,8 +211,10 @@
                 <form id="dataForm">
                     <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
                     <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
-                    <input type="password" required name="password" placeholder="Пароль" id="inputPasswordSignUp"><br><br>
-                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся</button>
+                    <input type="password" required name="password" placeholder="Пароль"
+                           id="inputPasswordSignUp"><br><br>
+                    <button class="btn-success enter-button" data-dismiss="modal" onclick="signUp()">Зарегистрироватся
+                    </button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -215,12 +226,13 @@
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
 <script src="/js/jquery.validate.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap/bootstrap.min.js"></script>
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/addLot.js"></script>
+<script src="/js/currencyConversion.js"></script>
 </body>
 </html>

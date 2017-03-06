@@ -6,21 +6,27 @@
     <bean id="getLotsStatementSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
-                                left JOIN bid AS b ON b.bid=l.maxBidId"/>
+                                left JOIN bid AS b ON b.id=l.maxBidId"/>
     </bean>
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
-                                WHERE  c.parentId =:categoryId OR c.id =:categoryId"/>
+
+                                WHERE  (c.parentId =:categoryId OR c.id =:categoryId)"/>
+                                <!--WHERE  (c.parentId =:categoryId OR c.id =:categoryId) AND (l.type !='C')"/>-->
     </bean>
+
+    <bean id="getLotCountStatementSQL" class="java.lang.String">
+    <constructor-arg value="SELECT COUNT(*) FROM lot AS l"/>
+
+</bean>
     <bean id="getLotsByUserIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
                                 left JOIN bid AS b ON b.bid=l.maxBidId
                                 JOIN user AS u ON l.userId=u.id
-                                WHERE  u.id =:userId"/>
+                                WHERE  u.id =:userId;"/>
     </bean>
-
     <bean id="getLotByIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
                                 l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep,
@@ -63,5 +69,35 @@
         <constructor-arg value="UPDATE lot SET title=:title, description=:description, categoryId=:categoryId,
                                 startDate=:startDate, endDate=:endDate, startPrice=:startPrice, minStep=:minStep,
                                 quickBuyPrice=:quickBuyPrice, type=:type WHERE id=:id;"/>
+    </bean>
+    <bean id="placeBidSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO bid (lotId, userId, bid) VALUES (:lotId, :userId, :bid);"/>
+    </bean>
+    <bean id="updateMaxBidIdSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE lot SET maxBidId=:bidId WHERE id=:id;"/>
+    </bean>
+    <bean id="closeLotSQL" class="java.lang.String">
+        <constructor-arg value="UPDATE lot SET type=:type WHERE id=:id;"/>
+    </bean>
+
+    <bean id="getLotsForReportStatementSQL" class="java.lang.String">
+        <constructor-arg value="SELECT l.id, l.title, l.description, l.categoryId, c.parentId AS parentCategoryId, c.name AS categoryName, cp.name AS parentCategoryName,
+                                l.userId, u.name AS userName, l.startDate, l.endDate, l.startPrice, l.minStep,
+                                l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
+                                FROM lot AS l
+                                 JOIN user AS u ON u.id=l.userId
+                                JOIN category AS c ON c.id=l.categoryId
+                                JOIN category AS cp ON cp.id=c.parentId
+                                left JOIN bid as b ON b.id=l.maxBidId
+                                 "/>
+    </bean>
+    <bean id="saveReportSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO report (report) VALUES (:report);"/>
+    </bean>
+    <bean id="getReportSQL" class="java.lang.String">
+        <constructor-arg value="SELECT report FROM report WHERE id=:reportId;"/>
+    </bean>
+    <bean id="cleanReportsSQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM report;"/>
     </bean>
 </beans>

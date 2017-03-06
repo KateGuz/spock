@@ -3,11 +3,12 @@ function deleteLot(lotId,userId) {
     if (verification == true) {
         $.ajax({
             url: '/lot/' + lotId,
-            type: 'DELETE'
-        })
-            .success(function () {
+            type: 'DELETE',
+            success: function () {
                 alert("Лот удален");
-                top.location.href = 'user/'+userId+'/edit';
-            })
+                top.location.href = '/user/'+userId;
+            }
+        })
+
     }
 }

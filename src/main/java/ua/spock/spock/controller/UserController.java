@@ -5,17 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import ua.spock.spock.controller.util.Util;
-import ua.spock.spock.entity.Lot;
+import org.springframework.web.bind.annotation.*;
+import ua.spock.spock.entity.Currency;
 import ua.spock.spock.entity.User;
+import ua.spock.spock.entity.UserType;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.UserService;
+import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.utils.UserJsonParser;
-import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -24,32 +23,51 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private Util util;
-
+    private LotDtoConstructor lotDtoConstructor;
 
     @RequestMapping("/user/{id}/edit")
-    public String showProfile(ModelMap model, @PathVariable Integer id) {
-        model.addAttribute("lots", lotService.getUserLots(id));
-        model.addAttribute("user", userService.get(id));
-        return "profile";
+    public String showProfile(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+        if (session.getAttribute("loggedUser") != null) {
+            if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType() == UserType.ADMIN)) {
+                if (currency != null) {
+                    session.setAttribute("currency", currency);
+                }
+                if (session.getAttribute("currency") == null) {
+                    session.setAttribute("currency", "UAH");
+                }
+                model.addAttribute("user", userService.get(id));
+                model.addAttribute("currency", session.getAttribute("currency"));
+                return "editUser";
+            }
+        }
+        return "error";
     }
 
     @RequestMapping(value = "/user/{id}/edit", method = RequestMethod.PUT)
-    public ResponseEntity editUser(@PathVariable Integer id, @RequestBody String json) {
+    public ResponseEntity editUser(@PathVariable Integer id, @RequestBody String json, HttpSession session) {
         User user = UserJsonParser.jsonToUser(json);
-        user.setId(id);
-        userService.edit(user);
-        return new ResponseEntity(HttpStatus.OK);
+        if (session.getAttribute("loggedUser") != null) {
+            if ((((User) session.getAttribute("loggedUser")).getId() == id) || (((User) session.getAttribute("loggedUser")).getType() == UserType.ADMIN)) {
+                user.setId(id);
+                userService.edit(user);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/user/{id}")
-    public String editUser(ModelMap model, @PathVariable Integer id) {
+    public String editUser(ModelMap model, @PathVariable Integer id, @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
+        if (currency != null) {
+            session.setAttribute("currency", currency);
+        }
+        if (session.getAttribute("currency") == null) {
+            session.setAttribute("currency", "UAH");
+        }
+        currency = (String) session.getAttribute("currency");
         model.addAttribute("user", userService.get(id));
-        List<Lot> tempLots = lotService.getUserLots(id);
-        model.addAttribute("lots", util.getActualLots(tempLots));
-        model.addAttribute("timeLeft",util.getTimeLeft());
-        model.addAttribute("isStarted", util.getIsStarted());
-        model.addAttribute("bidCount", util.getBidCount());
-        return "editUser";
+        model.addAttribute("lots", lotDtoConstructor.constructListOfLots(lotService.getUserLots(id), Currency.valueOf(currency)));
+        model.addAttribute("currency", currency);
+        return "profile";
     }
 }

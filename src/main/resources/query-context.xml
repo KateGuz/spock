@@ -11,9 +11,7 @@
 
     <bean id="getLotsByCategoryStatementSQL" class="java.lang.String">
         <constructor-arg value=" JOIN category AS c ON l.categoryId=c.id
-
                                 WHERE  (c.parentId =:categoryId OR c.id =:categoryId)"/>
-                                <!--WHERE  (c.parentId =:categoryId OR c.id =:categoryId) AND (l.type !='C')"/>-->
     </bean>
 
     <bean id="getLotCountStatementSQL" class="java.lang.String">
@@ -23,7 +21,7 @@
     <bean id="getLotsByUserIdSQL" class="java.lang.String">
         <constructor-arg value="SELECT  l.id, l.title, l.startDate, l.endDate, l.startPrice, l.quickBuyPrice, l.type, l.maxBidId, b.bid AS maxBidValue
                                 FROM lot AS l
-                                left JOIN bid AS b ON b.bid=l.maxBidId
+                                left JOIN bid AS b ON b.id=l.maxBidId
                                 JOIN user AS u ON l.userId=u.id
                                 WHERE  u.id =:userId;"/>
     </bean>
@@ -76,7 +74,7 @@
     <bean id="updateMaxBidIdSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET maxBidId=:bidId WHERE id=:id;"/>
     </bean>
-    <bean id="closeLotSQL" class="java.lang.String">
+    <bean id="changeLotTypeSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET type=:type WHERE id=:id;"/>
     </bean>
 
@@ -99,5 +97,35 @@
     </bean>
     <bean id="cleanReportsSQL" class="java.lang.String">
         <constructor-arg value="DELETE FROM report;"/>
+    </bean>
+    <bean id="getPendingLotsForProcessingSQL" class="java.lang.String">
+        <constructor-arg value="SELECT l.id, l.title, l.userId, u.name AS userName, u.email AS userEmail, l.startDate,
+                                l.endDate, l.type, l.maxBidId, b.bid AS maxBidValue, b.userId AS maxBidUserId,
+                                mbu.name AS maxBidUserName, mbu.email AS maxBidUserEmail
+                                FROM lot AS l JOIN user AS u ON u.id=l.userId left JOIN bid as b ON b.id=l.maxBidId
+                                LEFT JOIN user AS mbu ON mbu.id=b.userId
+                                WHERE (l.startDate >= :startPeriod AND l.startDate &lt; :endPeriod);"/>
+    </bean>
+    <bean id="getOverduePendingLotsForProcessingSQL" class="java.lang.String">
+        <constructor-arg value="SELECT l.id, l.title, l.userId, u.name AS userName, u.email AS userEmail, l.startDate,
+                                l.endDate, l.type, l.maxBidId, b.bid AS maxBidValue, b.userId AS maxBidUserId,
+                                mbu.name AS maxBidUserName, mbu.email AS maxBidUserEmail
+                                FROM lot AS l JOIN user AS u ON u.id=l.userId left JOIN bid as b ON b.id=l.maxBidId
+                                LEFT JOIN user AS mbu ON mbu.id=b.userId
+                                WHERE (l.startDate &lt; :endPeriod AND l.type='P');"/>
+    </bean>
+    <bean id="getStartedLotsForProcessingSQL" class="java.lang.String">
+        <constructor-arg value="select l.id, l.endDate FROM lot AS l WHERE (l.endDate >= :startPeriod AND l.endDate &lt; :endPeriod);"/>
+    </bean>
+    <bean id="getOverdueStartedLotsForProcessingSQL" class="java.lang.String">
+        <constructor-arg value="select l.id, l.endDate FROM lot AS l WHERE (l.endDate &lt; :endPeriod AND l.type='I');"/>
+    </bean>
+    <bean id="getClosedLotForNotificationSQL" class="java.lang.String">
+        <constructor-arg value="SELECT l.id, l.title, l.userId, u.name AS userName, u.email AS userEmail, l.startDate,
+                                l.endDate, l.type, l.maxBidId, b.bid AS maxBidValue, b.userId AS maxBidUserId,
+                                mbu.name AS maxBidUserName, mbu.email AS maxBidUserEmail
+                                FROM lot AS l JOIN user AS u ON u.id=l.userId left JOIN bid as b ON b.id=l.maxBidId
+                                LEFT JOIN user AS mbu ON mbu.id=b.userId
+                                WHERE l.id=:lotId;"/>
     </bean>
 </beans>

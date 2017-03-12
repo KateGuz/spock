@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.LotDao;
+import ua.spock.spock.dao.mapper.LotForNotificationRowMapper;
+import ua.spock.spock.dao.mapper.LotForClosingRowMapper;
 import ua.spock.spock.dao.mapper.LotRowMapper;
 import ua.spock.spock.dao.mapper.util.QueryType;
 import ua.spock.spock.dao.util.QueryGenerator;
@@ -15,12 +17,15 @@ import ua.spock.spock.entity.LotType;
 import ua.spock.spock.entity.ReportRequest;
 import ua.spock.spock.filter.LotFilter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public class JdbcLotDao implements LotDao {
     private final LotRowMapper ALL_LOTS_ROW_MAPPER = new LotRowMapper(QueryType.GET_ALL_LOTS);
     private final LotRowMapper LOT_ROW_MAPPER = new LotRowMapper(QueryType.GET_ONE_LOT);
+    private final LotForNotificationRowMapper LOT_FOR_NOTIFICATION_ROW_MAPPER = new LotForNotificationRowMapper();
+    private final LotForClosingRowMapper LOT_FOR_CLOSING_ROW_MAPPER = new LotForClosingRowMapper();
     @Autowired
     private QueryGenerator queryGenerator;
     @Autowired
@@ -38,7 +43,17 @@ public class JdbcLotDao implements LotDao {
     @Autowired
     private String updateMaxBidIdSQL;
     @Autowired
-    private String closeLotSQL;
+    private String getPendingLotsForProcessingSQL;
+    @Autowired
+    private String getOverduePendingLotsForProcessingSQL;
+    @Autowired
+    private String getStartedLotsForProcessingSQL;
+    @Autowired
+    private String getOverdueStartedLotsForProcessingSQL;
+    @Autowired
+    private String getClosedLotForNotificationSQL;
+    @Autowired
+    private String changeLotTypeSQL;
     private final int LOTS_PER_PAGE = 9;
 
     @Override
@@ -102,13 +117,61 @@ public class JdbcLotDao implements LotDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", lot.getId());
         params.addValue("type", LotType.CLOSED.getId());
-        namedParameterJdbcTemplate.update(closeLotSQL, params);
+        namedParameterJdbcTemplate.update(changeLotTypeSQL, params);
     }
 
     @Override
     public List<Lot> getLotsForReport(ReportRequest reportRequest) {
         String query = queryGenerator.generateReportQuery(reportRequest);
         return namedParameterJdbcTemplate.query(query, LOT_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Lot> getPendingLotsForProcessing(LocalDateTime startPeriod, LocalDateTime endPeriod) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("startPeriod", startPeriod);
+        params.addValue("endPeriod", endPeriod);
+        return namedParameterJdbcTemplate.query(getPendingLotsForProcessingSQL, params, LOT_FOR_NOTIFICATION_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Lot> getOverduePendingLotsForProcessing(LocalDateTime now) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("endPeriod", now);
+        return namedParameterJdbcTemplate.query(getOverduePendingLotsForProcessingSQL, params,
+                LOT_FOR_NOTIFICATION_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Lot> getStartedLotsForProcessing(LocalDateTime startPeriod, LocalDateTime endPeriod) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("startPeriod", startPeriod);
+        params.addValue("endPeriod", endPeriod);
+        return namedParameterJdbcTemplate.query(getStartedLotsForProcessingSQL, params, LOT_FOR_CLOSING_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Lot> getOverdueStartedLotsForProcessing(LocalDateTime now) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("endPeriod", now);
+        return namedParameterJdbcTemplate.query(getOverdueStartedLotsForProcessingSQL, params,
+                LOT_FOR_CLOSING_ROW_MAPPER);
+    }
+
+    @Override
+    public Lot getClosedLotForNotification(int lotId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("lotId", lotId);
+        return namedParameterJdbcTemplate.queryForObject(getClosedLotForNotificationSQL, params,
+                LOT_FOR_NOTIFICATION_ROW_MAPPER);
+    }
+
+    @Override
+    public void startLotBidding(Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", lot.getId());
+        params.addValue("type", LotType.IN_PROGRESS.getId());
+        namedParameterJdbcTemplate.update(changeLotTypeSQL, params);
     }
 
     private MapSqlParameterSource fillParams(Lot lot) {

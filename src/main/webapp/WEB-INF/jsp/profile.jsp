@@ -138,6 +138,9 @@
                                                     <c:when test="${lotDto.lot.type.id == 'I'}">
                                                         <span class="lot-preview-status">Активно</span>
                                                     </c:when>
+                                                    <c:when test="${lotDto.lot.type.id == 'C'}">
+                                                        <span class="lot-preview-status">Торги окончены</span>
+                                                    </c:when>
                                                     <c:otherwise>
                                                         <span class="lot-preview-status">Планируется</span>
                                                     </c:otherwise>

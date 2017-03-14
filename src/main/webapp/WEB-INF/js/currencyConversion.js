@@ -1,52 +1,26 @@
 $(document).ready(function () {
     $('#btnCurrencyUAH').click(function () {
-        if (window.location.href.indexOf('currency') !== -1) {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.href.substring(0, window.location.href.indexOf('&')) + "&currency=UAH";
-            } else {
-                window.location.href = window.location.pathname + "?currency=UAH";
-            }
-        }
-        else {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location + "&currency=UAH";
-            } else {
-                window.location.href = window.location + "?currency=UAH";
-            }
-        }
+        window.location.href = changeCurrency("UAH");
     });
 
     $('#btnCurrencyEUR').click(function () {
-        if (window.location.href.indexOf('currency') !== -1) {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location.href.substring(0, window.location.href.indexOf('&')) + "&currency=EUR";
-            } else {
-                window.location.href = window.location.pathname + "?currency=EUR";
-            }
-        }
-        else {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location + "&currency=EUR";
-            } else {
-                window.location.href = window.location + "?currency=EUR";
-            }
-        }
+        window.location.href = changeCurrency("EUR");
     });
 
     $('#btnCurrencyUSD').click(function () {
-        if (window.location.href.indexOf('currency') !== -1) {
-            if (window.location.href.indexOf('sortType') !== -1) {
-               window.location.href = window.location.href.substring(0, window.location.href.indexOf('&')) + "&currency=USD";
-            } else {
-                window.location.href = window.location.pathname + "?currency=USD";
-            }
-        }
-        else {
-            if (window.location.href.indexOf('sortType') !== -1) {
-                window.location.href = window.location + "&currency=USD";
-            } else {
-                window.location.href = window.location + "?currency=USD";
-            }
-        }
+        window.location.href = changeCurrency("USD");
     });
+
+    function changeCurrency(currency) {
+        var url = window.location.pathname + "?";
+        var name = null;
+        var params = window.location.search.substr(1).split("&");
+        params.forEach(function(param) {
+            name = param.split("=");
+            if (name[0] != "currency") {
+                url += param + "&";
+            }
+        });
+        return url + "currency=" + currency;
+    }
 });

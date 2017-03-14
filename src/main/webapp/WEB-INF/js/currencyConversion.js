@@ -17,7 +17,7 @@ $(document).ready(function () {
         var params = window.location.search.substr(1).split("&");
         params.forEach(function(param) {
             name = param.split("=");
-            if (name[0] != "currency") {
+            if (name[0] != "currency" && param.length > 0) {
                 url += param + "&";
             }
         });

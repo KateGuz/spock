@@ -4,7 +4,7 @@ import ua.spock.spock.entity.User;
 
 public interface UserDao {
 
-    void add(User user);
+    int add(User user);
 
     User get(User user);
 

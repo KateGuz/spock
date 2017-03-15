@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.UserDao;
 import ua.spock.spock.dao.mapper.UserRowMapper;
@@ -27,13 +28,15 @@ public class JdbcUserDao implements UserDao {
     private String editUserSQL;
 
     @Override
-    public void add(User user) {
+    public int add(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", user.getName());
         params.addValue("password", user.getPassword());
         params.addValue("email", user.getEmail());
         params.addValue("type", UserType.USER.getId());
-        namedParameterJdbcTemplate.update(addUserSQL, params);
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(addUserSQL, params, keyHolder);
+        return keyHolder.getKey().intValue();
     }
 
     @Override

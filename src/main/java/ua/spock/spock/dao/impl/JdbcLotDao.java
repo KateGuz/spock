@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.LotDao;
 import ua.spock.spock.dao.mapper.LotForNotificationRowMapper;
@@ -67,10 +68,11 @@ public class JdbcLotDao implements LotDao {
     }
 
     @Override
-    public void add(Lot lot) {
+    public int add(Lot lot) {
         MapSqlParameterSource params = fillParams(lot);
-        namedParameterJdbcTemplate.update(addLotSQL, params);
-
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(addLotSQL, params, keyHolder);
+        return keyHolder.getKey().intValue();
     }
 
     @Override
@@ -136,8 +138,7 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public List<Lot> getOverduePendingLotsForProcessing(LocalDateTime now) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("endPeriod", now);
+        MapSqlParameterSource params = new MapSqlParameterSource("endPeriod", now);
         return namedParameterJdbcTemplate.query(getOverduePendingLotsForProcessingSQL, params,
                 LOT_FOR_NOTIFICATION_ROW_MAPPER);
     }
@@ -152,16 +153,14 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public List<Lot> getOverdueStartedLotsForProcessing(LocalDateTime now) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("endPeriod", now);
+        MapSqlParameterSource params = new MapSqlParameterSource("endPeriod", now);
         return namedParameterJdbcTemplate.query(getOverdueStartedLotsForProcessingSQL, params,
                 LOT_FOR_CLOSING_ROW_MAPPER);
     }
 
     @Override
     public Lot getClosedLotForNotification(int lotId) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("lotId", lotId);
+        MapSqlParameterSource params = new MapSqlParameterSource("lotId", lotId);
         return namedParameterJdbcTemplate.queryForObject(getClosedLotForNotificationSQL, params,
                 LOT_FOR_NOTIFICATION_ROW_MAPPER);
     }

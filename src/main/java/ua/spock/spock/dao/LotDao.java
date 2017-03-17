@@ -12,7 +12,7 @@ public interface LotDao {
     int getPageCount(LotFilter lotFilter);
     Lot getById(int lotId);
     List<Lot> getByUser(int userId);
-    void add(Lot lot);
+    int add(Lot lot);
     void delete(int id);
     void edit(Lot lot);
     void updateMaxBidId(Lot lot, int bidId);

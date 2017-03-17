@@ -2,6 +2,7 @@ package ua.spock.spock.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.entity.Lot;
 
@@ -13,29 +14,26 @@ import javax.mail.internet.MimeMessage;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
-
 @Service
 public class EmailSender {
     @Resource(name = "mailSenderProperties")
     private Properties mailSenderProperties;
-    @Resource(name = "applicationProperties")
-    private Properties applicationProperties;
+    @Value("#{mailSenderProperties.username}")
     private String username;
+    @Value("#{mailSenderProperties.password}")
     private String password;
     private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
     private String host;
+    @Value("#{applicationProperties['server.port']}")
     private String port;
 
     @PostConstruct
     private void init() {
-        username = mailSenderProperties.getProperty("username");
-        password = mailSenderProperties.getProperty("password");
         try {
             host = InetAddress.getLocalHost().getCanonicalHostName();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        port = applicationProperties.getProperty("server.port");
     }
 
     public void sendEmail(String toEmail, int reportId, String documentName) {
@@ -68,7 +66,7 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(lot.getUser().getEmail()));
-            message.setSubject("Lot bidding started");
+            message.setSubject("Bidding started for " + lot.getTitle());
             message.setText(biddingStartMessage(lot));
 
             Transport.send(message);
@@ -89,7 +87,7 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(lot.getUser().getEmail()));
-            message.setSubject("Lot bidding closed");
+            message.setSubject("Bidding closed for " + lot.getTitle());
             message.setText(biddingCloseMessageToOwner(lot));
             Transport.send(message);
             logger.info("Bidding close for lotId={} notification message was sent to {}", lot.getId(), lot.getUser().
@@ -109,7 +107,7 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(lot.getUser().getEmail()));
-            message.setSubject("Lot purchased");
+            message.setSubject("Lot " + lot.getTitle() + " purchased");
             message.setText(biddingCloseMessageToBuyer(lot));
             Transport.send(message);
             logger.info("Bidding close for lotId={} notification message was sent to {}", lot.getId(),

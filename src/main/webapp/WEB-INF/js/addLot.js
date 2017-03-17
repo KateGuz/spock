@@ -16,10 +16,11 @@ function addLot() {
         '", "minStep" :"' + minStep +
         '", "categoryId" :"' + categoryId +
         '", "startDate" :"' + startDate +
-        '", "endDate" :"' + endDate +
-        '", "quickBuyPrice" :"' + quickBuyPrice +
-        '", "userId" :"' + userId + '"}';
-
+        '", "endDate" :"' + endDate;
+        if (quickBuyPrice > 0) {
+        json += '", "quickBuyPrice" :"' + quickBuyPrice;
+        }
+        json += '", "userId" :"' + userId + '"}';
     $.ajax({
         url: '/lot',
         type: 'POST',

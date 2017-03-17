@@ -29,7 +29,7 @@ public class CurrencyCache {
         BufferedReader reader;
         String resultJson;
         try {
-            URL url = new URL("http://finance.ua/currency/data?for=currency-cash");
+            URL url = new URL("https://finance.ua/currency/data?for=currency-cash");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();

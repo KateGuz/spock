@@ -5,16 +5,15 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.LotDao;
-import ua.spock.spock.entity.Lot;
-import ua.spock.spock.entity.LotBiddingStarter;
-import ua.spock.spock.entity.LotCloser;
-import ua.spock.spock.entity.ReportRequest;
+import ua.spock.spock.entity.*;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.LotService;
+import ua.spock.spock.service.UserService;
 import ua.spock.spock.utils.EmailSender;
 
 import javax.annotation.PostConstruct;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -27,6 +26,8 @@ public class LotServiceImpl implements LotService {
     private TaskScheduler scheduler;
     @Autowired
     private EmailSender emailSender;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<Lot> getLots(LotFilter lotFilter) {
@@ -54,12 +55,21 @@ public class LotServiceImpl implements LotService {
 
     @Override
     public void add(Lot lot) {
-        lotDao.add(lot);
+        int lotId = lotDao.add(lot);
+        lot.setId(lotId);
+        lot.setUser(userService.get(lot.getUser().getId()));
+        scheduleNewLot(lot);
     }
 
     @Override
     public void edit(Lot lot) {
+        Lot beforeEdit = lotDao.getById(lot.getId());
         lotDao.edit(lot);
+        if (lot.getStartDate().isBefore(beforeEdit.getStartDate()) ||
+                lot.getEndDate().isBefore(beforeEdit.getEndDate())) {
+            lot.setUser(userService.get(lot.getUser().getId()));
+            scheduleNewLot(lot);
+        }
     }
 
     @Override
@@ -70,6 +80,9 @@ public class LotServiceImpl implements LotService {
     @Override
     public void closeLot(Lot lot) {
         lotDao.closeLot(lot);
+        lot = lotDao.getClosedLotForNotification(lot.getId());
+        emailSender.sendLotClosingNotificationToBuyer(lot);
+        emailSender.sendLotClosingNotificationToOwner(lot);
     }
 
     @Override
@@ -77,9 +90,19 @@ public class LotServiceImpl implements LotService {
         return lotDao.getLotsForReport(reportRequest);
     }
 
-    @Scheduled(cron = "0 59 23 ? * *")
+    @Override
+    public Boolean checkIfScheduled(Lot lot) {
+        LocalDateTime nextDayStart = LocalDate.now().plusDays(1).atStartOfDay();
+        if(lot.getStartDate().isBefore(nextDayStart) || lot.getType() == LotType.IN_PROGRESS) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Scheduled(cron = "30 59 23 ? * *")
     private void dailyScheduleLotsProcessing() {
-        LocalDateTime startDate = LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1);
+        LocalDateTime startDate = LocalDate.now().plusDays(1).atStartOfDay();
         LocalDateTime endDate = startDate.plusDays(1);
         scheduleLotsProcessing(startDate, endDate);
     }
@@ -95,19 +118,10 @@ public class LotServiceImpl implements LotService {
         List<Lot> pendingLotsForProcessing = lotDao.getPendingLotsForProcessing(startDate, endDate);
         List<Lot> startedLotsForProcessing = lotDao.getStartedLotsForProcessing(startDate, endDate);
         for (Lot lot : pendingLotsForProcessing) {
-            LotBiddingStarter starter = new LotBiddingStarter(lot);
-            starter.setLotDao(lotDao);
-            starter.setEmailSender(emailSender);
-            scheduler.schedule(starter, Date.from(lot.getStartDate().atZone(ZoneId.systemDefault()).
-                    toInstant()));
-
+            scheduleLotStart(lot);
         }
         for (Lot lot : startedLotsForProcessing) {
-            LotCloser closer = new LotCloser(lot);
-            closer.setLotDao(lotDao);
-            closer.setEmailSender(emailSender);
-            scheduler.schedule(closer, Date.from(lot.getEndDate().atZone(ZoneId.systemDefault()).
-                    toInstant()));
+            scheduleLotClose(lot);
         }
     }
 
@@ -127,5 +141,31 @@ public class LotServiceImpl implements LotService {
                 emailSender.sendLotClosingNotificationToBuyer(lot);
             }
         }
+    }
+
+    private void scheduleNewLot(Lot lot) {
+        LocalDateTime nextDayStart = LocalDate.now().plusDays(1).atStartOfDay();
+        if (lot.getStartDate().isBefore(nextDayStart) && lot.getType() == LotType.PENDING) {
+            scheduleLotStart(lot);
+        }
+        if (lot.getEndDate().isBefore(nextDayStart)) {
+            scheduleLotClose(lot);
+        }
+    }
+
+    private void scheduleLotStart(Lot lot) {
+        LotBiddingStarter starter = new LotBiddingStarter(lot);
+        starter.setLotDao(lotDao);
+        starter.setEmailSender(emailSender);
+        scheduler.schedule(starter, Date.from(lot.getStartDate().atZone(ZoneId.systemDefault()).
+                toInstant()));
+    }
+
+    private void scheduleLotClose(Lot lot) {
+        LotCloser closer = new LotCloser(lot);
+        closer.setLotDao(lotDao);
+        closer.setEmailSender(emailSender);
+        scheduler.schedule(closer, Date.from(lot.getEndDate().atZone(ZoneId.systemDefault()).
+                toInstant()));
     }
 }

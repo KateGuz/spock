@@ -18,4 +18,5 @@ public interface LotService {
     void updateMaxBidId(Lot lot, int bidId);
     void closeLot(Lot lot);
     List<Lot> getLotsForReport(ReportRequest reportRequest);
+    Boolean checkIfScheduled(Lot lot);
 }

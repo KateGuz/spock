@@ -144,6 +144,8 @@ public class LotController {
                 model.addAttribute("lot", lot);
                 model.addAttribute("categories", allCategories);
                 model.addAttribute("currency", session.getAttribute("currency"));
+                Boolean scheduled = lotService.checkIfScheduled(lot);
+                model.addAttribute("scheduled", scheduled);
                 return "editLot";
             }
         }

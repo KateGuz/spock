@@ -147,7 +147,7 @@
                                 <div class="save-changes-button col-md-12">
                                     <button type="submit" class="btn btn-success save-changes-button"
                                             value="${loggedUser.id}" id="userId"
-                                            onclick="addLot()">Создать лот
+                                            onclick="checkData()">Создать лот
                                     </button>
                                 </div>
                             </div>
@@ -233,6 +233,7 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/addLot.js"></script>
+<script src="/js/checkData.js"></script>
 <script src="/js/currencyConversion.js"></script>
 </body>
 </html>

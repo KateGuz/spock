@@ -22,11 +22,13 @@ public class LotCloser implements Runnable {
 
     @Override
     public void run() {
-        lotDao.closeLot(lot);
         lot = lotDao.getClosedLotForNotification(lot.getId());
-        emailSender.sendLotClosingNotificationToOwner(lot);
-        if (lot.getMaxBid() != null) {
-            emailSender.sendLotClosingNotificationToBuyer(lot);
+        if (lot.getType() != LotType.CLOSED) {
+            lotDao.closeLot(lot);
+            emailSender.sendLotClosingNotificationToOwner(lot);
+            if (lot.getMaxBid() != null) {
+                emailSender.sendLotClosingNotificationToBuyer(lot);
+            }
         }
     }
 }

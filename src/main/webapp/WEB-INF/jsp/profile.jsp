@@ -129,7 +129,7 @@
                     </div>
                     <div class="col-md-8">
                         <div class="lots-preview-wrapper user-lots-preview-wrapper">
-                            <c:forEach items="${lots}" var="lotDto" begin="0" end="8">
+                            <c:forEach items="${lots}" var="lotDto" begin="0" end="${lots.size()}">
                                 <div class="col-md-4 col-sm-4">
                                     <a class="lot-preview-link" href="/lot/${lotDto.lot.id}">
                                         <div class="lot-preview-item jumbotron">
@@ -137,6 +137,9 @@
                                                 <c:choose>
                                                     <c:when test="${lotDto.lot.type.id == 'I'}">
                                                         <span class="lot-preview-status">Активно</span>
+                                                    </c:when>
+                                                    <c:when test="${lotDto.lot.type.id == 'C'}">
+                                                        <span class="lot-preview-status">Торги окончены</span>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <span class="lot-preview-status">Планируется</span>
@@ -205,7 +208,7 @@
                                                        href="/lot/${lotDto.lot.id}/edit">Редактировать</a>
                                                 </form>
                                                 <button type="button" class="btn btn-danger"
-                                                        onclick="deleteLot(${lotDto.lot.id},${user.id})">Закрыть
+                                                        onclick="deleteLot(${lotDto.lot.id},${user.id})">Удалить
                                                 </button>
                                             </div>
                                         </c:when>

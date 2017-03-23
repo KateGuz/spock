@@ -148,19 +148,19 @@
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Мгновенный выкуп (UAH):</span>
-                                    <input type="number" class="form-control" value="${lot.quickBuyPrice}" size="10"
+                                    <input type="number" class="form-control" <c:if test="${lot.quickBuyPrice > 0}"> value="${lot.quickBuyPrice}"</c:if> size="10"
                                            id="quickBuyPrice">
                                     <span>*опционально</span>
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Старт аукциона:</span>
                                     <input type="datetime-local" class="form-control" value="${lot.startDate}" required
-                                           id="startDate">
+                                           id="startDate" <c:if test="${scheduled}">disabled</c:if>>
                                 </div>
                                 <div class="edit-field-wrapper">
                                     <span>Конец аукциона:</span>
                                     <input type="datetime-local" class="form-control" value="${lot.endDate}" required
-                                           id="endDate">
+                                           id="endDate" <c:if test="${scheduled}">disabled</c:if>>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                     <div class="row">
                         <div class="save-changes-button">
                             <button type="submit" class="btn btn-success save-changes-button" value="${loggedUser.id}"
-                                    id="userId" onclick="editLot()">Сохранить изменения
+                                    id="userId" onclick="checkData()">Сохранить изменения
                             </button>
                         </div>
                     </div>
@@ -257,6 +257,7 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/editLot.js"></script>
+<script src="/js/checkData.js"></script>
 <script src="/js/ninja-slider.js"></script>
 <script src="/js/currencyConversion.js"></script>
 </body>

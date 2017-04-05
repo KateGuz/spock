@@ -8,14 +8,19 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.UserDao;
+import ua.spock.spock.dao.mapper.UserForNotificationRowMapper;
 import ua.spock.spock.dao.mapper.UserRowMapper;
+import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.entity.UserType;
+
+import java.util.List;
 
 @Repository
 public class JdbcUserDao implements UserDao {
 
     private final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
+    private final UserForNotificationRowMapper USER_FOR_NOTIFICATION_ROW_MAPPER = new UserForNotificationRowMapper();
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Autowired
@@ -26,6 +31,14 @@ public class JdbcUserDao implements UserDao {
     private String getUserByIdSQL;
     @Autowired
     private String editUserSQL;
+    @Autowired
+    private String checkIfSubscribedSQL;
+    @Autowired
+    private String subscribeSQL;
+    @Autowired
+    private String unSubscribeSQL;
+    @Autowired
+    private String getUsersForNotificationSQL;
 
     @Override
     public int add(User user) {
@@ -60,5 +73,35 @@ public class JdbcUserDao implements UserDao {
         params.addValue("password", user.getPassword());
         params.addValue("email", user.getEmail());
         namedParameterJdbcTemplate.update(editUserSQL, params);
+    }
+
+    @Override
+    public boolean checkIfSubscribed(User user, Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userId", user.getId());
+        params.addValue("lotId", lot.getId());
+        return namedParameterJdbcTemplate.queryForObject(checkIfSubscribedSQL, params, Integer.class) == 1;
+    }
+
+    @Override
+    public void subscribe(User user, Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userId", user.getId());
+        params.addValue("lotId", lot.getId());
+        namedParameterJdbcTemplate.update(subscribeSQL, params);
+    }
+
+    @Override
+    public void unSubscribe(User user, Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userId", user.getId());
+        params.addValue("lotId", lot.getId());
+        namedParameterJdbcTemplate.update(unSubscribeSQL, params);
+    }
+
+    @Override
+    public List<User> getUsersForNotification(Lot lot) {
+        MapSqlParameterSource params = new MapSqlParameterSource("lotId", lot.getId());
+        return namedParameterJdbcTemplate.query(getUsersForNotificationSQL, params, USER_FOR_NOTIFICATION_ROW_MAPPER);
     }
 }

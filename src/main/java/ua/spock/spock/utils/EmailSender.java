@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ua.spock.spock.entity.Bid;
 import ua.spock.spock.entity.Lot;
+import ua.spock.spock.entity.User;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -13,7 +15,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Properties;
+
 @Service
 public class EmailSender {
     @Resource(name = "mailSenderProperties")
@@ -117,6 +121,28 @@ public class EmailSender {
         }
     }
 
+    public void sendNewBidNotifications(Bid bid, List<User> recipients) {
+        Session session = Session.getDefaultInstance(mailSenderProperties, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+        try {
+            for (User recipient : recipients) {
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(username));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient.getEmail()));
+                message.setSubject("New bid " + bid.getValue() + "UAH for lot " + bid.getLot().getTitle());
+                message.setText(newBidMessage(bid.getLot()));
+                Transport.send(message);
+                logger.info("New bid notification for lot lotId={} was sent to {}", bid.getLot().getId(),
+                        recipient.getEmail());
+            }
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private String actionLink(int reportId, String documentName) {
         String result;
         if ("80".equals(port)) {
@@ -157,6 +183,14 @@ public class EmailSender {
         String lotLink = getLotLink(lot);
         return String.format("Вы купили лот \"%s\" у продавца %s за %.2f UAH.%nСвяжитесь с продавцом: %s%n%s",
                 lotTitle, sellerName, maxBidValue, sellerEmail, lotLink);
+    }
+
+    private String newBidMessage(Lot lot) {
+        String lotTitle = lot.getTitle();
+        double maxBidValue = lot.getMaxBid().getValue();
+        String lotLink = getLotLink(lot);
+        return String.format("Новая ставка %.2f UAH для лота \"%s\".%nСделайте вашу ставку:%n%s", maxBidValue,
+                lotTitle, lotLink);
     }
 
     private String getLotLink(Lot lot) {

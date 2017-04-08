@@ -33,7 +33,7 @@ public class LotController {
 
     @RequestMapping("/")
     public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, HttpSession session) {
-        currency = setCurrency(currency, session);
+        currency = handleCurrency(currency, session);
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setPage(page);
@@ -53,7 +53,7 @@ public class LotController {
     public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String
             sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
                                            categoryId, HttpSession session) {
-        currency = setCurrency(currency, session);
+        currency = handleCurrency(currency, session);
         LotFilter lotFilter = new LotFilter();
         lotFilter.setSortType(SortType.getTypeById(sort));
         lotFilter.setCategoryId(categoryId);
@@ -72,13 +72,11 @@ public class LotController {
     @RequestMapping("/lot/{lotId}")
     public String getLotById(ModelMap model, @PathVariable int lotId,
                              @RequestParam(value = "currency", required = false) String currency, HttpSession session) {
-        currency = setCurrency(currency, session);
+        currency = handleCurrency(currency, session);
         Lot lot = lotService.getById(lotId);
-        boolean subscribed;
         User user = (User) session.getAttribute("loggedUser");
         if (user != null) {
-            subscribed = userService.checkIfSubscribed(user, lot);
-            model.addAttribute("subscribed", subscribed);
+            model.addAttribute("subscribed", userService.checkIfSubscribed(user, lot));
         }
         model.addAttribute("lotDto", lotDtoConstructor.constructOneLot(lot, Currency.valueOf(currency)));
         model.addAttribute("currency", currency);
@@ -196,7 +194,7 @@ public class LotController {
         }
     }
 
-    private String setCurrency(String currency, HttpSession session) {
+    private String handleCurrency(String currency, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
         }

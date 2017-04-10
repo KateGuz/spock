@@ -1,8 +1,7 @@
 package ua.spock.spock.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -57,7 +56,11 @@ public class JdbcUserDao implements UserDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("email", user.getEmail());
         params.addValue("password", user.getPassword());
-        return namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
+        try {
+            return namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

@@ -6,8 +6,9 @@ function unSubscribe() {
             alert("Уведомления о новых ставках больше не будут приходить к вам на email.");
             location.reload();
         },
-        error: function () {
+        error: function(xhr) {
             alert("что-то пошло нетак :(");
+            document.body.innerHTML = xhr.responseText;
         }
     })
 }

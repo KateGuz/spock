@@ -1,9 +1,9 @@
 function signIn() {
-    var name = $("#inputNameSignIn").val();
+    var email = $("#inputEmailSignIn").val();
     var password = $("#inputPasswordSignIn").val();
 
 
-    var json = '{"name" :"' + name +
+    var json = '{"email" :"' + email +
         '", "password" :"' + password + '"}';
 
     $.ajax({

@@ -45,7 +45,7 @@
                                 JOIN category AS p ON p.id=c.parentId ORDER BY p.id;"/>
     </bean>
     <bean id="getUserSQL" class="java.lang.String">
-        <constructor-arg value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.name =:name AND u.password =:password;"/>
+        <constructor-arg value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.email =:email AND u.password =:password;"/>
     </bean>
     <bean id="addUserSQL" class="java.lang.String">
         <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>

@@ -243,7 +243,7 @@
                 <h4 class="modal-title">Вход</h4>
             </div>
             <div class="modal-body">
-                <input type="text" required name="name" placeholder="Имя" id="inputNameSignIn"><br><br>
+                <input type="text" required name="email" placeholder="email" id="inputEmailSignIn"><br><br>
                 <input type="password" name="password" placeholder="Пароль" id="inputPasswordSignIn"><br><br>
                 <button class="btn-success enter-button" data-dismiss="modal" onclick="signIn()">Войти</button>
                 <br>

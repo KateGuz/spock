@@ -12,9 +12,11 @@ public class UserJsonParser {
             Object object = parser.parse(json);
             User user = new User();
             JSONObject jsonObject = (JSONObject) object;
-            String name = String.valueOf(jsonObject.get("name"));
+            if (jsonObject.containsKey("name")) {
+                String name = String.valueOf(jsonObject.get("name"));
+                user.setName(name);
+            }
             String password = String.valueOf(jsonObject.get("password"));
-            user.setName(name);
             user.setPassword(password);
             if (jsonObject.containsKey("email")) {
                 String email = String.valueOf(jsonObject.get("email"));

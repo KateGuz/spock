@@ -112,7 +112,7 @@
                 <h4 class="modal-title">Вход</h4>
             </div>
             <div class="modal-body">
-                <input type="text" required name="name" placeholder="Имя" id="inputNameSignIn"><br><br>
+                <input type="email" required name="name" placeholder="Имя" id="inputEmailSignIn"><br><br>
                 <input type="password" name="password" placeholder="Пароль" id="inputPasswordSignIn"><br><br>
                 <button class="btn-success enter-button" data-dismiss="modal" onclick="signIn()">Войти</button>
                 <br>
@@ -140,7 +140,7 @@
             </div>
             <div class="modal-body">
                 <form id="dataForm">
-                    <input type="text" required name="name" placeholder="Имя" id="inputNameSignUp"><br><br>
+                    <input type="text" required name="email" placeholder="email" id="inputNameSignUp"><br><br>
                     <input type="email" required name="email" placeholder="Почта" id="inputEmailSignUp"><br><br>
                     <input type="password" required name="password" placeholder="Пароль"
                            id="inputPasswordSignUp"><br><br>

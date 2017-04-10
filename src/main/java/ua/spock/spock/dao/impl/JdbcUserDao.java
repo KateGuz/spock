@@ -55,7 +55,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User get(User user) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("name", user.getName());
+        params.addValue("email", user.getEmail());
         params.addValue("password", user.getPassword());
         return namedParameterJdbcTemplate.queryForObject(getUserSQL, params, USER_ROW_MAPPER);
     }

@@ -3,9 +3,12 @@ package ua.spock.spock.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.spock.spock.dao.UserDao;
+import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.User;
 import ua.spock.spock.service.UserService;
 import ua.spock.spock.service.utils.EmailValidator;
+
+import java.util.List;
 
 
 @Service
@@ -39,5 +42,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void edit(User user) {
         userDao.edit(user);
+    }
+
+    @Override
+    public boolean checkIfSubscribed(User user, Lot lot) {
+        return userDao.checkIfSubscribed(user, lot);
+    }
+
+    @Override
+    public void subscribe(User user, Lot lot) {
+        userDao.subscribe(user, lot);
+    }
+
+    @Override
+    public void unSubscribe(User user, Lot lot) {
+        userDao.unSubscribe(user, lot);
+    }
+
+    @Override
+    public List<User> getUsersForNotification(Lot lot) {
+        return userDao.getUsersForNotification(lot);
     }
 }

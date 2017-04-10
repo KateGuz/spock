@@ -128,4 +128,17 @@
                                 LEFT JOIN user AS mbu ON mbu.id=b.userId
                                 WHERE l.id=:lotId;"/>
     </bean>
+    <bean id="checkIfSubscribedSQL" class="java.lang.String">
+        <constructor-arg value="SELECT COUNT(*) FROM subscribtion WHERE userId=:userId AND lotId=:lotId;"/>
+    </bean>
+    <bean id="subscribeSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO subscribtion (userId, lotId) VALUES (:userId, :lotId);"/>
+    </bean>
+    <bean id="unSubscribeSQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM subscribtion WHERE userId=:userId AND lotId=:lotId;"/>
+    </bean>
+    <bean id="getUsersForNotificationSQL" class="java.lang.String">
+        <constructor-arg value="SELECT u.email FROM subscribtion AS s JOIN user AS u ON u.id=s.userId
+                                WHERE s.lotId=:lotId;"/>
+    </bean>
 </beans>

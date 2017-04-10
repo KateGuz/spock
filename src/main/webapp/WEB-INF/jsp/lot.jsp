@@ -104,9 +104,18 @@
                                     </button>
                                 </div>
                             </c:if>
-                            <div class="lot-subscribtion">
-                                <button type="button" class="btn btn-default">Подписаться на обновления</button>
-                            </div>
+                           <c:choose>
+                               <c:when test="${subscribed}">
+                                   <div class="lot-subscribtion">
+                                       <button type="button" class="btn btn-default" onclick="unSubscribe()">Отписаться от обновлений</button>
+                                   </div>
+                               </c:when>
+                               <c:otherwise>
+                                   <div class="lot-subscribtion">
+                                       <button type="button" class="btn btn-default" onclick="subscribe()">Подписаться на обновления</button>
+                                   </div>
+                               </c:otherwise>
+                           </c:choose>
                         </c:if>
                     </div>
                     <div class="col-md-7">
@@ -254,6 +263,8 @@
 <script src="/js/signIn.js"></script>
 <script src="/js/signUp.js"></script>
 <script src="/js/addBid.js"></script>
+<script src="/js/subscribe.js"></script>
+<script src="/js/unSubscribe.js"></script>
 <script src="/js/ninja-slider.js"></script>
 <script src="/js/quickBuy.js"></script>
 <script src="/js/currencyConversion.js"></script>

@@ -6,15 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.spock.spock.dto.LotDtoConstructor;
 import ua.spock.spock.entity.*;
 import ua.spock.spock.filter.LotFilter;
 import ua.spock.spock.service.BidService;
+import ua.spock.spock.service.ImageService;
 import ua.spock.spock.service.LotService;
 import ua.spock.spock.service.cache.CategoryCache;
-import ua.spock.spock.utils.LotJsonParser;
+import ua.spock.spock.utils.LotRequestParser;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -27,11 +31,13 @@ public class LotController {
     private CategoryCache categoryCache;
     @Autowired
     private LotDtoConstructor lotDtoConstructor;
-
-
+    @Autowired
+    private ImageService imageService;
 
     @RequestMapping("/")
-    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, HttpSession session) {
+    public String getLots(ModelMap model, @RequestParam(value = "sortType", required = false) String sort,
+                          @RequestParam(value = "currency", required = false) String currency,
+                          @RequestParam(value = "page", required = false, defaultValue = "1") int page, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
         }
@@ -55,9 +61,10 @@ public class LotController {
 
     @RequestMapping("/category/{categoryId}")
 
-    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String
-            sort, @RequestParam(value = "currency", required = false) String currency, @RequestParam(value = "page", required = false, defaultValue = "1") int page, @PathVariable Integer
-                                           categoryId, HttpSession session) {
+    public String getLotByCategory(ModelMap model, @RequestParam(value = "sortType", required = false) String sort,
+                                   @RequestParam(value = "currency", required = false) String currency,
+                                   @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                   @PathVariable Integer categoryId, HttpSession session) {
         if (currency != null) {
             session.setAttribute("currency", currency);
         }
@@ -110,10 +117,32 @@ public class LotController {
     }
 
     @RequestMapping(value = "/lot", method = RequestMethod.POST)
-    public ResponseEntity addNewLot(@RequestBody String json, HttpSession session) {
-        Lot lot = LotJsonParser.jsonToLot(json);
+    public ResponseEntity addNewLot(@RequestParam(name = "primaryImage", required = false) MultipartFile primaryImage,
+                                    @RequestParam(name = "secondaryImage", required = false) MultipartFile secondaryImage,
+                                    HttpServletRequest httpServletRequest, HttpSession session) throws IOException {
+        Lot lot = LotRequestParser.requestToLot(httpServletRequest);
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == lot.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
+                if (primaryImage != null) {
+                    Image image = new Image();
+                    try {
+                        image.setBytes(primaryImage.getBytes());
+                    } catch (IOException e) {
+                        throw new IOException(e);
+                    }
+                    image.setType("M");
+                    lot.setPrimaryImage(image);
+                }
+                if (secondaryImage != null) {
+                    Image image = new Image();
+                    try {
+                        image.setBytes(secondaryImage.getBytes());
+                    } catch (IOException e) {
+                        throw new IOException(e);
+                    }
+                    image.setType("C");
+                    lot.setSecondaryImage(image);
+                }
                 lotService.add(lot);
                 return new ResponseEntity(HttpStatus.OK);
             }
@@ -152,18 +181,42 @@ public class LotController {
         return "error";
     }
 
-    @RequestMapping(value = "/lot/{id}", method = RequestMethod.PUT)
-    public String saveEditedLot(@PathVariable Integer id, @RequestBody String json, HttpSession session) {
-        Lot lot = LotJsonParser.jsonToLot(json);
+    @RequestMapping(value = "/lot/{id}", method = RequestMethod.POST)
+    public ResponseEntity saveEditedLot(@PathVariable Integer id, @RequestParam(name = "primaryImage", required = false)
+            MultipartFile primaryImage, @RequestParam(name = "secondaryImage", required = false) MultipartFile secondaryImage,
+                                        HttpServletRequest httpServletRequest, HttpSession session) throws IOException {
+        Lot lot = LotRequestParser.requestToLot(httpServletRequest);
+        lot.setId(id);
         if (session.getAttribute("loggedUser") != null) {
             if ((((User) session.getAttribute("loggedUser")).getId() == lot.getUser().getId()) || (((User) session.getAttribute("loggedUser")).getType().equals(UserType.ADMIN))) {
-                lot.setId(id);
+                if (primaryImage != null) {
+                    Image image = new Image();
+                    try {
+                        image.setBytes(primaryImage.getBytes());
+                    } catch (IOException e) {
+                        throw new IOException(e);
+                    }
+                    image.setType("M");
+                    image.setId(id);
+                    imageService.editPrimaryLotImage(image);
+                }
+                if (secondaryImage != null) {
+                    Image image = new Image();
+                    try {
+                        image.setBytes(secondaryImage.getBytes());
+                    } catch (IOException e) {
+                        throw new IOException(e);
+                    }
+                    image.setType("C");
+                    image.setId(id);
+                    imageService.saveLotImage(image);
+                }
                 lotService.edit(lot);
-                int userId = lot.getUser().getId();
-                return "redirect:/user/" + userId;
+
+                return new ResponseEntity(HttpStatus.OK);
             }
         }
-        return "error";
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/lot/{lotId}/quickBuy", method = RequestMethod.POST)

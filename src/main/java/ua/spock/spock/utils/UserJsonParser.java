@@ -3,6 +3,7 @@ package ua.spock.spock.utils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import ua.spock.spock.entity.Image;
 import ua.spock.spock.entity.User;
 
 public class UserJsonParser {
@@ -24,7 +25,5 @@ public class UserJsonParser {
         } catch (ParseException e) {
             throw new RuntimeException("Error occurred while converting json to user", e);
         }
-
     }
-
 }

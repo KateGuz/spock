@@ -18,6 +18,24 @@ public class Lot {
     private String[] imageIds;
     private double quickBuyPrice;
     private LotType type;
+    private Image primaryImage;
+    private Image secondaryImage;
+
+    public Image getSecondaryImage() {
+        return secondaryImage;
+    }
+
+    public void setSecondaryImage(Image secondaryImage) {
+        this.secondaryImage = secondaryImage;
+    }
+
+    public Image getPrimaryImage() {
+        return primaryImage;
+    }
+
+    public void setPrimaryImage(Image primaryImage) {
+        this.primaryImage = primaryImage;
+    }
 
     public int getId() {
         return id;

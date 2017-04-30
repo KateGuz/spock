@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import ua.spock.spock.dao.ImageDao;
 import ua.spock.spock.entity.Image;
 
-import java.io.InputStream;
-
 @Repository
 public class JdbcImageDao implements ImageDao {
     @Autowired
@@ -17,6 +15,8 @@ public class JdbcImageDao implements ImageDao {
     private String getImageSQL;
     @Autowired
     private String getUserImageSQL;
+    @Autowired
+    private String editPrimaryLotImageSQL;
     @Autowired
     private String savePrimaryLotImageSQL;
     @Autowired
@@ -51,20 +51,24 @@ public class JdbcImageDao implements ImageDao {
     }
 
     @Override
-    public void savePrimaryLotImage(Image image) {
+    public void saveLotImage(Image image) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("lotId", image.getId());
-        params.addValue("type", "M");
+        params.addValue("type", image.getType());
         params.addValue("image", image.getBytes());
-        namedParameterJdbcTemplate.update(savePrimaryLotImageSQL, params);
+        if (image.getType().equals("M")) {
+            namedParameterJdbcTemplate.update(savePrimaryLotImageSQL, params);
+      } else {
+         namedParameterJdbcTemplate.update(saveSecondaryLotImageSQL, params);
+      }
     }
 
     @Override
-    public void saveSecondaryLotImage(Image image) {
+    public void editPrimaryLotImage(Image image) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("lotId", image.getId());
-        params.addValue("type", "C");
+        params.addValue("type", image.getType());
         params.addValue("image", image.getBytes());
-        namedParameterJdbcTemplate.update(saveSecondaryLotImageSQL, params);
+        namedParameterJdbcTemplate.update(editPrimaryLotImageSQL, params);
     }
 }

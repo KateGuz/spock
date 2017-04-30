@@ -29,12 +29,12 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void savePrimaryLotImage(Image image) {
-        imageDao.savePrimaryLotImage(image);
+    public void saveLotImage(Image image) {
+        imageDao.saveLotImage(image);
     }
 
     @Override
-    public void saveSecondaryLotImage(Image image) {
-        imageDao.saveSecondaryLotImage(image);
+    public void editPrimaryLotImage(Image image) {
+        imageDao.editPrimaryLotImage(image);
     }
 }

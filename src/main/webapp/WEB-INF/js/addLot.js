@@ -1,35 +1,31 @@
-
 function addLot() {
-    var title = $("#title").val();
-    var description = $("#description").val();
-    var startPrice = $("#startPrice").val();
-    var minStep = $("#minStep").val();
-    var categoryId = document.getElementById("categories").value;
-    var startDate = $("#startDate").val();
-    var endDate = $("#endDate").val();
-    var quickBuyPrice = $("#quickBuyPrice").val();
-    var userId = $("#userId").val();
-    
-    var json = '{"title" :"' + title +
-        '", "description" :"' + description +
-        '", "startPrice" :"' + startPrice +
-        '", "minStep" :"' + minStep +
-        '", "categoryId" :"' + categoryId +
-        '", "startDate" :"' + startDate +
-        '", "endDate" :"' + endDate +
-        '", "quickBuyPrice" :"' + quickBuyPrice +
-        '", "userId" :"' + userId + '"}';
+    var formData = new FormData();
+    formData.append('title', $('#title').val());
+    formData.append('description', $("#description").val());
+    formData.append('startPrice', $("#startPrice").val());
+    formData.append('minStep', $("#minStep").val());
+    formData.append('categoryId', document.getElementById("categories").value);
+    formData.append('startDate', $("#startDate").val());
+    formData.append('endDate', $("#endDate").val());
+    formData.append('quickBuyPrice', $("#quickBuyPrice").val());
+    formData.append('userId', $("#userId").val());
+    formData.append('primaryImage', $('#primaryLotImageId')[0].files[0]);
+    formData.append('secondaryImage', $('#secondaryLotImageId')[0].files[0]);
 
     $.ajax({
+        headers: {
+            Accept: "application/json; charset=utf-8"
+        },
         url: '/lot',
+        data: formData,
+        processData: false,
+        contentType: false,
         type: 'POST',
-        data: json,
-        contentType: "application/json",
         success: function () {
-            top.location.href = 'user/'+userId;
+            top.location.href = 'user/' + $("#userId").val();
         },
         error: function () {
-            alert("Не удалось создать лот.");
+            alert("Вы внесли некорректные данные.");
         }
     })
 }

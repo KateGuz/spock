@@ -2,14 +2,18 @@ package ua.spock.spock.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ua.spock.spock.dao.ImageDao;
 import ua.spock.spock.dao.LotDao;
 import ua.spock.spock.dao.mapper.LotRowMapper;
 import ua.spock.spock.dao.mapper.util.QueryType;
 import ua.spock.spock.dao.util.QueryGenerator;
 import ua.spock.spock.dao.util.SqlQueryParameters;
+import ua.spock.spock.entity.Image;
 import ua.spock.spock.entity.Lot;
 import ua.spock.spock.entity.LotType;
 import ua.spock.spock.filter.LotFilter;
@@ -23,7 +27,11 @@ public class JdbcLotDao implements LotDao {
     @Autowired
     private QueryGenerator queryGenerator;
     @Autowired
+    private ImageDao imageDao;
+    @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
     @Autowired
     private String getLotByIdSQL;
     @Autowired
@@ -31,7 +39,7 @@ public class JdbcLotDao implements LotDao {
     @Autowired
     private String deleteLotSQL;
     @Autowired
-    private String addLotSQL;
+    private String deleteLotForeignKeySQL;
     @Autowired
     private String editLotSQL;
     @Autowired
@@ -47,19 +55,27 @@ public class JdbcLotDao implements LotDao {
 
     @Override
     public List<Lot> getByUser(int userId) {
+
         return namedParameterJdbcTemplate.query(getLotsByUserIdSQL, new MapSqlParameterSource("userId", userId), ALL_LOTS_ROW_MAPPER);
     }
 
     @Override
     public void add(Lot lot) {
-        MapSqlParameterSource params = fillParams(lot);
-        namedParameterJdbcTemplate.update(addLotSQL, params);
-
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("lot").usingGeneratedKeyColumns("id");
+        Number lotId = simpleJdbcInsert.executeAndReturnKey(fillParams(lot));
+        Image image = lot.getPrimaryImage();
+        image.setId(lotId.intValue());
+        imageDao.saveLotImage(image);
+        image = lot.getSecondaryImage();
+        image.setId(lotId.intValue());
+        imageDao.saveLotImage(image);
     }
 
     @Override
     public void delete(int id) {
-        namedParameterJdbcTemplate.update(deleteLotSQL, new MapSqlParameterSource("lotId", id));
+        MapSqlParameterSource map = new MapSqlParameterSource("lotId", id);
+        namedParameterJdbcTemplate.update(deleteLotForeignKeySQL,map);
+        namedParameterJdbcTemplate.update(deleteLotSQL,map);
     }
 
     @Override

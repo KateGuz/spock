@@ -58,9 +58,6 @@
     <bean id="addUserSQL" class="java.lang.String">
         <constructor-arg value="INSERT INTO user (name,password,email,type) VALUES (:name, :password, :email, :type);"/>
     </bean>
-    <bean id="addLotSQL" class="java.lang.String">
-        <constructor-arg value="INSERT INTO lot (title,description,categoryId,startDate,endDate,startPrice,minStep,quickBuyPrice,userId,type) VALUES (:title, :description, :categoryId, :startDate, :endDate, :startPrice, :minStep, :quickBuyPrice, :userId, :type);"/>
-    </bean>
     <bean id="getUserByIdSQL" class="java.lang.String">
         <constructor-arg
                 value="SELECT u.id, u.name,u.email,u.password, u.registrationDate, u.type FROM user AS u WHERE u.id = :id;"/>
@@ -70,6 +67,9 @@
     </bean>
     <bean id="deleteLotSQL" class="java.lang.String">
         <constructor-arg value="DELETE FROM lot WHERE id =:lotId;"/>
+    </bean>
+    <bean id="deleteLotForeignKeySQL" class="java.lang.String">
+        <constructor-arg value="DELETE FROM lotimage WHERE lotId =:lotId;"/>
     </bean>
     <bean id="editLotSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lot SET title=:title, description=:description, categoryId=:categoryId,
@@ -88,8 +88,11 @@
     <bean id="getImageSQL" class="java.lang.String">
         <constructor-arg value="SELECT image FROM lotimage WHERE id = :imageId;"/>
     </bean>
-    <bean id="savePrimaryLotImageSQL" class="java.lang.String">
+    <bean id="editPrimaryLotImageSQL" class="java.lang.String">
         <constructor-arg value="UPDATE lotimage SET image=:image WHERE lotId=:lotId AND type=:type;"/>
+    </bean>
+    <bean id="savePrimaryLotImageSQL" class="java.lang.String">
+        <constructor-arg value="INSERT INTO lotimage (image,type,lotId) VALUES (:image,:type,:lotId)"/>
     </bean>
     <bean id="saveSecondaryLotImageSQL" class="java.lang.String">
         <constructor-arg value="INSERT INTO lotimage (image,type,lotId) VALUES (:image,:type,:lotId);"/>

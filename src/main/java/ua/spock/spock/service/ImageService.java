@@ -11,7 +11,8 @@ public interface ImageService {
 
     void saveUserImage(Image image);
 
-    void savePrimaryLotImage(Image image);
+    void saveLotImage(Image image);
 
-    void saveSecondaryLotImage(Image image);
+    void editPrimaryLotImage(Image image);
+
 }
